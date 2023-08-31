@@ -4,7 +4,7 @@
 
 # Jio Saavn API
 
-### A simple wrapper for the Jio Saavn API powered by Hono.js🔥 .
+### A simple wrapper for the Jio Saavn API powered by Hono.js 🔥.
 
 ## Building from source
 
@@ -23,7 +23,7 @@ cd jiosaavn-api-ts
 pnpm i || npm i || yarn
 ```
 
-#### Bun.js
+#### Bun
 
 > **Warning**
 > You need to have [Bun.js](https://bun.sh) installed on your machine to run the project with bun.
@@ -52,20 +52,12 @@ pnpm i -D tsx || npm i -D tsx || yarn add -D tsx
 ...
 
 /* For Node.js */;
-- // serve({
-- // port: process.env.PORT ?? 3000,
-- // fetch: app.fetch,
-- // });
-+ serve({
-+ port: process.env.PORT ?? 3000,
-+ fetch: app.fetch,
-+ });
+- // serve(server);
++ serve(server);
 
-- export default {
--   port: process.env.PORT ?? 3000,
--   fetch: app.fetch,
-- };
+...
 ```
+
 - Start the development server
 
 ```

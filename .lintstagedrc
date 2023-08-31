@@ -1,6 +1,7 @@
 {
   "*.{ts,json}": [
     "prettier --write \"**/*.{ts,json}\" --cache",
-    "eslint --fix ."
+    "eslint --fix .",
+    "tsc --noEmit"
   ]
 }
