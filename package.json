@@ -1,0 +1,33 @@
+{
+  "name": "jiosaavn",
+  "description": "🎵 An Unofficial wrapper for the Jio Saavn API.",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext ts,json --report-unused-disable-directives --max-warnings 0",
+    "fmt:check": "prettier --check \"**/*.{ts,json}\" --cache",
+    "fmt:write": "prettier --write \"**/*.{ts,json}\" --cache",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "hono": "^3.5.4"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "@total-typescript/ts-reset": "^0.5.1",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2",
+    "vercel": "^29.1.1"
+  }
+}

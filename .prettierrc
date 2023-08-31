@@ -1,0 +1,20 @@
+{
+  "endOfLine": "lf",
+  "semi": true,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "importOrder": [
+    "^(hono/(.*)$)|^(hono$)",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^types$",
+    "^@/types/?(.*)$",
+    "^@/config/(.*)$",
+    "^@/payloads/(.*)$",
+    "^@/routes/(.*)$",
+    "^@/services/(.*)$",
+    "^[./]"
+  ],
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"]
+}
