@@ -1,5 +1,5 @@
 import { AlbumRequest, AlbumResponse } from "./album";
-import { Quality, Type } from "./misc";
+import { CommonRequest, CommonResponse, Type } from "./misc";
 
 export type ModulesRequest = {
   new_albums: AlbumRequest[];
@@ -28,15 +28,8 @@ export type ModulesRequest = {
   "promo:vx:data:90"?: PromoRequest[];
 };
 
-export type ArtistRecoRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
+export type ArtistRecoRequest = CommonRequest & {
   more_info: ArtistRecoRequestMoreInfo;
-  perma_url: string;
-  subtitle: string;
-  title: string;
-  type: Type;
 };
 
 export type ArtistRecoRequestMoreInfo = {
@@ -45,15 +38,8 @@ export type ArtistRecoRequestMoreInfo = {
   station_display_text: string;
 };
 
-export type DiscoverRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
+export type DiscoverRequest = CommonRequest & {
   more_info: DiscoverMoreInfo;
-  perma_url: string;
-  subtitle: string;
-  title: string;
-  type: Type;
 };
 
 export type DiscoverMoreInfo = {
@@ -84,15 +70,8 @@ export type ChartRequestMoreInfo = {
   song_count?: number;
 };
 
-export type CityModRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
+export type CityModRequest = CommonRequest & {
   more_info: CityModRequestMoreInfo;
-  perma_url: string;
-  subtitle: string;
-  title: string;
-  type: Type;
 };
 
 export type CityModRequestMoreInfo = {
@@ -126,20 +105,13 @@ export type GlobalConfigItemLang = {
   title?: string;
 };
 
-export type TagMixRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
+export type TagMixRequest = CommonRequest & {
   language: string;
   list_count: string;
   list_type: Type;
   list: string;
   more_info: TagMixRequestMoreInfo;
-  perma_url: string;
   play_count: string;
-  subtitle: string;
-  title: string;
-  type: Type;
   year: string;
 };
 
@@ -148,15 +120,8 @@ export type TagMixRequestMoreInfo = {
   lastname: string;
 };
 
-export type RadioRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
+export type RadioRequest = CommonRequest & {
   more_info: RadioRequestMoreInfo;
-  perma_url: string;
-  subtitle: string;
-  title: string;
-  type: Type;
 };
 
 export type RadioRequestMoreInfo = {
@@ -173,15 +138,8 @@ export type RadioRequestMoreInfo = {
 //   shows: ShowRequest[];
 // };
 
-// export type ShowRequest = {
-//   explicit_content: string;
-//   id: string;
-//   image: string;
+// export type ShowRequest = CommonRequest & {
 //   more_info: ShowMoreInfo;
-//   perma_url: string;
-//   subtitle: string;
-//   title: string;
-//   type: Type;
 // };
 
 // export type ShowMoreInfo = {
@@ -192,31 +150,17 @@ export type RadioRequestMoreInfo = {
 //   year: string;
 // };
 
-export type TrendingRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
+export type TrendingRequest = CommonRequest & {
   language: string;
   list_count: string;
   list_type: Type;
   list: string;
-  perma_url: string;
   play_count: string;
-  subtitle: string;
-  title: string;
-  type: Type;
   year: string;
 };
 
-export type ModulePlaylistRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
+export type ModulePlaylistRequest = CommonRequest & {
   more_info: PlaylistMoreInfo;
-  perma_url: string;
-  subtitle: string;
-  title: string;
-  type: Type;
 };
 
 export type PlaylistMoreInfo = {
@@ -227,20 +171,13 @@ export type PlaylistMoreInfo = {
   uid: string;
 };
 
-export type PromoRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
+export type PromoRequest = CommonRequest & {
   language?: string;
   list_count?: string;
   list_type?: string;
   list?: string;
   more_info: PromoRequestMoreInfo;
-  perma_url: string;
   play_count?: string;
-  subtitle: string;
-  title: string;
-  type: Type;
   year?: string;
 };
 
@@ -314,61 +251,34 @@ export type ModuleResponse = {
   trending: Module<TrendingResponse[]>;
 };
 
-export type ArtistRecoResponse = {
-  explicit: boolean;
+export type ArtistRecoResponse = CommonResponse & {
   featuredStationtype: Type;
-  id: string;
-  image: Quality;
-  name: string;
   query: string;
   stationDisplayText: string;
-  subtitle: string;
-  type: Type;
-  url: string;
 };
 
-export type DiscoverResponse = {
+export type DiscoverResponse = CommonResponse & {
   badge: string;
-  explicit: boolean;
-  id: string;
-  image: string;
   isFeatured: boolean;
-  name: string;
-  subtitle: string;
   subtype: Type;
-  type: Type;
-  url: string;
   videoThumbnail: string;
   videoUrl: string;
 };
 
-export type ChartResponse = {
+export type ChartResponse = Omit<CommonResponse, "subtitle"> & {
   count?: number;
-  explicit?: boolean;
   firstname?: string;
-  id: string;
-  image: Quality;
   language?: string;
   listname?: string;
-  name: string;
   songCount?: number;
   subtitle?: string;
-  type: Type;
-  url: string;
 };
 
-export type CityModResponse = {
+export type CityModResponse = CommonResponse & {
   albumId?: string;
-  explicit: boolean;
   featuredStationType?: string;
-  id: string;
-  image: Quality;
   multipleTunes?: CityModResponseMultipleTune[];
-  name: string;
   query?: string;
-  subtitle: string;
-  type: Type;
-  url: string;
 };
 
 export type CityModResponseMultipleTune = {
@@ -378,102 +288,61 @@ export type CityModResponseMultipleTune = {
   type: Type;
 };
 
-export type TagMixResponse = {
-  explicit: boolean;
+export type TagMixResponse = CommonResponse & {
   firstname: string;
-  id: string;
-  image: Quality;
   language: string;
   lastname: string;
   listCount: number;
   listtype: Type;
   list: string;
-  name: string;
   playCount: number;
   subtitle: string;
-  type: Type;
-  url: string;
   year: number;
 };
 
 export type RadioResponse = {
   color?: string;
   description?: string;
-  explicit: boolean;
   featuredStationtype: Type;
-  id: string;
-  image: Quality;
   language: string;
-  name: string;
   query?: string;
   stationDisplayText: string;
-  subtitle: string;
-  type: Type;
-  url: string;
-};
+} & CommonResponse;
 
 export type DiscoverResonse = {
   badge: string;
-  explicit: boolean;
-  id: string;
-  image: Quality;
   isFeatured: boolean;
-  name: string;
   subtype: Type;
-  subtitle: string;
-  type: Type;
-  url: string;
   videoThumbnail: string;
   videoUrl: string;
-};
+} & CommonResponse;
 
 export type TrendingResponse = {
-  explicit: boolean;
-  type: Type;
-  id: string;
-  image: Quality;
   language: string;
   listCount: number;
   listtype: Type;
   list: string;
-  name: string;
   playCount: number;
-  subtitle: string;
-  url: string;
   year: number;
-};
+} & CommonResponse;
 
 export type ModulePlaylistResponse = {
-  explicit: boolean;
   firstname: string;
   followerCount: number;
-  id: string;
-  image: Quality;
   lastUpdated: number;
-  name: string;
   songCount: number;
-  subtitle: string;
-  type: Type;
-  url: string;
   userId: string;
-};
+} & CommonResponse;
 
 export type PromoResponse = {
   editorialLanguage?: string;
-  explicit: boolean;
-  id: string;
-  image: Quality;
   language?: string;
   listCount?: number;
   listType?: string;
   list?: string;
-  name: string;
   playCount?: number;
   position?: number;
   releaseYear?: number;
   squareImage?: string;
-  subtitle: string;
-  type: Type;
-  url: string;
   year?: number;
-};
+} & CommonResponse;

@@ -81,14 +81,14 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
     albums: {
       title: newAlbumsMod.title ?? "",
       subtitle: newAlbumsMod.subtitle ?? "",
-      featuredText: newAlbumsMod.featured_text ?? "",
+      featuredText: newAlbumsMod.featured_text,
       data: new_albums ? new_albums.map(albumPayload) : [],
     },
 
     artistRecos: {
       title: artistRecosMod?.title ?? "",
       subtitle: artistRecosMod?.subtitle ?? "",
-      featuredText: artistRecosMod?.featured_text ?? "",
+      featuredText: artistRecosMod?.featured_text,
       data: artist_recos ? artist_recos.map(artistRecoPayload) : [],
     },
 
@@ -97,14 +97,14 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
     charts: {
       title: chartsMod?.title ?? "",
       subtitle: chartsMod?.subtitle ?? "",
-      featuredText: chartsMod?.featured_text ?? "",
+      featuredText: chartsMod?.featured_text,
       data: charts.map(chartPayload),
     },
 
     cityMod: {
       title: cityModMod?.title ?? "",
       subtitle: cityModMod?.subtitle ?? "",
-      featuredText: cityModMod?.featured_text ?? "",
+      featuredText: cityModMod?.featured_text,
       data: city_mod ? city_mod.map(cityModPayload) : [],
     },
 
@@ -113,112 +113,112 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
     trending: {
       title: newTrendingMod?.title ?? "",
       subtitle: newTrendingMod?.subtitle ?? "",
-      featuredText: newTrendingMod?.featured_text ?? "",
+      featuredText: newTrendingMod?.featured_text,
       data: new_trending.map(trendingPayload),
     },
 
     radio: {
       title: radioMod?.title ?? "",
       subtitle: radioMod?.subtitle ?? "",
-      featuredText: radioMod?.featured_text ?? "",
+      featuredText: radioMod?.featured_text,
       data: radio.map(radioPayload),
     },
 
     mixes: {
       title: tagMixesMod?.title ?? "",
       subtitle: tagMixesMod?.subtitle ?? "",
-      featuredText: tagMixesMod?.featured_text ?? "",
+      featuredText: tagMixesMod?.featured_text,
       data: tag_mixes ? tag_mixes.map(tagMixPayload) : [],
     },
 
     playlists: {
       title: topPlaylistsMod?.title ?? "",
       subtitle: topPlaylistsMod?.subtitle ?? "",
-      featuredText: topPlaylistsMod?.featured_text ?? "",
+      featuredText: topPlaylistsMod?.featured_text,
       data: top_playlists ? top_playlists?.map(modulePlaylistPayload) : [],
     },
 
     promo107: {
       title: promo107Mod?.title ?? "",
       subtitle: promo107Mod?.subtitle ?? "",
-      featuredText: promo107Mod?.featured_text ?? "",
+      featuredText: promo107Mod?.featured_text,
       data: promo107 ? promo107?.map(promoPayload) : [],
     },
 
     promo112: {
       title: promo112Mod?.title ?? "",
       subtitle: promo112Mod?.subtitle ?? "",
-      featuredText: promo112Mod?.featured_text ?? "",
+      featuredText: promo112Mod?.featured_text,
       data: promo112 ? promo112?.map(promoPayload) : [],
     },
 
     promo113: {
       title: promo113Mod?.title ?? "",
       subtitle: promo113Mod?.subtitle ?? "",
-      featuredText: promo113Mod?.featured_text ?? "",
+      featuredText: promo113Mod?.featured_text,
       data: promo113 ? promo113?.map(promoPayload) : [],
     },
 
     promo114: {
       title: promo114Mod?.title ?? "",
       subtitle: promo114Mod?.subtitle ?? "",
-      featuredText: promo114Mod?.featured_text ?? "",
+      featuredText: promo114Mod?.featured_text,
       data: promo114 ? promo114?.map(promoPayload) : [],
     },
 
     promo116: {
       title: promo116Mod?.title ?? "",
       subtitle: promo116Mod?.subtitle ?? "",
-      featuredText: promo116Mod?.featured_text ?? "",
+      featuredText: promo116Mod?.featured_text,
       data: promo116 ? promo116?.map(promoPayload) : [],
     },
 
     promo118: {
       title: promo118Mod?.title ?? "",
       subtitle: promo118Mod?.subtitle ?? "",
-      featuredText: promo118Mod?.featured_text ?? "",
+      featuredText: promo118Mod?.featured_text,
       data: promo118 ? promo118?.map(promoPayload) : [],
     },
 
     promo176: {
       title: promo176Mod?.title ?? "",
       subtitle: promo176Mod?.subtitle ?? "",
-      featuredText: promo176Mod?.featured_text ?? "",
+      featuredText: promo176Mod?.featured_text,
       data: promo176 ? promo176?.map(promoPayload) : [],
     },
 
     promo185: {
       title: promo185Mod?.title ?? "",
       subtitle: promo185Mod?.subtitle ?? "",
-      featuredText: promo185Mod?.featured_text ?? "",
+      featuredText: promo185Mod?.featured_text,
       data: promo185 ? promo185?.map(promoPayload) : [],
     },
 
     promo49: {
       title: promo49Mod?.title ?? "",
       subtitle: promo49Mod?.subtitle ?? "",
-      featuredText: promo49Mod?.featured_text ?? "",
+      featuredText: promo49Mod?.featured_text,
       data: promo49 ? promo49?.map(promoPayload) : [],
     },
 
     promo68: {
       title: promo68Mod?.title ?? "",
       subtitle: promo68Mod?.subtitle ?? "",
-      featuredText: promo68Mod?.featured_text ?? "",
+      featuredText: promo68Mod?.featured_text,
       data: promo68 ? promo68?.map(promoPayload) : [],
     },
 
     promo76: {
       title: promo76Mod?.title ?? "",
       subtitle: promo76Mod?.subtitle ?? "",
-      featuredText: promo76Mod?.featured_text ?? "",
+      featuredText: promo76Mod?.featured_text,
       data: promo76 ? promo76?.map(promoPayload) : [],
     },
 
     promo90: {
       title: promo90Mod?.title ?? "",
       subtitle: promo90Mod?.subtitle ?? "",
-      featuredText: promo90Mod?.featured_text ?? "",
+      featuredText: promo90Mod?.featured_text,
       data: promo90 ? promo90?.map(promoPayload) : [],
     },
   };

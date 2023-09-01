@@ -2,7 +2,8 @@ import { Hono } from "hono";
 
 import { modulesPayload } from "../payloads/modules";
 import { api } from "../services/api";
-import { ModulesRequest } from "../types/modules";
+import { ModuleResponse, ModulesRequest } from "../types/modules";
+import { CustomResponse } from "../types/response";
 
 export const modules = new Hono();
 
@@ -10,16 +11,25 @@ modules.get("*", async (c) => {
   try {
     const langs = c.req.query("language");
 
-    const response = await api<ModulesRequest>("webapi.getLaunchData", {
+    const data = await api<ModulesRequest>("webapi.getLaunchData", {
       query: {
         language: langs ?? "hindi,english",
       },
     });
 
-    return c.json(modulesPayload(response));
-  } catch (error) {
-    console.error("An error occurred:", error);
+    const response: CustomResponse<ModuleResponse> = {
+      status: "Success",
+      message: "✅ Home Data fetched successfully",
+      data: modulesPayload(data),
+    };
 
-    return c.json({ error: "An error occurred" }, 500);
+    return c.json(response);
+  } catch (e) {
+    const error: CustomResponse<ModuleResponse> = {
+      status: "Failed",
+      message: `❌ ${(e as Error).message}`,
+    };
+
+    return c.json(error);
   }
 });

@@ -1,4 +1,4 @@
-import { Quality, Type } from "./misc";
+import { CommonRequest, CommonResponse } from "./misc";
 
 export type ArtistMapRequest = {
   primary_artists: ArtistMiniRequest[];
@@ -7,13 +7,9 @@ export type ArtistMapRequest = {
 };
 
 export type ArtistMiniRequest = {
-  id: string;
   name: string;
   role: string;
-  image: string;
-  type: Type;
-  perma_url: string;
-};
+} & Omit<CommonRequest, "explicit_content" | "title" | "subtitle">;
 
 /*---------------------- Response ---------------------- */
 
@@ -24,10 +20,5 @@ export type ArtistMapResponse = {
 };
 
 export type ArtistMiniResponse = {
-  id: string;
-  name: string;
   role: string;
-  image: Quality;
-  type: Type;
-  url: string;
-};
+} & Omit<CommonResponse, "explicit" | "subtitle">;

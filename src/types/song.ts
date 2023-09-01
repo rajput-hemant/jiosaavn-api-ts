@@ -1,22 +1,15 @@
 import { ArtistMapRequest, ArtistMapResponse } from "./artist";
-import { Quality, Rights, Type } from "./misc";
+import { CommonRequest, CommonResponse, Quality, Rights, Type } from "./misc";
 
 export type SongRequest = {
-  id: string;
-  title?: string;
-  subtitle: string;
-  type: Type;
-  perma_url: string;
-  image: string;
   language: string;
   year: string;
   play_count: string | number;
-  explicit_content: string;
   list_count: string;
   list_type: Type;
   list: string;
   more_info: SongRequestMoreInfo;
-};
+} & CommonRequest;
 
 export type SongRequestMoreInfo = {
   music: string;
@@ -45,16 +38,9 @@ export type SongRequestMoreInfo = {
 /*---------------------- Response ---------------------- */
 
 export type SongResponse = {
-  id: string;
-  name?: string;
-  subtitle: string;
-  type: Type;
-  url: string;
-  image: Quality;
   language: string;
   year: number;
   playCount: number;
-  explicit: boolean;
   listCount: number;
   listtype: Type;
   list: string;
@@ -78,4 +64,4 @@ export type SongResponse = {
   releaseDate: string;
   trillerAvailable: boolean;
   lyricsId?: string;
-};
+} & CommonResponse;
