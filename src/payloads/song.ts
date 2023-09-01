@@ -1,5 +1,5 @@
 import { SongRequest, SongResponse } from "../types/song";
-import { createImageLinks } from "../utils";
+import { createDownloadLinks, createImageLinks } from "../utils";
 import { artistMapPayload } from "./artist";
 
 /**
@@ -69,7 +69,7 @@ export function songPayload(s: SongRequest): SongResponse {
     origin,
     isDolbyContent: is_dolby_content,
     "320kbps": !!_320kbps,
-    downloadUrl: createImageLinks(encrypted_media_url),
+    downloadUrl: createDownloadLinks(encrypted_media_url),
     albumUrl: album_url,
     duration: +duration,
     rights,

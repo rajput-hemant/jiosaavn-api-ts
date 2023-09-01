@@ -5,9 +5,9 @@ import { prettyJSON } from "hono/pretty-json";
 
 // import { serve } from "@hono/node-server";
 
-import { home, modules } from "./routes";
+import { home, modules, song } from "./routes";
 
-const app = new Hono();
+const app = new Hono({ strict: false });
 
 // middlewares
 app.use("*", cors(), prettyJSON(), logger());
@@ -15,6 +15,7 @@ app.use("*", cors(), prettyJSON(), logger());
 // routes
 app.route("/", home);
 app.route("/modules", modules);
+app.route("/song", song);
 
 const server = {
   port: process.env.PORT ?? 3000,
