@@ -20,7 +20,7 @@ cd jiosaavn-api-ts
 - Install dependencies
 
 ```
-pnpm i || npm i || yarn
+bun i || pnpm i || npm i || yarn
 ```
 
 #### Bun
@@ -29,7 +29,7 @@ pnpm i || npm i || yarn
 > You need to have [Bun.js](https://bun.sh) installed on your machine to run the project with bun.
 
 ```
-pnpm dev || npm run dev || yarn dev
+bun run dev || pnpm dev || npm run dev || yarn dev
 ```
 
 #### Node.js
@@ -37,8 +37,8 @@ pnpm dev || npm run dev || yarn dev
 - Install the following dependencies
 
 ```
-pnpm i @hono/node-server || npm i @hono/node-server || yarn add @hono/node-server
-pnpm i -D tsx || npm i -D tsx || yarn add -D tsx
+bum i @hono/node-server || pnpm i @hono/node-server || npm i @hono/node-server || yarn add @hono/node-server
+bun i -D tsx || pnpm i -D tsx || npm i -D tsx || yarn add -D tsx
 ```
 
 - Make the following changes in [`src/index.ts`](src/index.ts)
@@ -61,13 +61,13 @@ pnpm i -D tsx || npm i -D tsx || yarn add -D tsx
 - Start the development server
 
 ```
-pnpm dev:node || npm dev:node || yarn dev:node
+bun run dev:node || pnpm dev:node || npm dev:node || yarn dev:node
 ```
 
 #### Vercel
 
 ```
-pnpm dev:vercel || npm dev:vercel || yarn dev:vercel
+bun run dev:vercel || pnpm dev:vercel || npm dev:vercel || yarn dev:vercel
 ```
 
 <div align = center>
@@ -90,8 +90,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [license]: https://img.shields.io/github/license/rajput-hemant/jiosaavn-api-ts
 [commit-activity]: https://img.shields.io/github/commit-activity/w/rajput-hemant/jiosaavn-api-ts
 [forks]: https://img.shields.io/github/forks/rajput-hemant/jiosaavn-api-ts?style=flat
-[stars]: h
-
-```
-
-```
+[stars]: https://img.shields.io/github/stars/rajput-hemant/jiosaavn-api-ts
