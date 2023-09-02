@@ -1,5 +1,5 @@
+import { createImageLinks } from "../lib/utils";
 import { AlbumRequest, AlbumResponse } from "../types/album";
-import { createImageLinks } from "../utils";
 import { artistMapPayload } from "./artist";
 import { songPayload } from "./song";
 

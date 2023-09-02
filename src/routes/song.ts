@@ -1,10 +1,11 @@
 import { Hono } from "hono";
 
+import { api } from "../lib/api";
+import { config } from "../lib/config";
+import { isJioSaavnLink, tokenFromLink } from "../lib/utils";
 import { songPayload } from "../payloads/song";
-import { api } from "../services/api";
 import { CustomResponse } from "../types/response";
 import { SongRequest, SongResponse } from "../types/song";
-import { isJioSaavnLink, tokenFromLink } from "../utils";
 
 export const song = new Hono();
 
@@ -33,11 +34,11 @@ song.get("/", async (c) => {
   let result: { songs: SongRequest[] };
 
   if (id) {
-    result = await api("song.getDetails", {
+    result = await api(config.endpoint.song.id, {
       query: { pids: id },
     });
   } else {
-    result = await api("webapi.get", {
+    result = await api(config.endpoint.song.link, {
       query: {
         token: tokenFromLink("song", link),
         type: "song",

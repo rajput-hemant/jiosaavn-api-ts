@@ -1,10 +1,10 @@
+import { createImageLinks } from "../lib/utils";
 import {
   ArtistMapRequest,
   ArtistMapResponse,
   ArtistMiniRequest,
   ArtistMiniResponse,
 } from "../types/artist";
-import { createImageLinks } from "../utils";
 
 /**
  * Utility function to convert the artist map response to a more usable format

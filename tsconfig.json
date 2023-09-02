@@ -12,13 +12,13 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": true
 
     /* path aliases */
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    // "baseUrl": "./",
+    // "paths": {
+    //   "@/*": ["src/*"]
+    // }
   },
   "include": ["api/*.ts", "src/*", ".env"]
 }

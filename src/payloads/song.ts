@@ -1,5 +1,5 @@
+import { createDownloadLinks, createImageLinks } from "../lib/utils";
 import { SongRequest, SongResponse } from "../types/song";
-import { createDownloadLinks, createImageLinks } from "../utils";
 import { artistMapPayload } from "./artist";
 
 /**

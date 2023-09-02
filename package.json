@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "crypto-js": "^4.1.1",
-    "hono": "^3.5.4"
+    "hono": "^3.5.4",
+    "lru-cache": "^10.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",

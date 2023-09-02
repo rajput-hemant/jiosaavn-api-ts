@@ -1,3 +1,5 @@
+import { config } from "./config";
+
 export const api = async <T>(
   path: string,
   {
@@ -8,7 +10,6 @@ export const api = async <T>(
     query?: Record<string, string>;
   }
 ) => {
-  const baseURL = "https://www.jiosaavn.com/api.php";
   const params = new URLSearchParams({
     _format: "json",
     _marker: "0",
@@ -17,7 +18,7 @@ export const api = async <T>(
     ...query,
   });
 
-  const url = `${baseURL}?__call=${path}&${params}`;
+  const url = `${config.baseURL}?__call=${path}&${params}`;
 
   const response = await fetch(url, {
     headers: {
