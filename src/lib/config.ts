@@ -1,6 +1,10 @@
 export const config = {
   baseURL: "https://www.jiosaavn.com/api.php",
+  docsURL: "https://docs-jiosaavn.netlify.app",
+  siteURL: "https://jiosaavn-api-ts.vercel.app",
+
   enableRateLimit: !!process.env.ENABLE_RATE_LIMIT ?? false,
+
   endpoint: {
     modules: "webapi.getLaunchData", // "content.getBrowseModules"
     song: {
@@ -8,14 +12,17 @@ export const config = {
       link: "webapi.get",
       recommended: "reco.getReco",
     },
+
     album: {
       id: "content.getAlbumDetails",
       link: "webapi.get",
       recommended: "reco.getAlbumReco",
     },
+
     playlist: {
       id: "playlist.getDetails",
     },
+
     artist: {
       id: "artist.getArtistPageDetails",
       link: "webapi.get",
@@ -23,6 +30,7 @@ export const config = {
       albums: "artist.getArtistMoreAlbum",
       topSongs: "search.artistOtherTopSongs",
     },
+
     search: {
       topSearch: "content.getTopSearches",
       all: "autocomplete.get",
@@ -31,12 +39,14 @@ export const config = {
       artists: "search.getArtistResults",
       playlists: "search.getPlaylistResults",
     },
+
     radio: {
       featured: "webradio.createFeaturedStation",
       artist: "webradio.createArtistStation",
       entity: "webradio.createEntityStation",
       songs: "webradio.getSong",
     },
+
     lyrics: "lyrics.getLyrics",
   },
 };

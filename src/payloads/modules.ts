@@ -1,5 +1,4 @@
 import { createImageLinks } from "../lib/utils";
-import { albumPayload } from "../payloads/albums";
 import {
   ArtistRecoRequest,
   ArtistRecoResponse,
@@ -22,6 +21,7 @@ import {
   TrendingRequest,
   TrendingResponse,
 } from "../types/modules";
+import { albumPayload } from "./album";
 
 /**
  * Utility function to convert the modules response to a more usable format

@@ -46,6 +46,10 @@ song.get("/", async (c) => {
     });
   }
 
+  if (!("songs" in result)) {
+    throw new Error("Song not found, please check the id or link");
+  }
+
   const response: CustomResponse<SongResponse[]> = {
     status: "Success",
     message: "✅ Song(s) Details fetched successfully",
@@ -58,24 +62,18 @@ song.get("/", async (c) => {
 song.get("/recommendations", async (c) => {
   const { id } = c.req.query();
 
-  const result = await api<SongRequest[]>("reco.getreco", {
+  const result = await api<SongRequest[]>(config.endpoint.song.recommended, {
     query: { pid: id },
   });
+
+  if (!Array.isArray(result)) {
+    throw new Error("No recommendations found, please check the id");
+  }
 
   const response: CustomResponse<SongResponse[]> = {
     status: "Success",
     message: "✅ Song Recommendations fetched successfully",
     data: result.map(songPayload),
-  };
-
-  return c.json(response);
-});
-
-song.onError((err, c) => {
-  const response: CustomResponse<null> = {
-    status: "Failed",
-    message: `❌ ${err.message}`,
-    data: null,
   };
 
   return c.json(response);
