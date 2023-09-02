@@ -37,7 +37,7 @@ bun run dev || pnpm dev || npm run dev || yarn dev
 - Install the following dependencies
 
 ```
-bum i @hono/node-server || pnpm i @hono/node-server || npm i @hono/node-server || yarn add @hono/node-server
+bun i @hono/node-server || pnpm i @hono/node-server || npm i @hono/node-server || yarn add @hono/node-server
 bun i -D tsx || pnpm i -D tsx || npm i -D tsx || yarn add -D tsx
 ```
 

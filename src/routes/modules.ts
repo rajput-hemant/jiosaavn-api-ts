@@ -10,7 +10,7 @@ export const modules = new Hono();
 modules.get("*", async (c) => {
   const langs = c.req.query("language");
 
-  const data = await api<ModulesRequest>("webapi.geLaunchData", {
+  const data = await api<ModulesRequest>("webapi.getLaunchData", {
     query: { language: langs ?? "hindi,english" },
   });
 

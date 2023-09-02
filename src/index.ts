@@ -18,12 +18,14 @@ app.route("/modules", modules);
 app.route("/song", song);
 
 const server = {
-  port: process.env.PORT ?? 3000,
+  port: +(process.env.PORT ?? 3000),
   fetch: app.fetch,
 };
 
 /* For Node.js */
-// serve(server);
+// serve(server, (info) => {
+//   console.log(`Server listening on ${info.address}:${info.port}`);
+// });
 
 /* For Vercel */
 export { app };

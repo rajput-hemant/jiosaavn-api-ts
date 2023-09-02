@@ -1,4 +1,4 @@
-import { cipher, util } from "node-forge";
+import Crypto from "crypto-js";
 
 /**
  * Utility function to create image links for different qualities
@@ -32,17 +32,15 @@ export const createDownloadLinks = (encryptedMediaUrl: string) => {
 
   const key = "38346591";
 
-  const encrypted = util.decode64(encryptedMediaUrl);
-  const decipher = cipher.createDecipher(
-    "DES-ECB",
-    util.createBuffer(key, "utf8")
+  const decrypted = Crypto.DES.decrypt(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    { ciphertext: Crypto.enc.Base64.parse(encryptedMediaUrl) },
+    Crypto.enc.Utf8.parse(key),
+    { mode: Crypto.mode.ECB }
   );
 
-  decipher.start();
-  decipher.update(util.createBuffer(encrypted));
-  decipher.finish();
-
-  const decryptedLink = decipher.output.toString();
+  const decryptedLink = decrypted.toString(Crypto.enc.Utf8);
 
   const links = qualities.map((q) => ({
     quality: q.bitrate,
