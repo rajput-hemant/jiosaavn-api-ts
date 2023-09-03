@@ -223,32 +223,32 @@ export type Module<T> = {
   title: string;
   subtitle: string;
   featuredText?: string;
-  data: T;
+  data: T[];
 };
 
 export type ModuleResponse = {
-  albums: Module<AlbumResponse[]>;
-  artistRecos: Module<ArtistRecoResponse[]>;
-  charts: Module<ChartResponse[]>;
-  cityMod?: Module<CityModResponse[]>;
+  albums: Module<AlbumResponse>;
+  artistRecos: Module<ArtistRecoResponse>;
+  charts: Module<ChartResponse>;
+  cityMod?: Module<CityModResponse>;
   globalConfig: GlobalConfig;
   discover: DiscoverResponse[];
-  mixes: Module<TagMixResponse[]>;
-  playlists: Module<ModulePlaylistResponse[]>;
-  promo107: Module<PromoResponse[]>;
-  promo112: Module<PromoResponse[]>;
-  promo113: Module<PromoResponse[]>;
-  promo114: Module<PromoResponse[]>;
-  promo116: Module<PromoResponse[]>;
-  promo118: Module<PromoResponse[]>;
-  promo176: Module<PromoResponse[]>;
-  promo185: Module<PromoResponse[]>;
-  promo49: Module<PromoResponse[]>;
-  promo68: Module<PromoResponse[]>;
-  promo76: Module<PromoResponse[]>;
-  promo90: Module<PromoResponse[]>;
-  radio: Module<RadioResponse[]>;
-  trending: Module<TrendingResponse[]>;
+  mixes: Module<TagMixResponse>;
+  playlists: Module<ModulePlaylistResponse>;
+  promo107: Module<PromoResponse>;
+  promo112: Module<PromoResponse>;
+  promo113: Module<PromoResponse>;
+  promo114: Module<PromoResponse>;
+  promo116: Module<PromoResponse>;
+  promo118: Module<PromoResponse>;
+  promo176: Module<PromoResponse>;
+  promo185: Module<PromoResponse>;
+  promo49: Module<PromoResponse>;
+  promo68: Module<PromoResponse>;
+  promo76: Module<PromoResponse>;
+  promo90: Module<PromoResponse>;
+  radio: Module<RadioResponse>;
+  trending: Module<TrendingResponse>;
 };
 
 export type ArtistRecoResponse = CommonResponse & {

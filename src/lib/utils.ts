@@ -1,5 +1,7 @@
 import Crypto from "crypto-js";
 
+import { Type } from "../types/misc";
+
 /**
  * Utility function to create image links for different qualities
  *
@@ -57,7 +59,7 @@ export const createDownloadLinks = (encryptedMediaUrl: string) => {
  * @param link - JioSaavn link
  * @returns Token from the link
  */
-export function tokenFromLink(type: string, link: string) {
+export function tokenFromLink(type: Type, link: string) {
   return link.split(`${type}/`).slice(1).join("/").split("/")[1];
 }
 
