@@ -1,4 +1,4 @@
-import { createImageLinks } from "../lib/utils";
+import { createImageLinks, parseBool } from "../lib/utils";
 import { AlbumRequest, AlbumResponse } from "../types/album";
 import { artistMapPayload } from "./artist";
 import { songPayload } from "./song";
@@ -38,7 +38,7 @@ export function albumPayload(a: AlbumRequest): AlbumResponse {
     type,
     language,
     playCount: +play_count,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     year: +year,
     url,
     image: createImageLinks(image),

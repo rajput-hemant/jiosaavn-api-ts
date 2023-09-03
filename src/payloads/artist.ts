@@ -1,4 +1,4 @@
-import { createImageLinks } from "../lib/utils";
+import { createImageLinks, parseBool } from "../lib/utils";
 import {
   ArtistMapRequest,
   ArtistMapResponse,
@@ -253,8 +253,8 @@ export function artistPlaylistPayload(
       uid: userId,
       song_count,
       language,
-      video_available,
-      is_dolby_content,
+      video_available: videoAvailable,
+      is_dolby_content: isDolbyContent,
       images,
       artist_name: artistName,
     },
@@ -266,7 +266,7 @@ export function artistPlaylistPayload(
     url,
     type,
     image: createImageLinks(image),
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     subtitle,
     numsongs: +(numsongs ?? 0),
     firstname,
@@ -274,8 +274,8 @@ export function artistPlaylistPayload(
     userId,
     songCount: +song_count,
     language,
-    videoAvailable: !!video_available,
-    isDolbyContent: !!is_dolby_content,
+    videoAvailable,
+    isDolbyContent,
     images,
     artistName,
   };

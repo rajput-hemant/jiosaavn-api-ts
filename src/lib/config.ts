@@ -1,9 +1,11 @@
+import { parseBool } from "./utils";
+
 export const config = {
   baseURL: "https://www.jiosaavn.com/api.php",
   docsURL: "https://docs-jiosaavn.netlify.app",
   siteURL: "https://jiosaavn-api-ts.vercel.app",
 
-  enableRateLimit: !!process.env.ENABLE_RATE_LIMIT ?? false,
+  enableRateLimit: parseBool(process.env.ENABLE_RATE_LIMIT),
 
   endpoint: {
     modules: "webapi.getLaunchData", // "content.getBrowseModules"

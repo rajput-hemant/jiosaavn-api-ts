@@ -1,4 +1,4 @@
-import { createImageLinks } from "../lib/utils";
+import { createImageLinks, parseBool } from "../lib/utils";
 import {
   ArtistRecoRequest,
   ArtistRecoResponse,
@@ -8,6 +8,7 @@ import {
   CityModResponse,
   DiscoverRequest,
   DiscoverResponse,
+  Module,
   ModulePlaylistRequest,
   ModulePlaylistResponse,
   ModuleResponse,
@@ -23,12 +24,6 @@ import {
 } from "../types/modules";
 import { albumPayload } from "./album";
 
-/**
- * Utility function to convert the modules response to a more usable format
- *
- * @param m The modules request object
- * @returns The modules response object
- */
 export function modulesPayload(m: ModulesRequest): ModuleResponse {
   const {
     artist_recos,
@@ -50,32 +45,24 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       radio: radioMod,
       tag_mixes: tagMixesMod,
       top_playlists: topPlaylistsMod,
-      "promo:vx:data:107": promo107Mod,
-      "promo:vx:data:112": promo112Mod,
-      "promo:vx:data:113": promo113Mod,
-      "promo:vx:data:114": promo114Mod,
-      "promo:vx:data:116": promo116Mod,
-      "promo:vx:data:118": promo118Mod,
-      "promo:vx:data:176": promo176Mod,
-      "promo:vx:data:185": promo185Mod,
-      "promo:vx:data:49": promo49Mod,
-      "promo:vx:data:68": promo68Mod,
-      "promo:vx:data:76": promo76Mod,
-      "promo:vx:data:90": promo90Mod,
     },
-    "promo:vx:data:107": promo107,
-    "promo:vx:data:112": promo112,
-    "promo:vx:data:113": promo113,
-    "promo:vx:data:114": promo114,
-    "promo:vx:data:116": promo116,
-    "promo:vx:data:118": promo118,
-    "promo:vx:data:176": promo176,
-    "promo:vx:data:185": promo185,
-    "promo:vx:data:49": promo49,
-    "promo:vx:data:68": promo68,
-    "promo:vx:data:76": promo76,
-    "promo:vx:data:90": promo90,
   } = m;
+
+  const promos = Object.keys(m)
+    .filter((key) => key.includes("promo"))
+    .reduce(
+      (acc, key, i) => {
+        acc[`promo${i}`] = {
+          title: m.modules[key].title,
+          subtitle: m.modules[key].subtitle,
+          featuredText: m.modules[key].featured_text,
+          data: m[key].map(promoPayload),
+        };
+
+        return acc;
+      },
+      {} as Record<string, Module<PromoResponse>>
+    );
 
   return {
     albums: {
@@ -138,89 +125,7 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       data: top_playlists ? top_playlists?.map(modulePlaylistPayload) : [],
     },
 
-    promo107: {
-      title: promo107Mod?.title ?? "",
-      subtitle: promo107Mod?.subtitle ?? "",
-      featuredText: promo107Mod?.featured_text,
-      data: promo107 ? promo107?.map(promoPayload) : [],
-    },
-
-    promo112: {
-      title: promo112Mod?.title ?? "",
-      subtitle: promo112Mod?.subtitle ?? "",
-      featuredText: promo112Mod?.featured_text,
-      data: promo112 ? promo112?.map(promoPayload) : [],
-    },
-
-    promo113: {
-      title: promo113Mod?.title ?? "",
-      subtitle: promo113Mod?.subtitle ?? "",
-      featuredText: promo113Mod?.featured_text,
-      data: promo113 ? promo113?.map(promoPayload) : [],
-    },
-
-    promo114: {
-      title: promo114Mod?.title ?? "",
-      subtitle: promo114Mod?.subtitle ?? "",
-      featuredText: promo114Mod?.featured_text,
-      data: promo114 ? promo114?.map(promoPayload) : [],
-    },
-
-    promo116: {
-      title: promo116Mod?.title ?? "",
-      subtitle: promo116Mod?.subtitle ?? "",
-      featuredText: promo116Mod?.featured_text,
-      data: promo116 ? promo116?.map(promoPayload) : [],
-    },
-
-    promo118: {
-      title: promo118Mod?.title ?? "",
-      subtitle: promo118Mod?.subtitle ?? "",
-      featuredText: promo118Mod?.featured_text,
-      data: promo118 ? promo118?.map(promoPayload) : [],
-    },
-
-    promo176: {
-      title: promo176Mod?.title ?? "",
-      subtitle: promo176Mod?.subtitle ?? "",
-      featuredText: promo176Mod?.featured_text,
-      data: promo176 ? promo176?.map(promoPayload) : [],
-    },
-
-    promo185: {
-      title: promo185Mod?.title ?? "",
-      subtitle: promo185Mod?.subtitle ?? "",
-      featuredText: promo185Mod?.featured_text,
-      data: promo185 ? promo185?.map(promoPayload) : [],
-    },
-
-    promo49: {
-      title: promo49Mod?.title ?? "",
-      subtitle: promo49Mod?.subtitle ?? "",
-      featuredText: promo49Mod?.featured_text,
-      data: promo49 ? promo49?.map(promoPayload) : [],
-    },
-
-    promo68: {
-      title: promo68Mod?.title ?? "",
-      subtitle: promo68Mod?.subtitle ?? "",
-      featuredText: promo68Mod?.featured_text,
-      data: promo68 ? promo68?.map(promoPayload) : [],
-    },
-
-    promo76: {
-      title: promo76Mod?.title ?? "",
-      subtitle: promo76Mod?.subtitle ?? "",
-      featuredText: promo76Mod?.featured_text,
-      data: promo76 ? promo76?.map(promoPayload) : [],
-    },
-
-    promo90: {
-      title: promo90Mod?.title ?? "",
-      subtitle: promo90Mod?.subtitle ?? "",
-      featuredText: promo90Mod?.featured_text,
-      data: promo90 ? promo90?.map(promoPayload) : [],
-    },
+    ...promos,
   };
 }
 
@@ -242,7 +147,7 @@ function artistRecoPayload(a: ArtistRecoRequest): ArtistRecoResponse {
     subtitle,
     type,
     url,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     image: createImageLinks(image),
     featuredStationtype: featured_station_type,
     query: query,
@@ -268,10 +173,10 @@ function discoverPayload(d: DiscoverRequest): DiscoverResponse {
     subtitle,
     type,
     url,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     image: image,
     badge,
-    isFeatured: !!is_featured,
+    isFeatured: parseBool(is_featured),
     videoThumbnail: video_thumbnail,
     videoUrl: video_url,
     subtype: sub_type,
@@ -295,7 +200,7 @@ function chartPayload(c: ChartRequest): ChartResponse {
     subtitle,
     type,
     url,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     image: createImageLinks(image),
     firstname: c.more_info?.firstname,
     songCount: c.more_info?.song_count,
@@ -320,7 +225,7 @@ function cityModPayload(c: CityModRequest): CityModResponse {
     type,
     url,
     image: createImageLinks(image),
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
   };
 }
 
@@ -347,7 +252,7 @@ function trendingPayload(t: TrendingRequest): TrendingResponse {
     subtitle,
     type,
     url,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     image: createImageLinks(image),
     language,
     list,
@@ -383,7 +288,7 @@ function radioPayload(r: RadioRequest): RadioResponse {
     subtitle,
     type,
     url,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     image: createImageLinks(image),
     featuredStationtype: featured_station_type,
     language,
@@ -418,7 +323,7 @@ function tagMixPayload(t: TagMixRequest): TagMixResponse {
     subtitle,
     type,
     url,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     image: createImageLinks(image),
     firstname,
     lastname,
@@ -457,7 +362,7 @@ function modulePlaylistPayload(
     subtitle,
     type,
     url,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     image: createImageLinks(image),
     firstname,
     followerCount: +follower_count,
@@ -490,7 +395,7 @@ function promoPayload(p: PromoRequest): PromoResponse {
     subtitle,
     type,
     url,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     image: createImageLinks(image),
     language,
     list,

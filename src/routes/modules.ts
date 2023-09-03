@@ -9,11 +9,15 @@ import { CustomResponse } from "../types/response";
 export const modules = new Hono();
 
 modules.get("*", async (c) => {
-  const langs = c.req.query("language");
+  const { language, raw } = c.req.query();
 
   const data = await api<ModulesRequest>(config.endpoint.modules, {
-    query: { language: langs ?? "hindi,english" },
+    query: { language },
   });
+
+  if (raw === "true") {
+    return c.json(data);
+  }
 
   const response: CustomResponse<ModuleResponse> = {
     status: "Success",

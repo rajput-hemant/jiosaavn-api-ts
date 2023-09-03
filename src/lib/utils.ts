@@ -23,7 +23,7 @@ export function createImageLinks(link: string) {
  * @param encryptedMediaUrl - Encrypted media url
  * @returns Download links for different qualities
  */
-export const createDownloadLinks = (encryptedMediaUrl: string) => {
+export function createDownloadLinks(encryptedMediaUrl: string) {
   const qualities = [
     { id: "_12", bitrate: "12kbps" },
     { id: "_48", bitrate: "48kbps" },
@@ -50,7 +50,7 @@ export const createDownloadLinks = (encryptedMediaUrl: string) => {
   }));
 
   return links;
-};
+}
 
 /**
  * Utility function to get the `token` from a link
@@ -69,9 +69,19 @@ export function tokenFromLink(type: Type, link: string) {
  * @param url The url to check
  * @returns true if the url is valid
  */
-export const isJioSaavnLink = (url: string) => {
+export function isJioSaavnLink(url: string) {
   const regex =
     /^(https?:\/\/)?(www.)?jiosaavn\.com\/(song|shows|album|artist|featured)\/(.+)$/;
 
   return regex.test(url);
-};
+}
+
+/**
+ * Utility function to parse a boolean value from a string
+ *
+ * @param value string to parse
+ * @returns `true` | `false`
+ */
+export function parseBool(value?: string | null) {
+  return ["true", "1"].includes(value ?? "");
+}

@@ -1,4 +1,4 @@
-import { createDownloadLinks, createImageLinks } from "../lib/utils";
+import { createDownloadLinks, createImageLinks, parseBool } from "../lib/utils";
 import { SongRequest, SongResponse } from "../types/song";
 import { artistMapPayload } from "./artist";
 
@@ -57,7 +57,7 @@ export function songPayload(s: SongRequest): SongResponse {
     language,
     year: +year,
     playCount: typeof play_count === "string" ? +play_count : play_count,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     listCount: +list_count,
     listtype: list_type,
     list,
@@ -68,14 +68,14 @@ export function songPayload(s: SongRequest): SongResponse {
     song,
     origin,
     isDolbyContent: is_dolby_content,
-    "320kbps": !!_320kbps,
+    "320kbps": parseBool(_320kbps),
     downloadUrl: createDownloadLinks(encrypted_media_url),
     albumUrl: album_url,
     duration: +duration,
     rights,
-    hasLyrics: !!has_lyrics,
+    hasLyrics: parseBool(has_lyrics),
     lyricsSnippet: lyrics_snippet,
-    starred: !!starred,
+    starred: parseBool(starred),
     artistMap: artistMapPayload(artistMap),
     releaseDate: release_date ?? "",
     trillerAvailable: triller_available,

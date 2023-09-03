@@ -1,3 +1,4 @@
+import { parseBool } from "../lib/utils";
 import { PlaylistRequest, PlaylistResponse } from "../types/playlist";
 import { artistMiniPayload } from "./artist";
 import { songPayload } from "./song";
@@ -43,7 +44,7 @@ export function playlistPayload(p: PlaylistRequest): PlaylistResponse {
     language,
     year: +year,
     playCount: +play_count,
-    explicit: !!explicit_content,
+    explicit: parseBool(explicit_content),
     listCount: +list_count,
     listType: list_type,
     userId: uid,
