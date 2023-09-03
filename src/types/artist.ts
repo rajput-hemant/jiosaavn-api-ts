@@ -13,12 +13,12 @@ export type ArtistRequest = {
   isVerified: boolean;
   dominantLanguage: string;
   dominantType: string;
-  topSongs: SongRequest[];
-  topAlbums: AlbumRequest[];
-  dedicated_artist_playlist: ArtistPlaylistRequest[];
-  featured_artist_playlist: ArtistPlaylistRequest[];
-  singles: ArtistSongRequest[];
-  latest_release: ArtistSongRequest[];
+  topSongs?: SongRequest[];
+  topAlbums?: AlbumRequest[];
+  dedicated_artist_playlist?: ArtistPlaylistRequest[];
+  featured_artist_playlist?: ArtistPlaylistRequest[];
+  singles?: ArtistSongRequest[];
+  latest_release?: ArtistSongRequest[];
   similarArtists: SimilarArtistRequest[];
   isRadioPresent: boolean;
   bio: string;
@@ -30,15 +30,15 @@ export type ArtistRequest = {
   availableLanguages: string[];
   fan_count: string;
   is_followed: boolean;
-  modules: {
+  modules: Partial<{
     topSongs: ArtistModuleRequest;
     latest_release: ArtistModuleRequest;
     topAlbums: ArtistModuleRequest;
-    dedicated_artist_playlist?: ArtistModuleRequest;
+    dedicated_artist_playlist: ArtistModuleRequest;
     featured_artist_playlist: ArtistModuleRequest;
     singles: ArtistModuleRequest;
-    similarArtists?: ArtistModuleRequest;
-  };
+    similarArtists: ArtistModuleRequest;
+  }>;
 };
 
 export type ArtistPlaylistRequest = {
