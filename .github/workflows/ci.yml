@@ -1,6 +1,6 @@
 name: Check Pull Request
 
-on: [pull_request]
+on: [pull_request, workflow_dispatch]
 
 jobs:
   run-ci:
@@ -16,25 +16,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.4.0
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          version: 8
-
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: lts/*
-          cache: "pnpm"
+          bun-version: latest
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun i
 
       - name: Check types
-        run: pnpm type-check
+        run: bun run type-check
 
       - name: Check linting
-        run: pnpm lint
-
-      - name: Check commits messages
-        uses: wagoid/commitlint-github-action@v5
+        run: bun run lint
