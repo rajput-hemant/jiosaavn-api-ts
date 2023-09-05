@@ -3,7 +3,7 @@ import { Quality, Rights } from "./misc";
 
 export type SongObjRequest = {
   songs: SongRequest[];
-  modules: SongModulesRequest;
+  modules?: SongModulesRequest;
 };
 
 export type SongRequest = {
@@ -107,7 +107,7 @@ export type SongModulesRequest = {
 
 export type SongObjResponse = {
   songs: SongResponse[];
-  modules: SongModulesResponse;
+  modules?: SongModulesResponse;
 };
 
 export type SongResponse = {

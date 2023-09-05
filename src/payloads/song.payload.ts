@@ -14,7 +14,7 @@ export function songObjPayload(s: SongObjRequest): SongObjResponse {
 
   return {
     songs: songs.map(songPayload),
-    modules: songModulesPayload(modules),
+    modules: modules ? songModulesPayload(modules) : undefined,
   };
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "jiosaavn",
   "description": "🎵 An Unofficial wrapper for the Jio Saavn API.",
-  "main": "src/index.ts",
+  "module": "src/index.js",
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
@@ -28,6 +28,7 @@
     "@types/node": "^20.5.7",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
+    "bun-types": "^0.8.1",
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.3",

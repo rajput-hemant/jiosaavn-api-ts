@@ -1,6 +1,6 @@
 <div align=center>
 
-![][views] ![][stars] ![][forks] ![][issues] ![][license] ![][code-size] ![][commit-activity]
+![][ci] ![][views] ![][stars] ![][forks] ![][issues] ![][license] ![][code-size] ![][commit-activity]
 
 # Jio Saavn API
 
@@ -91,3 +91,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [commit-activity]: https://img.shields.io/github/commit-activity/w/rajput-hemant/jiosaavn-api-ts
 [forks]: https://img.shields.io/github/forks/rajput-hemant/jiosaavn-api-ts?style=flat
 [stars]: https://img.shields.io/github/stars/rajput-hemant/jiosaavn-api-ts
+[ci]: https://github.com/rajput-hemant/jiosaavn-api-ts/actions/workflows/ci.yml/badge.svg

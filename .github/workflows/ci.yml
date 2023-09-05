@@ -1,13 +1,10 @@
-name: Check Pull Request
+name: CI
 
-on: [pull_request, workflow_dispatch]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  run-ci:
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    name: Run Type Check & Linters
+  build:
+    name: Run Type Check, Linters & Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -29,3 +26,6 @@ jobs:
 
       - name: Check linting
         run: bun run lint
+
+      - name: Run tests
+        run: bun test

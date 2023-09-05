@@ -115,6 +115,14 @@ artist.get("/:path{(songs|albums)}", async (c) => {
     { query: { artistId: id, page, category, sort_order } }
   );
 
+  if (
+    path === "songs"
+      ? result.topSongs?.songs.length === 0
+      : result.topAlbums?.albums.length === 0
+  ) {
+    throw new Error(`Artist's top ${path} not found, please check the id`);
+  }
+
   if (parseBool(raw)) {
     return c.json(result);
   }
@@ -145,6 +153,10 @@ artist.get("/top-songs", async (c) => {
   const result: SongRequest[] = await api(top_songs, {
     query: { artist_ids, song_id, page, category, sort_order, language },
   });
+
+  if (result.length === 0) {
+    throw new Error("Artist not found, please check the ids");
+  }
 
   if (parseBool(raw)) {
     return c.json(result);
