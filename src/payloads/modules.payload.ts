@@ -9,8 +9,6 @@ import {
   DiscoverRequest,
   DiscoverResponse,
   Module,
-  ModulePlaylistRequest,
-  ModulePlaylistResponse,
   ModuleResponse,
   ModulesRequest,
   PromoRequest,
@@ -19,10 +17,10 @@ import {
   RadioResponse,
   TagMixRequest,
   TagMixResponse,
-  TrendingRequest,
-  TrendingResponse,
 } from "../types/modules";
 import { albumPayload } from "./album";
+import { playlistPayload } from "./playlist";
+import { songPayload } from "./song";
 
 export function modulesPayload(m: ModulesRequest): ModuleResponse {
   const {
@@ -55,7 +53,9 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
         acc[`promo${i}`] = {
           title: m.modules[key].title,
           subtitle: m.modules[key].subtitle,
-          featuredText: m.modules[key].featured_text,
+          position: m.modules[key].position,
+          source: `promo${i}`,
+          featured_text: m.modules[key].featured_text,
           data: m[key].map(promoPayload),
         };
 
@@ -65,67 +65,97 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
     );
 
   return {
-    albums: {
-      title: newAlbumsMod.title ?? "",
-      subtitle: newAlbumsMod.subtitle ?? "",
-      featuredText: newAlbumsMod.featured_text,
-      data: new_albums ? new_albums.map(albumPayload) : [],
+    trending: {
+      title: newTrendingMod.title,
+      subtitle: newTrendingMod.subtitle,
+      position: newTrendingMod.position,
+      source: "/get/trending",
+      featured_text: newTrendingMod.featured_text,
+      data: new_trending.map((i) =>
+        i.type === "song"
+          ? songPayload(i)
+          : i.type === "album"
+          ? albumPayload(i)
+          : playlistPayload(i)
+      ),
     },
-
-    artistRecos: {
-      title: artistRecosMod?.title ?? "",
-      subtitle: artistRecosMod?.subtitle ?? "",
-      featuredText: artistRecosMod?.featured_text,
-      data: artist_recos ? artist_recos.map(artistRecoPayload) : [],
-    },
-
-    discover: browse_discover.map(discoverPayload),
 
     charts: {
-      title: chartsMod?.title ?? "",
-      subtitle: chartsMod?.subtitle ?? "",
-      featuredText: chartsMod?.featured_text,
+      title: chartsMod.title,
+      subtitle: chartsMod.subtitle,
+      position: chartsMod.position,
+      source: "/get/charts",
+      featured_text: chartsMod?.featured_text,
       data: charts.map(chartPayload),
     },
 
-    cityMod: {
-      title: cityModMod?.title ?? "",
-      subtitle: cityModMod?.subtitle ?? "",
-      featuredText: cityModMod?.featured_text,
-      data: city_mod ? city_mod.map(cityModPayload) : [],
+    albums: {
+      title: newAlbumsMod.title,
+      subtitle: newAlbumsMod.subtitle,
+      position: newAlbumsMod.position,
+      source: "/get/albums",
+      featured_text: newAlbumsMod.featured_text,
+      data: new_albums.map((a) =>
+        a.type === "song" ? songPayload(a) : albumPayload(a)
+      ),
     },
 
-    globalConfig: global_config,
-
-    trending: {
-      title: newTrendingMod?.title ?? "",
-      subtitle: newTrendingMod?.subtitle ?? "",
-      featuredText: newTrendingMod?.featured_text,
-      data: new_trending.map(trendingPayload),
+    playlists: {
+      title: topPlaylistsMod.title,
+      subtitle: topPlaylistsMod.subtitle,
+      position: topPlaylistsMod.position,
+      source: "/get/featured-playlists",
+      featured_text: topPlaylistsMod.featured_text,
+      data: top_playlists.map(playlistPayload),
     },
 
     radio: {
-      title: radioMod?.title ?? "",
-      subtitle: radioMod?.subtitle ?? "",
-      featuredText: radioMod?.featured_text,
+      title: radioMod.title,
+      subtitle: radioMod.subtitle,
+      position: radioMod.position,
+      source: "/get/featured-stations",
+      featured_text: radioMod.featured_text,
       data: radio.map(radioPayload),
+    },
+
+    artist_recos: {
+      title: artistRecosMod?.title ?? "",
+      subtitle: artistRecosMod?.subtitle ?? "",
+      position: artistRecosMod?.position ?? -1,
+      source: "artist_recos|artistRecos",
+      featured_text: artistRecosMod?.featured_text,
+      data: artist_recos ? artist_recos.map(artistRecoPayload) : [],
+    },
+
+    discover: {
+      title: "",
+      subtitle: "",
+      position: -1,
+      source: "N/A",
+      data: browse_discover.map(discoverPayload),
+    },
+
+    city_mod: {
+      title: cityModMod?.title ?? "",
+      subtitle: cityModMod?.subtitle ?? "",
+      position: cityModMod?.position ?? -1,
+      source: "city_mod|cityMod",
+      featured_text: cityModMod?.featured_text,
+      data: city_mod ? city_mod.map(cityModPayload) : [],
     },
 
     mixes: {
       title: tagMixesMod?.title ?? "",
       subtitle: tagMixesMod?.subtitle ?? "",
-      featuredText: tagMixesMod?.featured_text,
+      position: tagMixesMod?.position ?? -1,
+      source: "mixes",
+      featured_text: tagMixesMod?.featured_text,
       data: tag_mixes ? tag_mixes.map(tagMixPayload) : [],
     },
 
-    playlists: {
-      title: topPlaylistsMod?.title ?? "",
-      subtitle: topPlaylistsMod?.subtitle ?? "",
-      featuredText: topPlaylistsMod?.featured_text,
-      data: top_playlists ? top_playlists?.map(modulePlaylistPayload) : [],
-    },
-
     ...promos,
+
+    global_config: global_config,
   };
 }
 
@@ -147,11 +177,11 @@ function artistRecoPayload(a: ArtistRecoRequest): ArtistRecoResponse {
     subtitle,
     type,
     url,
-    explicit: parseBool(explicit_content),
     image: createImageLinks(image),
-    featuredStationtype: featured_station_type,
-    query: query,
-    stationDisplayText: station_display_text,
+    explicit: parseBool(explicit_content),
+    query,
+    featured_station_type,
+    station_display_text,
   };
 }
 
@@ -164,7 +194,14 @@ function discoverPayload(d: DiscoverRequest): DiscoverResponse {
     image,
     perma_url: url,
     explicit_content,
-    more_info: { badge, is_featured, sub_type, video_thumbnail, video_url },
+    more_info: {
+      badge,
+      is_featured,
+      sub_type,
+      video_thumbnail,
+      video_url,
+      tags,
+    },
   } = d;
 
   return {
@@ -176,10 +213,11 @@ function discoverPayload(d: DiscoverRequest): DiscoverResponse {
     explicit: parseBool(explicit_content),
     image: image,
     badge,
-    isFeatured: parseBool(is_featured),
-    videoThumbnail: video_thumbnail,
-    videoUrl: video_url,
-    subtype: sub_type,
+    is_featured: parseBool(is_featured),
+    video_thumbnail,
+    video_url,
+    sub_type,
+    tags,
   };
 }
 
@@ -200,10 +238,10 @@ function chartPayload(c: ChartRequest): ChartResponse {
     subtitle,
     type,
     url,
-    explicit: parseBool(explicit_content),
+    explicit: explicit_content ? parseBool(explicit_content) : undefined,
     image: createImageLinks(image),
-    firstname: c.more_info?.firstname,
-    songCount: c.more_info?.song_count,
+    first_name: c.more_info?.firstname,
+    song_count: c.more_info?.song_count,
   };
 }
 
@@ -226,40 +264,6 @@ function cityModPayload(c: CityModRequest): CityModResponse {
     url,
     image: createImageLinks(image),
     explicit: parseBool(explicit_content),
-  };
-}
-
-function trendingPayload(t: TrendingRequest): TrendingResponse {
-  const {
-    id,
-    title: name,
-    subtitle,
-    type,
-    image,
-    perma_url: url,
-    explicit_content,
-    language,
-    list,
-    list_count,
-    list_type,
-    play_count,
-    year,
-  } = t;
-
-  return {
-    id,
-    name,
-    subtitle,
-    type,
-    url,
-    explicit: parseBool(explicit_content),
-    image: createImageLinks(image),
-    language,
-    list,
-    listCount: +list_count,
-    listtype: list_type,
-    playCount: +play_count,
-    year: +year,
   };
 }
 
@@ -290,9 +294,9 @@ function radioPayload(r: RadioRequest): RadioResponse {
     url,
     explicit: parseBool(explicit_content),
     image: createImageLinks(image),
-    featuredStationtype: featured_station_type,
+    featured_station_type,
     language,
-    stationDisplayText: station_display_text,
+    station_display_text: station_display_text,
     color,
     description,
     query,
@@ -314,7 +318,7 @@ function tagMixPayload(t: TagMixRequest): TagMixResponse {
     list_type,
     play_count,
     year,
-    more_info: { firstname, lastname },
+    more_info: { firstname: first_name, lastname: last_name },
   } = t;
 
   return {
@@ -325,50 +329,14 @@ function tagMixPayload(t: TagMixRequest): TagMixResponse {
     url,
     explicit: parseBool(explicit_content),
     image: createImageLinks(image),
-    firstname,
-    lastname,
+    first_name,
+    last_name,
     language,
     list,
-    listCount: +list_count,
-    listtype: list_type,
-    playCount: +play_count,
+    list_count: +list_count,
+    list_type: list_type,
+    play_count: +play_count,
     year: +year,
-  };
-}
-
-function modulePlaylistPayload(
-  p: ModulePlaylistRequest
-): ModulePlaylistResponse {
-  const {
-    id,
-    title: name,
-    subtitle,
-    type,
-    perma_url: url,
-    explicit_content,
-    image,
-    more_info: {
-      firstname,
-      follower_count,
-      last_updated,
-      song_count,
-      uid: userId,
-    },
-  } = p;
-
-  return {
-    id,
-    name,
-    subtitle,
-    type,
-    url,
-    explicit: parseBool(explicit_content),
-    image: createImageLinks(image),
-    firstname,
-    followerCount: +follower_count,
-    lastUpdated: +last_updated,
-    songCount: +song_count,
-    userId,
   };
 }
 
@@ -386,7 +354,8 @@ function promoPayload(p: PromoRequest): PromoResponse {
     list_type,
     play_count,
     year,
-    more_info,
+    more_info: { editorial_language, release_year, square_image },
+    list_count,
   } = p;
 
   return {
@@ -396,16 +365,14 @@ function promoPayload(p: PromoRequest): PromoResponse {
     type,
     url,
     explicit: parseBool(explicit_content),
-    image: createImageLinks(image),
+    image: createImageLinks(square_image ?? image),
     language,
     list,
-    listCount: +(p.list_count ?? 0),
-    listType: list_type,
-    playCount: +(play_count ?? 0),
-    year: +(year ?? 0),
-    editorialLanguage: more_info?.editorial_language,
-    position: +(more_info?.position ?? 0),
-    releaseYear: +(more_info?.release_year ?? 0),
-    squareImage: more_info?.square_image,
+    list_count: list_count ? +list_count : undefined,
+    list_type: list_type,
+    play_count: play_count ? +play_count : undefined,
+    year: year ? +year : undefined,
+    editorial_language,
+    release_year: release_year ? +release_year : undefined,
   };
 }

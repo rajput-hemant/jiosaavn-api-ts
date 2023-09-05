@@ -1,20 +1,23 @@
 import { AlbumRequest, AlbumResponse } from "./album";
 import { Quality, Type } from "./misc";
+import { PlaylistRequest, PlaylistResponse } from "./playlist";
+import { SongRequest, SongResponse } from "./song";
 
 export type ModulesRequest = {
-  new_albums: AlbumRequest[];
+  new_albums: ModuleAlbumRequest;
   artist_recos?: ArtistRecoRequest[];
   browse_discover: DiscoverRequest[];
   charts: ChartRequest[];
   city_mod?: CityModRequest[];
   global_config: GlobalConfig;
   modules: ModuleRequest;
-  new_trending: TrendingRequest[];
+  new_trending: TrendingRequest;
   radio: RadioRequest[];
   tag_mixes?: TagMixRequest[];
-  top_playlists: ModulePlaylistRequest[];
-  // top_shows: TopShowsRequest;
+  top_playlists: PlaylistRequest[];
 } & Record<string, PromoRequest[]>;
+
+type ModuleAlbumRequest = AlbumRequest[] | SongRequest[];
 
 export type ArtistRecoRequest = {
   explicit_content: string;
@@ -24,13 +27,11 @@ export type ArtistRecoRequest = {
   subtitle: string;
   title: string;
   type: Type;
-  more_info: ArtistRecoRequestMoreInfo;
-};
-
-export type ArtistRecoRequestMoreInfo = {
-  featured_station_type: Type;
-  query: string;
-  station_display_text: string;
+  more_info: {
+    featured_station_type: Type;
+    query: string;
+    station_display_text: string;
+  };
 };
 
 export type DiscoverRequest = {
@@ -41,16 +42,15 @@ export type DiscoverRequest = {
   subtitle: string;
   title: string;
   type: Type;
-  more_info: DiscoverMoreInfo;
-};
-
-export type DiscoverMoreInfo = {
-  available: string;
-  badge: string;
-  is_featured: string;
-  sub_type: Type;
-  video_thumbnail: string;
-  video_url: string;
+  more_info: {
+    available: string;
+    badge: string;
+    tags: Record<string, string[]>;
+    is_featured: string;
+    sub_type: Type;
+    video_thumbnail: string;
+    video_url: string;
+  };
 };
 
 export type ChartRequest = {
@@ -60,16 +60,14 @@ export type ChartRequest = {
   image: string;
   language?: string;
   listname?: string;
-  more_info?: ChartRequestMoreInfo;
   perma_url: string;
   subtitle?: string;
   title: string;
   type: Type;
-};
-
-export type ChartRequestMoreInfo = {
-  firstname?: string;
-  song_count?: number;
+  more_info?: Partial<{
+    firstname: string;
+    song_count: number;
+  }>;
 };
 
 export type CityModRequest = {
@@ -80,21 +78,17 @@ export type CityModRequest = {
   subtitle: string;
   title: string;
   type: Type;
-  more_info: CityModRequestMoreInfo;
-};
-
-export type CityModRequestMoreInfo = {
-  album_id?: string;
-  featured_station_type?: string;
-  multiple_tunes?: CityModRequestMultipleTune[];
-  query?: string;
-};
-
-export type CityModRequestMultipleTune = {
-  id: string;
-  subtype: Type;
-  title: string;
-  type: Type;
+  more_info: Partial<{
+    album_id: string;
+    featured_station_type: string;
+    query: string;
+    multiple_tunes: {
+      id: string;
+      subtype: Type;
+      title: string;
+      type: Type;
+    }[];
+  }>;
 };
 
 export type GlobalConfig = {
@@ -102,12 +96,12 @@ export type GlobalConfig = {
   weekly_top_songs_listid: GlobalConfigItem;
 };
 
-export type GlobalConfigItem = {
+type GlobalConfigItem = {
   english: GlobalConfigItemLang;
   hindi: GlobalConfigItemLang;
 };
 
-export type GlobalConfigItemLang = {
+type GlobalConfigItemLang = {
   count: number;
   image: string;
   listid: string;
@@ -126,14 +120,12 @@ export type TagMixRequest = {
   list_count: string;
   list_type: Type;
   list: string;
-  more_info: TagMixRequestMoreInfo;
+  more_info: {
+    firstname: string;
+    lastname: string;
+  };
   play_count: string;
   year: string;
-};
-
-export type TagMixRequestMoreInfo = {
-  firstname: string;
-  lastname: string;
 };
 
 export type RadioRequest = {
@@ -144,76 +136,17 @@ export type RadioRequest = {
   subtitle: string;
   title: string;
   type: Type;
-  more_info: RadioRequestMoreInfo;
+  more_info: {
+    color?: string;
+    description?: string;
+    featured_station_type: Type;
+    language: string;
+    query?: string;
+    station_display_text: string;
+  };
 };
 
-export type RadioRequestMoreInfo = {
-  color?: string;
-  description?: string;
-  featured_station_type: Type;
-  language: string;
-  query?: string;
-  station_display_text: string;
-};
-
-// export type TopShowsRequest = {
-//   last_page: boolean;
-//   shows: ShowRequest[];
-// };
-
-// export type ShowRequest = {
-//   explicit_content: string;
-//   id: string;
-//   image: string;
-//   perma_url: string;
-//   subtitle: string;
-//   title: string;
-//   type: Type;
-//   more_info: ShowMoreInfo;
-// };
-
-// export type ShowMoreInfo = {
-//   badge: string;
-//   release_date: string;
-//   season_number: string;
-//   square_image: string;
-//   year: string;
-// };
-
-export type TrendingRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
-  perma_url: string;
-  subtitle: string;
-  title: string;
-  type: Type;
-  language: string;
-  list_count: string;
-  list_type: Type;
-  list: string;
-  play_count: string;
-  year: string;
-};
-
-export type ModulePlaylistRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
-  perma_url: string;
-  subtitle: string;
-  title: string;
-  type: Type;
-  more_info: PlaylistMoreInfo;
-};
-
-export type PlaylistMoreInfo = {
-  firstname: string;
-  follower_count: string;
-  last_updated: string;
-  song_count: string;
-  uid: string;
-};
+type TrendingRequest = AlbumRequest[] | SongRequest[] | PlaylistRequest[];
 
 export type PromoRequest = {
   explicit_content: string;
@@ -227,16 +160,14 @@ export type PromoRequest = {
   list_count?: string;
   list_type?: string;
   list?: string;
-  more_info: PromoRequestMoreInfo;
   play_count?: string;
   year?: string;
-};
-
-export type PromoRequestMoreInfo = {
-  editorial_language?: string;
-  position?: string;
-  release_year?: number;
-  square_image?: string;
+  more_info: Partial<{
+    editorial_language: string;
+    position: string;
+    release_year: number;
+    square_image: string;
+  }>;
 };
 
 export type ModuleRequest = {
@@ -251,9 +182,10 @@ export type ModuleRequest = {
 } & Record<string, ModuleItemRequest>;
 
 export type ModuleItemRequest = {
-  featured_text?: string;
-  subtitle: string;
   title: string;
+  subtitle: string;
+  position: number;
+  featured_text?: string;
 };
 
 /*---------------------- Response ---------------------- */
@@ -261,22 +193,25 @@ export type ModuleItemRequest = {
 export type Module<T> = {
   title: string;
   subtitle: string;
-  featuredText?: string;
+  position: number;
+  featured_text?: string;
+  source: string;
   data: T[];
 };
 
 export type ModuleResponse = {
-  albums: Module<AlbumResponse>;
-  artistRecos: Module<ArtistRecoResponse>;
+  albums: Module<AlbumResponse | SongResponse>;
+  artist_recos: Module<ArtistRecoResponse>;
   charts: Module<ChartResponse>;
-  cityMod?: Module<CityModResponse>;
-  globalConfig: GlobalConfig;
-  discover: DiscoverResponse[];
+  city_mod?: Module<CityModResponse>;
+  discover: Module<DiscoverResponse>;
   mixes: Module<TagMixResponse>;
-  playlists: Module<ModulePlaylistResponse>;
+  playlists: Module<PlaylistResponse>;
   radio: Module<RadioResponse>;
-  trending: Module<TrendingResponse>;
+  trending: Module<AlbumResponse | SongResponse | PlaylistResponse>;
+  global_config: GlobalConfig;
 };
+// & Record<string, Module<PromoResponse>>;
 
 export type ArtistRecoResponse = {
   explicit: boolean;
@@ -286,9 +221,9 @@ export type ArtistRecoResponse = {
   subtitle: string;
   name: string;
   type: Type;
-  featuredStationtype: Type;
+  featured_station_type: Type;
   query: string;
-  stationDisplayText: string;
+  station_display_text: string;
 };
 
 export type DiscoverResponse = {
@@ -300,14 +235,15 @@ export type DiscoverResponse = {
   name: string;
   type: Type;
   badge: string;
-  isFeatured: boolean;
-  subtype: Type;
-  videoThumbnail: string;
-  videoUrl: string;
+  is_featured: boolean;
+  sub_type: Type;
+  tags: Record<string, string[]>;
+  video_thumbnail: string;
+  video_url: string;
 };
 
 export type ChartResponse = {
-  explicit: boolean;
+  explicit?: boolean;
   id: string;
   image: Quality;
   url: string;
@@ -315,10 +251,10 @@ export type ChartResponse = {
   name: string;
   type: Type;
   count?: number;
-  firstname?: string;
+  first_name?: string;
   language?: string;
   listname?: string;
-  songCount?: number;
+  song_count?: number;
 };
 
 export type CityModResponse = {
@@ -329,17 +265,10 @@ export type CityModResponse = {
   subtitle: string;
   name: string;
   type: Type;
-  albumId?: string;
-  featuredStationType?: string;
-  multipleTunes?: CityModResponseMultipleTune[];
+  album_id?: string;
+  featured_station_type?: string;
+  multiple_tunes?: { id: string; name: string; sub_type: Type; type: Type }[];
   query?: string;
-};
-
-export type CityModResponseMultipleTune = {
-  id: string;
-  name: string;
-  subtype: Type;
-  type: Type;
 };
 
 export type TagMixResponse = {
@@ -350,13 +279,13 @@ export type TagMixResponse = {
   subtitle: string;
   name: string;
   type: Type;
-  firstname: string;
+  first_name: string;
   language: string;
-  lastname: string;
-  listCount: number;
-  listtype: Type;
+  last_name: string;
+  list_count: number;
+  list_type: Type;
   list: string;
-  playCount: number;
+  play_count: number;
   year: number;
 };
 
@@ -370,25 +299,10 @@ export type RadioResponse = {
   type: Type;
   color?: string;
   description?: string;
-  featuredStationtype: Type;
+  featured_station_type: Type;
   language: string;
   query?: string;
-  stationDisplayText: string;
-};
-
-export type DiscoverResonse = {
-  explicit: boolean;
-  id: string;
-  image: Quality;
-  url: string;
-  subtitle: string;
-  name: string;
-  type: Type;
-  badge: string;
-  isFeatured: boolean;
-  subtype: Type;
-  videoThumbnail: string;
-  videoUrl: string;
+  station_display_text: string;
 };
 
 export type TrendingResponse = {
@@ -400,26 +314,11 @@ export type TrendingResponse = {
   name: string;
   type: Type;
   language: string;
-  listCount: number;
-  listtype: Type;
+  list_count: number;
+  list_type: Type;
   list: string;
-  playCount: number;
+  play_count: number;
   year: number;
-};
-
-export type ModulePlaylistResponse = {
-  explicit: boolean;
-  id: string;
-  image: Quality;
-  url: string;
-  subtitle: string;
-  name: string;
-  type: Type;
-  firstname: string;
-  followerCount: number;
-  lastUpdated: number;
-  songCount: number;
-  userId: string;
 };
 
 export type PromoResponse = {
@@ -430,14 +329,12 @@ export type PromoResponse = {
   subtitle: string;
   name: string;
   type: Type;
-  editorialLanguage?: string;
+  editorial_language?: string;
   language?: string;
-  listCount?: number;
-  listType?: string;
+  list_count?: number;
+  list_type?: string;
   list?: string;
-  playCount?: number;
-  position?: number;
-  releaseYear?: number;
-  squareImage?: string;
+  play_count?: number;
+  release_year?: number;
   year?: number;
 };

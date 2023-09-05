@@ -13,11 +13,11 @@ export const home = new Hono().get("/", (c) =>
 		<meta name="title" content="JioSaavn API" />
 		<meta name="description" content="JioSaavn API by rajput-hemant@github" />
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="${config.siteURL}" />
+		<meta property="og:url" content="${config.urls.siteUrl}" />
 		<meta property="og:title" content="JioSaavn API" />
 		<meta property="og:description" content="JioSaavn API by rajput-hemant@github" />
 		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content="${config.siteURL}" />
+		<meta property="twitter:url" content="${config.urls.siteUrl}" />
 		<meta property="twitter:title" content="JioSaavn API by rajput-hemant@github" />
 		<meta
 			property="twitter:description"
@@ -105,7 +105,7 @@ export const home = new Hono().get("/", (c) =>
 			</div>
 
 			<a
-				href="${config.docsURL}"
+				href="${config.urls.docsUrl}"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="card before: before:transition-opcacity after:transition-opcacity relative flex h-[180px] w-full lg:h-[225px] lg:w-[500px] flex-col rounded-xl bg-white/10 shadow-lg shadow-black transition-shadow duration-500 before:absolute before:left-0 before:top-0 before:h-full before:w-full before:rounded-xl before:opacity-0 before:duration-500 after:absolute after:left-0 after:top-0 after:h-full after:w-full after:rounded-xl after:opacity-0 after:duration-500 hover:shadow-2xl hover:shadow-black before:hover:opacity-100"
