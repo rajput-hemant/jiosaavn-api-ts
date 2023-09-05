@@ -27,7 +27,7 @@ app.notFound((c) => {
   c.status(404);
   return c.json({
     status: "Failed",
-    message: `Requested route not found, please check the documentation at ${config.docsURL}`,
+    message: `Requested route not found, please check the documentation at ${config.urls.docsUrl}`,
   });
 });
 

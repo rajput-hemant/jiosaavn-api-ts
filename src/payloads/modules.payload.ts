@@ -18,9 +18,9 @@ import {
   TagMixRequest,
   TagMixResponse,
 } from "../types/modules";
-import { albumPayload } from "./album";
-import { playlistPayload } from "./playlist";
-import { songPayload } from "./song";
+import { albumPayload } from "./album.payload";
+import { playlistPayload } from "./playlist.payload";
+import { songPayload } from "./song.payload";
 
 export function modulesPayload(m: ModulesRequest): ModuleResponse {
   const {
