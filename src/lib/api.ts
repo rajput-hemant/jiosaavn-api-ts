@@ -18,7 +18,7 @@ export const api = async <T>(
     ...query,
   });
 
-  const url = `${config.baseURL}?__call=${path}&${params}`;
+  const url = `${config.urls.baseUrl}?__call=${path}&${params}`;
 
   const response = await fetch(url, {
     headers: {
@@ -26,7 +26,7 @@ export const api = async <T>(
     },
   });
 
-  const data: T = await response.json();
+  const data = await response.json();
 
-  return data;
+  return data as T;
 };

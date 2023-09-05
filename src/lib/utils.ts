@@ -1,6 +1,6 @@
 import Crypto from "crypto-js";
 
-import { Type } from "../types/misc";
+import { Quality } from "../types/misc";
 
 /**
  * Utility function to create image links for different qualities
@@ -8,13 +8,19 @@ import { Type } from "../types/misc";
  * @param link - Image link
  * @returns Image links for different qualities
  */
-export function createImageLinks(link: string) {
-  return link.includes("150x150")
-    ? ["50x50", "150x150", "500x500"].map((quality) => ({
+export function createImageLinks(link: string): Quality {
+  const qualities = ["50x50", "150x150", "500x500"];
+
+  for (const q of qualities) {
+    if (link.includes(q)) {
+      return qualities.map((quality) => ({
         quality,
-        link: link.replace("150x150", quality),
-      }))
-    : link;
+        link: link.replace(q, quality),
+      }));
+    }
+  }
+
+  return link;
 }
 
 /**
@@ -41,7 +47,6 @@ export function createDownloadLinks(encryptedMediaUrl: string) {
     Crypto.enc.Utf8.parse(key),
     { mode: Crypto.mode.ECB }
   );
-
   const decryptedLink = decrypted.toString(Crypto.enc.Utf8);
 
   const links = qualities.map((q) => ({
@@ -59,8 +64,8 @@ export function createDownloadLinks(encryptedMediaUrl: string) {
  * @param link - JioSaavn link
  * @returns Token from the link
  */
-export function tokenFromLink(type: Type, link: string) {
-  return link.split(`${type}/`).slice(1).join("/").split("/")[1];
+export function tokenFromLink(link: string) {
+  return link.split("/").at(-1)!;
 }
 
 /**
@@ -82,6 +87,37 @@ export function isJioSaavnLink(url: string) {
  * @param value string to parse
  * @returns `true` | `false`
  */
-export function parseBool(value?: string | null) {
-  return ["true", "1"].includes(value ?? "");
+export function parseBool(value: string) {
+  return ["true", "1"].includes(value);
+}
+
+type A = Record<string, unknown>;
+
+/**
+ * Utility function to convert an object's keys to camelCase from snake_case **_Recursively_**
+ *
+ * @param obj Object to convert
+ * @returns Object with camelCase keys
+ */
+export function toCamelCase<T>(obj: A | A[]): T {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => toCamelCase(item)) as T;
+  }
+
+  const result: A = {};
+
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const camelCaseKey = key.replace(/_([a-z])/g, (_, letter) =>
+        letter.toUpperCase()
+      );
+      result[camelCaseKey] = toCamelCase(obj[key] as A);
+    }
+  }
+
+  return result as T;
 }

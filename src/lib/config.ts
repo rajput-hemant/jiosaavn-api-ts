@@ -1,28 +1,35 @@
-import { parseBool } from "./utils";
-
 export const config = {
-  baseURL: "https://www.jiosaavn.com/api.php",
-  docsURL: "https://docs-jiosaavn.netlify.app",
-  siteURL: "https://jiosaavn-api-ts.vercel.app",
+  urls: {
+    baseUrl: "https://www.jiosaavn.com/api.php",
+    docsUrl: "https://docs-jiosaavn.netlify.app",
+    siteUrl: "https://jiosaavn-api-ts.vercel.app",
+  },
 
-  enableRateLimit: parseBool(process.env.ENABLE_RATE_LIMIT),
+  enableRateLimit: process.env.ENABLE_RATE_LIMIT === "true" ?? false,
 
   endpoint: {
-    modules: "webapi.getLaunchData", // "content.getBrowseModules"
+    modules: {
+      launch_data: "webapi.getLaunchData",
+      browse_modules: "content.getBrowseModules",
+    },
+
     song: {
       id: "song.getDetails",
       link: "webapi.get",
-      recommended: "reco.getReco",
+      recommend: "reco.getreco",
     },
 
     album: {
       id: "content.getAlbumDetails",
       link: "webapi.get",
-      recommended: "reco.getAlbumReco",
+      recommend: "reco.getAlbumReco",
+      same_year: "search.topAlbumsoftheYear",
     },
 
     playlist: {
       id: "playlist.getDetails",
+      link: "webapi.get",
+      recommend: "reco.getPlaylistReco",
     },
 
     artist: {
@@ -30,11 +37,11 @@ export const config = {
       link: "webapi.get",
       songs: "artist.getArtistMoreSong",
       albums: "artist.getArtistMoreAlbum",
-      topSongs: "search.artistOtherTopSongs",
+      top_songs: "search.artistOtherTopSongs",
     },
 
     search: {
-      topSearch: "content.getTopSearches",
+      top_search: "content.getTopSearches",
       all: "autocomplete.get",
       songs: "search.getResults",
       albums: "search.getAlbumResults",
@@ -49,6 +56,17 @@ export const config = {
       songs: "webradio.getSong",
     },
 
-    lyrics: "lyrics.getLyrics",
+    get: {
+      trending: "content.getTrending",
+      featured_playlists: "content.getFeaturedPlaylists",
+      charts: "content.getCharts",
+      top_shows: "content.getTopShows",
+      top_artists: "social.getTopArtists",
+      top_albums: "content.getAlbums",
+      footer_details: "webapi.getFooterDetails",
+      featured_stations: "webradio.getFeaturedStations",
+      actor_top_songs: "search.actorOtherTopSongs",
+      lyrics: "lyrics.getLyrics",
+    },
   },
 };
