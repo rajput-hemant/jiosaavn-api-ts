@@ -14,8 +14,8 @@ describe("Artist", () => {
     expect(artists.data).toBeNull();
   });
 
-  test("GET /artist?id=568707 | Artist Details by ID", async () => {
-    const response = await app.request("/artist?id=568707");
+  test("GET /artist?id=459320 | Artist Details by ID", async () => {
+    const response = await app.request("/artist?id=459320");
 
     expect(response.status).toBe(200);
 
@@ -25,8 +25,8 @@ describe("Artist", () => {
     expect(artists.data).toHaveProperty("follower_count");
   });
 
-  test("GET /artist?id=568___ | Artist Details by ID (Invalid ID)", async () => {
-    const response = await app.request("/artist?id=568___");
+  test("GET /artist?id=459___ | Artist Details by ID (Invalid ID)", async () => {
+    const response = await app.request("/artist?id=459___");
 
     expect(response.status).toBe(400);
 
@@ -36,8 +36,8 @@ describe("Artist", () => {
     expect(artists.data).toBeNull();
   });
 
-  test("GET /artist?id=568707&camel=1 | Artist Details by ID (Camel Case)", async () => {
-    const response = await app.request("/artist?id=568707&camel=1");
+  test("GET /artist?id=459320&camel=1 | Artist Details by ID (Camel Case)", async () => {
+    const response = await app.request("/artist?id=459320&camel=1");
 
     expect(response.status).toBe(200);
 
@@ -60,8 +60,8 @@ describe("Artist", () => {
     expect(artists.data).toHaveProperty("follower_count");
   });
 
-  test("GET /artist/songs?id=568707 | Artists Top Songs by Artist ID", async () => {
-    const response = await app.request("/artist/songs?id=568707");
+  test("GET /artist/songs?id=459320 | Artists Top Songs by Artist ID", async () => {
+    const response = await app.request("/artist/songs?id=459320");
 
     expect(response.status).toBe(200);
 
@@ -73,8 +73,8 @@ describe("Artist", () => {
     expect(recos.data.top_songs.songs[0]).toHaveProperty("play_count");
   });
 
-  test("GET /artist/songs?id=568___ | Artists Top Songs by Artist ID (Invalid ID)", async () => {
-    const response = await app.request("/artist/songs?id=568___");
+  test("GET /artist/songs?id=459___ | Artists Top Songs by Artist ID (Invalid ID)", async () => {
+    const response = await app.request("/artist/songs?id=459___");
 
     expect(response.status).toBe(400);
 
@@ -84,8 +84,8 @@ describe("Artist", () => {
     expect(artists.data).toBeNull();
   });
 
-  test("GET /artist/albums?id=568707 | Artists Top Albums by Artist ID", async () => {
-    const response = await app.request("/artist/albums?id=568707");
+  test("GET /artist/albums?id=459320 | Artists Top Albums by Artist ID", async () => {
+    const response = await app.request("/artist/albums?id=459320");
 
     expect(response.status).toBe(200);
 
@@ -96,8 +96,8 @@ describe("Artist", () => {
     expect(recos.data.top_albums.albums[0]).toHaveProperty("play_count");
   });
 
-  test("GET /artist/albums?id=568___ | | Artists Top Albums by Artist ID (Invalid ID)", async () => {
-    const response = await app.request("/artist?id=568___");
+  test("GET /artist/albums?id=459___ | | Artists Top Albums by Artist ID (Invalid ID)", async () => {
+    const response = await app.request("/artist?id=459___");
 
     expect(response.status).toBe(400);
 

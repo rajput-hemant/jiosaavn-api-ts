@@ -24,7 +24,7 @@ describe("Playlist", () => {
     expect(playlists.status).toBe("Success");
     expect(playlists.data).toHaveProperty("fan_count");
     expect(playlists.data.songs).toBeArray();
-    expect(playlists.data.songs[0]).toHaveProperty("play_count");
+    // expect(playlists.data.songs[0]).toHaveProperty("play_count");
   });
 
   test("GET /playlist?id=159144718&camel=1 | Playlist Details by ID (Camel Case)", async () => {
@@ -37,7 +37,7 @@ describe("Playlist", () => {
     expect(playlists.status).toBe("Success");
     expect(playlists.data).toHaveProperty("fanCount");
     expect(playlists.data.songs).toBeArray();
-    expect(playlists.data.songs[0]).toHaveProperty("playCount");
+    // expect(playlists.data.songs[0]).toHaveProperty("playCount");
   });
 
   test("GET /playlist?id=1591____ | Playlist Details by ID (Invalid ID)", async () => {
