@@ -3,8 +3,6 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 
-// import { serve } from "@hono/node-server";
-
 import { config } from "./lib/config";
 import { rateLimitMiddleware } from "./lib/middleware";
 import { album, artist, get, home, modules, playlist, song } from "./routes";
@@ -12,18 +10,33 @@ import { CustomResponse } from "./types/response";
 
 const app = new Hono({ strict: false });
 
-// middlewares
+/* middlewares */
 app.use("*", cors(), prettyJSON(), logger(), rateLimitMiddleware());
 
-// routes
+/* routes */
+
+/* home */
 app.route("/", home);
+
+/* modules */
 app.route("/modules", modules);
+
+/* details & recommendations */
 app.route("/song", song);
 app.route("/album", album);
 app.route("/playlist", playlist);
 app.route("/artist", artist);
+
+/* search */
+// ...
+
+/* get */
 app.route("/get", get);
 
+/* radio */
+// ...
+
+/* 404 */
 app.notFound((c) => {
   c.status(404);
   return c.json({
@@ -32,6 +45,7 @@ app.notFound((c) => {
   });
 });
 
+/* error */
 app.onError((err, c) => {
   const response: CustomResponse<null> = {
     status: "Failed",
@@ -48,12 +62,6 @@ const server = {
   fetch: app.fetch,
 };
 
-/* For Node.js */
-// serve(server, (info) => {
-//   console.log(`Server listening on ${info.address}:${info.port}`);
-// });
-
-/* For Vercel */
 export { app };
 
 export default server;

@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "dev:node": "tsx src/index.ts",
+    "dev:node": "tsx api/node.ts",
     "dev:vercel": "vercel dev",
-    "deploy": "vercel",
+    "deploy:vercel": "vercel",
+    "dev:cf": "wrangler dev src/index.ts",
+    "deploy:cf": "wrangler deploy --minify src/index.ts",
     "type-check": "tsc --noEmit",
     "lint": "eslint src --ext ts,json --report-unused-disable-directives --max-warnings 0",
     "fmt:check": "prettier --check \"**/*.{ts,json}\" --cache",
@@ -15,11 +17,13 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@hono/node-server": "^1.1.1",
     "crypto-js": "^4.1.1",
     "hono": "^3.5.4",
     "lru-cache": "^10.0.1"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230904.0",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
@@ -34,7 +38,9 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
+    "tsx": "^3.12.8",
     "typescript": "^5.2.2",
-    "vercel": "^29.1.1"
+    "vercel": "^29.1.1",
+    "wrangler": "^3.7.0"
   }
 }

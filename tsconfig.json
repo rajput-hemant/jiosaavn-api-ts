@@ -3,11 +3,12 @@
     "target": "ESNext",
     "module": "ESNext",
     "skipLibCheck": true,
+    "lib": ["esnext"],
 
     /* Bundler mode */
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "types": ["bun-types"],
+    "types": ["bun-types", "@cloudflare/workers-types"],
 
     /* Linting */
     "strict": true,
