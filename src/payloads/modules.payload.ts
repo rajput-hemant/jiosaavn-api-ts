@@ -2,8 +2,6 @@ import { createImageLinks, parseBool } from "../lib/utils";
 import {
   ArtistRecoRequest,
   ArtistRecoResponse,
-  ChartRequest,
-  ChartResponse,
   CityModRequest,
   CityModResponse,
   DiscoverRequest,
@@ -13,12 +11,11 @@ import {
   ModulesRequest,
   PromoRequest,
   PromoResponse,
-  RadioRequest,
-  RadioResponse,
   TagMixRequest,
   TagMixResponse,
 } from "../types/modules";
 import { albumPayload } from "./album.payload";
+import { chartPayload, radioPayload, trendingPayload } from "./get.payload";
 import { playlistPayload } from "./playlist.payload";
 import { songPayload } from "./song.payload";
 
@@ -71,13 +68,7 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       position: newTrendingMod.position,
       source: "/get/trending",
       featured_text: newTrendingMod.featured_text,
-      data: new_trending.map((i) =>
-        i.type === "song"
-          ? songPayload(i)
-          : i.type === "album"
-          ? albumPayload(i)
-          : playlistPayload(i)
-      ),
+      data: trendingPayload(new_trending),
     },
 
     charts: {
@@ -221,30 +212,6 @@ function discoverPayload(d: DiscoverRequest): DiscoverResponse {
   };
 }
 
-function chartPayload(c: ChartRequest): ChartResponse {
-  const {
-    id,
-    title: name,
-    subtitle,
-    type,
-    image,
-    perma_url: url,
-    explicit_content,
-  } = c;
-
-  return {
-    id,
-    name,
-    subtitle,
-    type,
-    url,
-    explicit: explicit_content ? parseBool(explicit_content) : undefined,
-    image: createImageLinks(image),
-    first_name: c.more_info?.firstname,
-    song_count: c.more_info?.song_count,
-  };
-}
-
 function cityModPayload(c: CityModRequest): CityModResponse {
   const {
     id,
@@ -254,6 +221,7 @@ function cityModPayload(c: CityModRequest): CityModResponse {
     image,
     perma_url: url,
     explicit_content,
+    more_info,
   } = c;
 
   return {
@@ -264,42 +232,9 @@ function cityModPayload(c: CityModRequest): CityModResponse {
     url,
     image: createImageLinks(image),
     explicit: parseBool(explicit_content),
-  };
-}
-
-function radioPayload(r: RadioRequest): RadioResponse {
-  const {
-    id,
-    title: name,
-    subtitle,
-    type,
-    perma_url: url,
-    explicit_content,
-    image,
-    more_info: {
-      featured_station_type,
-      language,
-      station_display_text,
-      color,
-      description,
-      query,
-    },
-  } = r;
-
-  return {
-    id,
-    name,
-    subtitle,
-    type,
-    url,
-    explicit: parseBool(explicit_content),
-    image: createImageLinks(image),
-    featured_station_type,
-    language,
-    station_display_text: station_display_text,
-    color,
-    description,
-    query,
+    query: more_info?.query,
+    album_id: more_info?.album_id,
+    featured_station_type: more_info?.featured_station_type,
   };
 }
 

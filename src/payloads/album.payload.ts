@@ -53,11 +53,7 @@ export function albumPayload(a: AlbumRequest): AlbumResponse {
     is_dolby_content,
     copyright_text,
     label_url,
-    songs: list
-      ? typeof list === "string"
-        ? []
-        : list.map(songPayload)
-      : undefined,
+    songs: !list || typeof list === "string" ? [] : list.map(songPayload),
     modules: modules ? albumModulesPayload(modules) : undefined,
   };
 }

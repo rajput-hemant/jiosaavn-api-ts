@@ -68,11 +68,7 @@ export function playlistPayload(p: PlaylistRequest): PlaylistResponse {
     share: share ? +share : undefined,
     video_count: video_count ? +video_count : undefined,
     artists: artists?.map(artistMiniPayload),
-    songs: list
-      ? typeof list === "string" || !list
-        ? []
-        : list.map(songPayload)
-      : undefined,
+    songs: !list || typeof list === "string" ? [] : list.map(songPayload),
     subtitle_desc,
     modules: modules ? playlistModulesPayload(modules) : undefined,
   };

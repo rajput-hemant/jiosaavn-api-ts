@@ -1,4 +1,12 @@
 import { AlbumRequest, AlbumResponse } from "./album";
+import {
+  ChartRequest,
+  ChartResponse,
+  RadioRequest,
+  RadioResponse,
+  TrendingRequest,
+  TrendingResponse,
+} from "./get";
 import { Quality, Type } from "./misc";
 import { PlaylistRequest, PlaylistResponse } from "./playlist";
 import { SongRequest, SongResponse } from "./song";
@@ -41,7 +49,7 @@ export type DiscoverRequest = {
   perma_url: string;
   subtitle: string;
   title: string;
-  type: Type;
+  type: "channel";
   more_info: {
     available: string;
     badge: string;
@@ -51,23 +59,6 @@ export type DiscoverRequest = {
     video_thumbnail: string;
     video_url: string;
   };
-};
-
-export type ChartRequest = {
-  count?: number;
-  explicit_content?: string;
-  id: string;
-  image: string;
-  language?: string;
-  listname?: string;
-  perma_url: string;
-  subtitle?: string;
-  title: string;
-  type: Type;
-  more_info?: Partial<{
-    firstname: string;
-    song_count: number;
-  }>;
 };
 
 export type CityModRequest = {
@@ -127,26 +118,6 @@ export type TagMixRequest = {
   play_count: string;
   year: string;
 };
-
-export type RadioRequest = {
-  explicit_content: string;
-  id: string;
-  image: string;
-  perma_url: string;
-  subtitle: string;
-  title: string;
-  type: Type;
-  more_info: {
-    color?: string;
-    description?: string;
-    featured_station_type: Type;
-    language: string;
-    query?: string;
-    station_display_text: string;
-  };
-};
-
-type TrendingRequest = AlbumRequest[] | SongRequest[] | PlaylistRequest[];
 
 export type PromoRequest = {
   explicit_content: string;
@@ -208,7 +179,7 @@ export type ModuleResponse = {
   mixes: Module<TagMixResponse>;
   playlists: Module<PlaylistResponse>;
   radio: Module<RadioResponse>;
-  trending: Module<AlbumResponse | SongResponse | PlaylistResponse>;
+  trending: Module<TrendingResponse[0]>;
   global_config: GlobalConfig;
 };
 // & Record<string, Module<PromoResponse>>;
@@ -233,28 +204,13 @@ export type DiscoverResponse = {
   url: string;
   subtitle: string;
   name: string;
-  type: Type;
+  type: "channel";
   badge: string;
   is_featured: boolean;
   sub_type: Type;
   tags: Record<string, string[]>;
   video_thumbnail: string;
   video_url: string;
-};
-
-export type ChartResponse = {
-  explicit?: boolean;
-  id: string;
-  image: Quality;
-  url: string;
-  subtitle?: string;
-  name: string;
-  type: Type;
-  count?: number;
-  first_name?: string;
-  language?: string;
-  listname?: string;
-  song_count?: number;
 };
 
 export type CityModResponse = {
@@ -267,7 +223,6 @@ export type CityModResponse = {
   type: Type;
   album_id?: string;
   featured_station_type?: string;
-  multiple_tunes?: { id: string; name: string; sub_type: Type; type: Type }[];
   query?: string;
 };
 
@@ -282,38 +237,6 @@ export type TagMixResponse = {
   first_name: string;
   language: string;
   last_name: string;
-  list_count: number;
-  list_type: Type;
-  list: string;
-  play_count: number;
-  year: number;
-};
-
-export type RadioResponse = {
-  explicit: boolean;
-  id: string;
-  image: Quality;
-  url: string;
-  subtitle: string;
-  name: string;
-  type: Type;
-  color?: string;
-  description?: string;
-  featured_station_type: Type;
-  language: string;
-  query?: string;
-  station_display_text: string;
-};
-
-export type TrendingResponse = {
-  explicit: boolean;
-  id: string;
-  image: Quality;
-  url: string;
-  subtitle: string;
-  name: string;
-  type: Type;
-  language: string;
   list_count: number;
   list_type: Type;
   list: string;
