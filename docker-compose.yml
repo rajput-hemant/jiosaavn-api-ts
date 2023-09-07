@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  app:
+    image: oven/bun
+    container_name: jiosaavn
+    working_dir: /app
+    ports:
+      - "80:3000"
+    environment:
+      - ENABLE_RATE_LIMIT=true
+    volumes:
+      - ./src:/app/src
+    command: bun run src/index.ts

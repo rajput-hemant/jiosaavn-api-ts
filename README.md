@@ -13,7 +13,7 @@
 </div>
 
 - 🚀 **Ultrafast** - Powered by [Hono.js](https://hono.dev).The router `RegExpRouter` is really fast.
-- 🪶 **Lightweight** - Has has minimal dependencies.
+- 🪶 **Lightweight** - Has minimal dependencies.
 - 🌍 **Multi-runtime** - Works on `Bun`, `Node.js`, `Vercel` or `Cloudflare Workers`. The same code runs on all platforms.
 - 🔥 Download High Quality Songs, w/ lyrics for supported songs.
 - 🎵 Get Songs, Albums, Playlists, Artists, Radio Stations, Podcasts Lyrics, Recommendations, and more.
@@ -62,9 +62,9 @@ bun run dev:vercel || pnpm dev:vercel || npm run dev:vercel || yarn dev:vercel
 #### Cloudflare Workers
 
 > **Warning**
-> Make sure to remove Node API code from `src/index.ts#` & [`config.ts`](./src/lib/config.ts#L8) before deploying or running the project with Cloudflare Workers.
+> Make sure to remove Node API code from [`src/index.ts`](https://github.com/rajput-hemant/jiosaavn-api-ts/blob/master/src/index.ts) & [`config.ts`](https://github.com/rajput-hemant/jiosaavn-api-ts/blob/master/src/lib/config.ts#L8) before deploying or running the project with Cloudflare Workers.
 
-[src/index.ts](./src/index.ts)
+[src/index.ts](https://github.com/rajput-hemant/jiosaavn-api-ts/blob/master/src/index.ts)
 
 ```diff
 ...
@@ -75,7 +75,7 @@ bun run dev:vercel || pnpm dev:vercel || npm run dev:vercel || yarn dev:vercel
 ...
 ```
 
-[src/lib/config.ts](./src/lib/config.ts#L8)
+[src/lib/config.ts](https://github.com/rajput-hemant/jiosaavn-api-ts/blob/master/src/lib/config.ts#L8)
 
 ```diff
 ...
@@ -102,21 +102,72 @@ You can easily deploy your own hosted version of the `JioSaavn API` by clicking 
 
 **OR**
 
-#### Deploying using CLI
+## Deploying using CLI
 
 </div>
 
-- Vercel (utilizes Edge Functions and can automatically execute in the region nearest to the user who triggers them.)
+### Vercel
+
+- It utilizes Edge Functions and can automatically execute in the region nearest to the user who triggers them.
 - It's worth noting that `Mumbai, India (South) - bom1` is the recommended region for this project deployment.
 
 ```
 bun run deploy:vercel || pnpm deploy:vercel || npm run deploy:vercel || yarn deploy:vercel
 ```
 
-- Cloudfare Workers
+### Cloudfare Workers
 
 ```
 bun run deploy:cf || pnpm deploy:cf || npm run deploy:cf || yarn deploy:cf
+```
+
+### Build and Run Docker Image
+
+#### Docker Compose (Recommended)
+
+- Start the container
+
+```
+docker-compose up -d # detached mode
+```
+
+- Stop the container
+
+```
+docker-compose stop # stops the container
+docker-compose down # stops and removes the container
+```
+
+#### Docker
+
+- Start Docker daemon (Skip if already running)
+
+```
+sudo dockerd
+```
+
+- Build the image
+
+```
+docker build -t jiosaavn .
+```
+
+- Run the image
+
+```
+docker run -p 80:3000 jiosaavn
+```
+
+- Open http://localhost to view it in the browser.
+
+- Stop the container
+
+```
+docker ps
+```
+
+```
+docker stop <container-id>
 ```
 
 <div align=center>
