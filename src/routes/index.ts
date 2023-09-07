@@ -4,7 +4,8 @@ import { get } from "./get.route";
 import { home } from "./home.route";
 import { modules } from "./modules.route";
 import { playlist } from "./playlist.route";
+import { radio } from "./radio.route";
 import { search } from "./search.route";
 import { song } from "./song.route";
 
-export { album, get, artist, home, modules, playlist, search, song };
+export { album, get, artist, home, modules, playlist, radio, search, song };

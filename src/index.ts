@@ -12,6 +12,7 @@ import {
   home,
   modules,
   playlist,
+  radio,
   search,
   song,
 } from "./routes";
@@ -42,7 +43,7 @@ app.route("/search", search);
 app.route("/get", get);
 
 /* radio */
-// ...
+app.route("/radio", radio);
 
 /* 404 */
 app.notFound((c) => {
