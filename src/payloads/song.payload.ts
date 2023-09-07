@@ -94,7 +94,7 @@ export function songPayload(s: SongRequest): SongResponse {
     lyrics_id,
     lyrics_snippet,
     starred: parseBool(starred),
-    release_date,
+    release_date: release_date ?? "",
     triller_available,
     copyright_text,
     vcode,

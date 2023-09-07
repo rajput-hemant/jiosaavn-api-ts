@@ -47,6 +47,7 @@ export const config = {
       albums: "search.getAlbumResults",
       artists: "search.getArtistResults",
       playlists: "search.getPlaylistResults",
+      more: "search.getMoreResults",
     },
 
     radio: {
@@ -70,3 +71,21 @@ export const config = {
     },
   },
 };
+
+// getFooterDetails
+// reco.getreco
+// content >> getFeaturedPlaylists getCharts getTopShows
+// 	social.getTopArtists
+// webapi.getBrowseHoverDetails >> is_entity_page:true, language:hindi
+
+// api	"content.getCharts" "content.getTrending" "content.getAlbums" "content.getFeaturedPlaylists" 	"webradio.getFeaturedStations"
+// page_param	"p"
+// size_param	"n"
+// default_size	10
+
+//search.actorOtherTopSongs
+// actor_ids	"461361,476035"
+// song_id	"7SobLOvo"
+// language	"hindi"
+
+// webradio.getScratchStation;

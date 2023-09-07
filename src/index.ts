@@ -5,7 +5,16 @@ import { prettyJSON } from "hono/pretty-json";
 
 import { config } from "./lib/config";
 import { rateLimitMiddleware } from "./lib/middleware";
-import { album, artist, get, home, modules, playlist, song } from "./routes";
+import {
+  album,
+  artist,
+  get,
+  home,
+  modules,
+  playlist,
+  search,
+  song,
+} from "./routes";
 import { CustomResponse } from "./types/response";
 
 const app = new Hono({ strict: false });
@@ -28,8 +37,7 @@ app.route("/playlist", playlist);
 app.route("/artist", artist);
 
 /* search */
-// ...
-
+app.route("/search", search);
 /* get */
 app.route("/get", get);
 

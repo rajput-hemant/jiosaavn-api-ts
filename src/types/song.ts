@@ -41,7 +41,7 @@ export type SongRequest = {
     starred: string;
     copyright_text: string;
     artistMap: ArtistMapRequest;
-    release_date: string;
+    release_date?: string;
     label_url: string;
     vcode: string;
     vlink: string;
