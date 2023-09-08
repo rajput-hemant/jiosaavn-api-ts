@@ -28,17 +28,15 @@ radio.get("/featured", async (c) => {
     camel = "",
   } = c.req.query();
 
+  if (!name) throw new Error("Radio Station Name is Required!");
+
   const result: RadioStationRequest = await api(f, {
     query: { pid, artistid, name, query, mode, language },
   });
 
-  if (result.error) {
-    throw new Error(result.error);
-  }
+  if (result.error) throw new Error(result.error);
 
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
+  if (parseBool(raw)) return c.json(result);
 
   const payload: CustomResponse<RadioStationResponse> = {
     status: "Success",
@@ -60,17 +58,15 @@ radio.get("/artist", async (c) => {
     camel = "",
   } = c.req.query();
 
+  if (!name) throw new Error("Radio Station Name is Required!");
+
   const result: RadioStationRequest = await api(a, {
     query: { pid, artistid, name, query: name, mode, language },
   });
 
-  if (result.error) {
-    throw new Error(result.error);
-  }
+  if (result.error) throw new Error(result.error);
 
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
+  if (parseBool(raw)) return c.json(result);
 
   const payload: CustomResponse<RadioStationResponse> = {
     status: "Success",
@@ -89,17 +85,16 @@ radio.get("/entity", async (c) => {
     camel = "",
   } = c.req.query();
 
+  if (!entity_id) throw new Error("Radio Station ID is Required!");
+  if (!entity_type) throw new Error("Radio Station Type is Required!");
+
   const result: RadioStationRequest = await api(e, {
     query: { entity_id, entity_type },
   });
 
-  if (result.error) {
-    throw new Error(result.error);
-  }
+  if (result.error) throw new Error(result.error);
 
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
+  if (parseBool(raw)) return c.json(result);
 
   const payload: CustomResponse<RadioStationResponse> = {
     status: "Success",
@@ -118,17 +113,15 @@ radio.get("/songs", async (c) => {
     camel = "",
   } = c.req.query();
 
+  if (!stationid) throw new Error("Radio Station ID is Required!");
+
   const result: RadioSongRequest = await api(s, {
     query: { stationid, k },
   });
 
-  if (result.error) {
-    throw new Error(result.error);
-  }
+  if (result.error) throw new Error(result.error);
 
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
+  if (parseBool(raw)) return c.json(result);
 
   const payload: CustomResponse<RadioSongResponse> = {
     status: "Success",
