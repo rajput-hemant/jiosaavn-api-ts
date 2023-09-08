@@ -216,7 +216,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
       }),
     },
 
-    topquery: {
+    top_query: {
       position: tq.position,
       data: tq.data.map((t) => {
         const {

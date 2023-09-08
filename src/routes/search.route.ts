@@ -42,6 +42,28 @@ const {
   more: m,
 } = config.endpoint.search;
 
+search.get("/", async (c) => {
+  const { q: query = "", raw = "", camel = "" } = c.req.query();
+
+  const result: AllSearchRequest = await api(all, { query: { query } });
+
+  if (!result.albums) {
+    throw new Error("No search results found");
+  }
+
+  if (parseBool(raw)) {
+    return c.json(result);
+  }
+
+  const payload: CustomResponse<AllSearchResponse> = {
+    status: "Success",
+    message: "✅ Search results fetched successfully",
+    data: allSearchPayload(result),
+  };
+
+  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
+});
+
 search.get("/top", async (c) => {
   const { raw = "", camel = "" } = c.req.query();
 
@@ -59,28 +81,6 @@ search.get("/top", async (c) => {
     status: "Success",
     message: "✅ Top searches fetched successfully",
     data: result.map(topSearchesPayload),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
-});
-
-search.get("/all", async (c) => {
-  const { q: query = "", raw = "", camel = "" } = c.req.query();
-
-  const result: AllSearchRequest = await api(all, { query: { query } });
-
-  if (!result.albums) {
-    throw new Error("No search results found");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const payload: CustomResponse<AllSearchResponse> = {
-    status: "Success",
-    message: "✅ Search results fetched successfully",
-    data: allSearchPayload(result),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(payload) : payload);

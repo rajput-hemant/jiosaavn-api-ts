@@ -241,7 +241,7 @@ export type AllSearchResponse = {
     description: string;
     position: number;
   }>;
-  topquery: A<AllSearchResponse["songs"]["data"][0]>;
+  top_query: A<AllSearchResponse["songs"]["data"][0]>;
   shows: A<{
     id: string;
     name: string;
