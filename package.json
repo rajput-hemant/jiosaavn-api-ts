@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "dev:node": "tsx api/node.ts",
+    "dev:node": "tsx src/node.ts",
     "dev:vercel": "vercel dev",
     "deploy:vercel": "vercel",
     "dev:cf": "wrangler dev src/index.ts",
