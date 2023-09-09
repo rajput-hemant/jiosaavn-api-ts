@@ -35,9 +35,9 @@ const {
 // middleware to check if query params are provided and are valid
 artist.use("*", async (c, next) => {
   const { id, link, artist_id, song_id } = c.req.query();
-  const path = c.req.path.split("/").slice(2).join("/");
+  const path = "/" + c.req.path.split("/").slice(2).join("/");
 
-  if (path === "") {
+  if (path === "/") {
     if (!id && !link) throw new Error("Please provide album id or link");
 
     if (id && link) throw new Error("Please provide either album id or link");

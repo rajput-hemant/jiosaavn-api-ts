@@ -18,15 +18,15 @@ const { id: _id, link: _link, recommend, same_year } = config.endpoint.album;
 
 // middleware to check if query params are provided and are valid
 album.use("*", async (c, next) => {
-  const { id, link, year } = c.req.query();
-  const path = c.req.path.split("/").slice(2).join("/");
+  const { id, link, token, year } = c.req.query();
+  const path = "/" + c.req.path.split("/").slice(2).join("/");
 
-  if (path === "") {
+  if (path === "/" && !token) {
     if (!id && !link) throw new Error("Please provide album id or link");
 
     if (id && link) throw new Error("Please provide either album id or link");
 
-    if (link && !isJioSaavnLink(link)) {
+    if (link && !(isJioSaavnLink(link) && link.includes("album"))) {
       throw new Error("Please provide a valid JioSaavn link");
     }
   }
@@ -43,10 +43,20 @@ album.use("*", async (c, next) => {
 });
 
 album.get("/", async (c) => {
-  const { id: albumid = "", link = "", raw = "", camel = "" } = c.req.query();
+  const {
+    id: albumid = "",
+    link = "",
+    token = "",
+    raw = "",
+    camel = "",
+  } = c.req.query();
 
   const result: AlbumRequest = await api(albumid ? _id : _link, {
-    query: { albumid, token: tokenFromLink(link), type: "album" },
+    query: {
+      albumid,
+      token: token ? token : tokenFromLink(link),
+      type: "album",
+    },
   });
 
   if (!result.id) {
@@ -99,7 +109,7 @@ album.get("/recommend", async (c) => {
   return c.json(response);
 });
 
-album.get("same-year", async (c) => {
+album.get("/same-year", async (c) => {
   const {
     year: album_year = "",
     lang: album_lang = "",

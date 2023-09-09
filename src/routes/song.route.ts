@@ -23,16 +23,16 @@ const { id: _id, link: _link, recommend } = config.endpoint.song;
 
 // middleware to check if query params are provided and are valid
 song.use("*", async (c, next) => {
-  const { id, link } = c.req.query();
+  const { id, link, token } = c.req.query();
   const path = c.req.path.split("/").slice(2).join("/");
 
-  if (path === "") {
+  if (path === "" && !token) {
     if (!id && !link) throw new Error("Please provide song id(s) or a link");
 
     if (id && link)
       throw new Error("Please provide either song id(s) or a link");
 
-    if (link && !isJioSaavnLink(link)) {
+    if (link && !(isJioSaavnLink(link) && link.includes("song"))) {
       throw new Error("Please provide a valid JioSaavn link");
     }
   }
@@ -45,10 +45,16 @@ song.use("*", async (c, next) => {
 });
 
 song.get("/", async (c) => {
-  const { id: pids = "", link = "", raw = "", camel = "" } = c.req.query();
+  const {
+    id: pids = "",
+    link = "",
+    token = "",
+    raw = "",
+    camel = "",
+  } = c.req.query();
 
   const result: SongObjRequest = await api(pids ? _id : _link, {
-    query: { pids, token: tokenFromLink(link), type: "song" },
+    query: { pids, token: token ? token : tokenFromLink(link), type: "song" },
   });
 
   if (!("songs" in result)) {
