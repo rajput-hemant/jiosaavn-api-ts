@@ -6,6 +6,7 @@
       "destination": "/api"
     }
   ],
+  "regions": ["bom1"],
   "headers": [
     {
       "source": "(.*)",

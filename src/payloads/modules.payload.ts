@@ -112,7 +112,7 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
     artist_recos: {
       title: artistRecosMod?.title ?? "",
       subtitle: artistRecosMod?.subtitle ?? "",
-      position: artistRecosMod?.position ?? -1,
+      position: artistRecosMod?.position ?? 0,
       source: "artist_recos|artistRecos",
       featured_text: artistRecosMod?.featured_text,
       data: artist_recos ? artist_recos.map(artistRecoPayload) : [],
@@ -121,15 +121,15 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
     discover: {
       title: "",
       subtitle: "",
-      position: -1,
-      source: "N/A",
+      position: 0,
+      source: "discover",
       data: browse_discover.map(discoverPayload),
     },
 
     city_mod: {
       title: cityModMod?.title ?? "",
       subtitle: cityModMod?.subtitle ?? "",
-      position: cityModMod?.position ?? -1,
+      position: cityModMod?.position ?? 0,
       source: "city_mod|cityMod",
       featured_text: cityModMod?.featured_text,
       data: city_mod ? city_mod.map(cityModPayload) : [],
@@ -138,7 +138,7 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
     mixes: {
       title: tagMixesMod?.title ?? "",
       subtitle: tagMixesMod?.subtitle ?? "",
-      position: tagMixesMod?.position ?? -1,
+      position: tagMixesMod?.position ?? 0,
       source: "mixes",
       featured_text: tagMixesMod?.featured_text,
       data: tag_mixes ? tag_mixes.map(tagMixPayload) : [],

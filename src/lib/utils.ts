@@ -101,7 +101,7 @@ type A = Record<string, unknown>;
  */
 export function toCamelCase<T>(obj: A | A[]): T {
   if (typeof obj !== "object" || obj === null) {
-    return obj;
+    return obj as T;
   }
 
   if (Array.isArray(obj)) {

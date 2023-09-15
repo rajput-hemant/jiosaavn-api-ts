@@ -1,7 +1,7 @@
 import { MiddlewareHandler } from "hono";
 import { LRUCache } from "lru-cache";
 
-import { config } from "../lib/config";
+import { config } from "./config";
 
 const tokenCache = new LRUCache({
   max: 500,

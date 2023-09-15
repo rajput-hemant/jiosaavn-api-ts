@@ -19,10 +19,11 @@ export const api = async <T>(
   });
 
   const url = `${config.urls.baseUrl}?__call=${path}&${params}`;
+  const langs = params.get("language") || "hindi,english";
 
   const response = await fetch(url, {
     headers: {
-      cookie: "L=english; gdpr_acceptance=true; DL=english",
+      cookie: `L=${langs}; gdpr_acceptance=true; DL=${langs}`,
     },
   });
 
