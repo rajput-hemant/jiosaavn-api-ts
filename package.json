@@ -1,7 +1,6 @@
 {
   "name": "jiosaavn",
   "description": "🎵 An Unofficial wrapper for the Jio Saavn API.",
-  "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "dev:node": "tsx src/node.ts",

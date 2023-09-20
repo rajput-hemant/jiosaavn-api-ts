@@ -11,6 +11,7 @@ import {
   get,
   home,
   modules,
+  ping,
   playlist,
   radio,
   search,
@@ -18,7 +19,7 @@ import {
 } from "./routes";
 import { CustomResponse } from "./types/response";
 
-const app = new Hono({ strict: false });
+const app = new Hono({ strict: false }); // match routes w/ or w/o trailing slash
 
 /* middlewares */
 app.use("*", cors(), prettyJSON(), logger(), rateLimitMiddleware());
@@ -44,6 +45,9 @@ app.route("/get", get);
 
 /* radio */
 app.route("/radio", radio);
+
+/* test route to check if the server is up and running */
+app.route("/ping", ping);
 
 /* 404 */
 app.notFound((c) => {

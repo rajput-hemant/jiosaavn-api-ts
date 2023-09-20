@@ -23,7 +23,7 @@ export const api = async <T>(
 
   const response = await fetch(url, {
     headers: {
-      cookie: `L=${langs}; gdpr_acceptance=true; DL=${langs}`,
+      cookie: `L=${langs}; gdpr_acceptance=true; DL=english`,
     },
   });
 

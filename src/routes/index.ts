@@ -3,6 +3,7 @@ export * from "./artist.route";
 export * from "./get.route";
 export * from "./home.route";
 export * from "./modules.route";
+export * from "./ping.route";
 export * from "./playlist.route";
 export * from "./radio.route";
 export * from "./search.route";
