@@ -7,6 +7,7 @@ import {
   parseBool,
   toCamelCase,
   tokenFromLink,
+  validLangs,
 } from "../lib/utils";
 import {
   artistPayload,
@@ -51,7 +52,7 @@ artist.use("*", async (c, next) => {
     if (!id) throw new Error("Please provide artist id.");
   }
 
-  if (path === "/top-songs") {
+  if (["/top-songs", "/recommend"].includes(path)) {
     if (!artist_id) throw new Error("Please provide artist id.");
     if (!song_id) throw new Error("Please provide song id.");
   }
@@ -138,12 +139,12 @@ artist.get("/:path{(songs|albums)}", async (c) => {
   return c.json(response);
 });
 
-artist.get("/top-songs", async (c) => {
+artist.get("/:path{(top-songs|recommend)}", async (c) => {
   const {
     artist_id: artist_ids,
     song_id,
     page = "",
-    lang: language = "",
+    lang = "",
     cat: category = "", // ["latest", "alphabetical"]
     sort: sort_order = "", // ["asc", "desc"]
     raw = "",
@@ -151,7 +152,14 @@ artist.get("/top-songs", async (c) => {
   } = c.req.query();
 
   const result: SongRequest[] = await api(top_songs, {
-    query: { artist_ids, song_id, page, category, sort_order, language },
+    query: {
+      artist_ids,
+      song_id,
+      page,
+      category,
+      sort_order,
+      language: validLangs(lang),
+    },
   });
 
   if (result.length === 0) {

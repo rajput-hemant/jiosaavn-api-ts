@@ -7,6 +7,7 @@ import {
   parseBool,
   toCamelCase,
   tokenFromLink,
+  validLangs,
 } from "../lib/utils";
 import { playlistPayload } from "../payloads/playlist.payload";
 import { PlaylistRequest, PlaylistResponse } from "../types/playlist";
@@ -76,19 +77,14 @@ playlist.get("/", async (c) => {
 });
 
 playlist.get("/recommend", async (c) => {
-  const {
-    id: listid,
-    lang: language = "",
-    raw = "",
-    camel = "",
-  } = c.req.query();
+  const { id: listid, lang = "", raw = "", camel = "" } = c.req.query();
 
   if (!listid) {
     throw new Error("Please provide playlist id");
   }
 
   const result = await api<PlaylistRequest[]>(recommend, {
-    query: { listid, language },
+    query: { listid, language: validLangs(lang) },
   });
 
   if (!result.length) {

@@ -17,7 +17,7 @@ export function rateLimitMiddleware(): MiddlewareHandler {
 
     const limit = 5;
 
-    const xff = c.req.headers.get("x-forwarded-for");
+    const xff = c.req.header("x-forwarded-for");
 
     const userIp = xff
       ? Array.isArray(xff)

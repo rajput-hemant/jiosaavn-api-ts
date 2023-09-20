@@ -7,6 +7,7 @@ import {
   parseBool,
   toCamelCase,
   tokenFromLink,
+  validLangs,
 } from "../lib/utils";
 import { albumPayload } from "../payloads/album.payload";
 import { AlbumRequest, AlbumResponse } from "../types/album";
@@ -79,15 +80,10 @@ album.get("/", async (c) => {
 });
 
 album.get("/recommend", async (c) => {
-  const {
-    id: albumid,
-    lang: language = "",
-    raw = "",
-    camel = "",
-  } = c.req.query();
+  const { id: albumid, lang = "", raw = "", camel = "" } = c.req.query();
 
   const result = await api<AlbumRequest[]>(recommend, {
-    query: { albumid, language },
+    query: { albumid, language: validLangs(lang) },
   });
 
   if (!result.length) {
@@ -112,13 +108,13 @@ album.get("/recommend", async (c) => {
 album.get("/same-year", async (c) => {
   const {
     year: album_year = "",
-    lang: album_lang = "",
+    lang = "",
     raw = "",
     camel = "",
   } = c.req.query();
 
   const result = await api<AlbumRequest[]>(same_year, {
-    query: { album_year, album_lang },
+    query: { album_year, album_lang: validLangs(lang) },
   });
 
   if (!result.length) {

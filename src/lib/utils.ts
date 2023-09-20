@@ -91,6 +91,40 @@ export function parseBool(value: string) {
   return ["true", "1"].includes(value);
 }
 
+/**
+ * Utility function to validate the `langs` query
+ * @param langs `langs` query
+ *
+ * @returns Valid `langs` query
+ */
+export function validLangs(langs: string) {
+  const validLangs = [
+    "hindi",
+    "english",
+    "punjabi",
+    "tamil",
+    "telugu",
+    "marathi",
+    "gujarati",
+    "bengali",
+    "kannada",
+    "bhojpuri",
+    "malayalam",
+    "urdu",
+    "haryanvi",
+    "rajasthani",
+    "odia",
+    "assamese",
+  ];
+
+  const filteredLangs = langs
+    .split(",")
+    .filter((l) => validLangs.includes(l.trim()))
+    .join(",");
+
+  return filteredLangs === "" ? "hindi,english" : filteredLangs;
+}
+
 type A = Record<string, unknown>;
 
 /**

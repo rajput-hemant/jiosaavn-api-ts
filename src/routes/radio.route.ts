@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 import { api } from "../lib/api";
 import { config } from "../lib/config";
-import { parseBool, toCamelCase } from "../lib/utils";
+import { parseBool, toCamelCase, validLangs } from "../lib/utils";
 import { radioSongsPayload } from "../payloads/radio.payload";
 import {
   RadioSongRequest,
@@ -23,7 +23,7 @@ radio.get("/featured", async (c) => {
     name = "",
     q: query = "",
     mode = "",
-    lang: language = "",
+    lang = "",
     raw = "",
     camel = "",
   } = c.req.query();
@@ -31,7 +31,7 @@ radio.get("/featured", async (c) => {
   if (!name) throw new Error("Radio Station Name is Required!");
 
   const result: RadioStationRequest = await api(f, {
-    query: { pid, artistid, name, query, mode, language },
+    query: { pid, artistid, name, query, mode, language: validLangs(lang) },
   });
 
   if (result.error) throw new Error(result.error);
@@ -53,7 +53,7 @@ radio.get("/artist", async (c) => {
     artist_id: artistid = "",
     name = "",
     mode = "",
-    lang: language = "",
+    lang = "",
     raw = "",
     camel = "",
   } = c.req.query();
@@ -61,7 +61,14 @@ radio.get("/artist", async (c) => {
   if (!name) throw new Error("Radio Station Name is Required!");
 
   const result: RadioStationRequest = await api(a, {
-    query: { pid, artistid, name, query: name, mode, language },
+    query: {
+      pid,
+      artistid,
+      name,
+      query: name,
+      mode,
+      language: validLangs(lang),
+    },
   });
 
   if (result.error) throw new Error(result.error);

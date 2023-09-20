@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 import { api } from "../lib/api";
 import { config } from "../lib/config";
-import { parseBool, toCamelCase } from "../lib/utils";
+import { parseBool, toCamelCase, validLangs } from "../lib/utils";
 import {
   chartPayload,
   featuredPlaylistsPayload,
@@ -53,7 +53,7 @@ get.get("/trending", async (c) => {
   const {
     year = new Date().getFullYear().toString(),
     type: entity_type = "",
-    lang: entity_language = "",
+    lang = "",
     page: p = "",
     n = "10",
     raw = "",
@@ -61,7 +61,7 @@ get.get("/trending", async (c) => {
   } = c.req.query();
 
   const result: TrendingRequest = await api(t, {
-    query: { year, entity_type, entity_language, p, n },
+    query: { year, entity_type, entity_language: validLangs(lang), p, n },
   });
 
   if (!result.length) {
@@ -225,7 +225,7 @@ get.get("/actor-top-songs", async (c) => {
   if (!actor_id) throw new Error("Actor ID(s) param is required");
   if (!song_id) throw new Error("Song ID param is required");
 
-  const query = { actor_ids: actor_id, song_id, language: lang };
+  const query = { actor_ids: actor_id, song_id, language: validLangs(lang) };
 
   const result: SongRequest[] = await api(ats, { query });
 
@@ -250,16 +250,18 @@ get.get("/actor-top-songs", async (c) => {
 
 get.get("/footer-details", async (c) => {
   const {
-    lang: language = "",
+    lang = "",
     page: p = "",
     n = "",
     raw = "",
     camel = "",
   } = c.req.query();
 
-  if (!language) throw new Error("Language param is required");
+  if (!lang) throw new Error("Language param is required");
 
-  const result: FooterDetails = await api(fd, { query: { language, p, n } });
+  const result: FooterDetails = await api(fd, {
+    query: { language: validLangs(lang), p, n },
+  });
 
   if (!result.playlist.length) {
     throw new Error(

@@ -7,6 +7,7 @@ import {
   parseBool,
   toCamelCase,
   tokenFromLink,
+  validLangs,
 } from "../lib/utils";
 import { songObjPayload, songPayload } from "../payloads/song.payload";
 import { CustomResponse } from "../types/response";
@@ -77,10 +78,10 @@ song.get("/", async (c) => {
 });
 
 song.get("/recommend", async (c) => {
-  const { id: pid, lang: language = "", raw = "", camel = "" } = c.req.query();
+  const { id: pid, lang = "", raw = "", camel = "" } = c.req.query();
 
   const result: SongRequest[] = await api(recommend, {
-    query: { pid, language },
+    query: { pid, language: validLangs(lang) },
   });
 
   if (!result) {
