@@ -35,15 +35,16 @@ const {
 
 // middleware to check if query params are provided and are valid
 artist.use("*", async (c, next) => {
-  const { id, link, artist_id, song_id } = c.req.query();
+  const { id, link, token, artist_id, song_id } = c.req.query();
   const path = "/" + c.req.path.split("/").slice(2).join("/");
 
   if (path === "/") {
-    if (!id && !link) throw new Error("Please provide album id or link");
+    if (!id && !link && !token)
+      throw new Error("Please provide Artist id, link or token");
 
-    if (id && link) throw new Error("Please provide either album id or link");
+    if (id && link) throw new Error("Please provide either Artist id or link");
 
-    if (link && !isJioSaavnLink(link)) {
+    if (link && !isJioSaavnLink(link) && link.includes("artist")) {
       throw new Error("Please provide a valid JioSaavn link");
     }
   }
@@ -64,6 +65,7 @@ artist.get("/", async (c) => {
   const {
     id = "",
     link = "",
+    token = "",
     page: p = "",
     n_song = "10",
     n_album = "10",
@@ -74,7 +76,7 @@ artist.get("/", async (c) => {
   const result: ArtistRequest = await api(id ? _id : _link, {
     query: {
       artistId: id,
-      token: tokenFromLink(link),
+      token: token ? token : tokenFromLink(link),
       type: id ? "" : "artist",
       p,
       n_song,

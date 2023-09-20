@@ -16,10 +16,17 @@ export const radio = new Hono();
 
 const { featured: f, artist: a, entity: e, songs: s } = config.endpoint.radio;
 
-radio.get("/featured", async (c) => {
+radio.get("/:path{(featured|artist|entity)}", async (c) => {
+  const path = c.req.path.split("/").slice(2)[0] as
+    | "featured"
+    | "artist"
+    | "entity";
+
   const {
     song_id: pid = "",
     artist_id: artistid = "",
+    id: entity_id = "",
+    type: entity_type = "",
     name = "",
     q: query = "",
     mode = "",
@@ -28,85 +35,41 @@ radio.get("/featured", async (c) => {
     camel = "",
   } = c.req.query();
 
-  if (!name) throw new Error("Radio Station Name is Required!");
+  if (path === "entity") {
+    if (!entity_id) throw new Error("Radio Station ID is Required!");
+    if (!entity_type) throw new Error("Radio Station Type is Required!");
+  } else {
+    if (!name) throw new Error("Radio Station Name is Required!");
+  }
 
-  const result: RadioStationRequest = await api(f, {
-    query: { pid, artistid, name, query, mode, language: validLangs(lang) },
-  });
+  const endpoint = path === "featured" ? f : path === "artist" ? a : e;
 
-  if (result.error) throw new Error(result.error);
+  const { error, stationid: station_id }: RadioStationRequest = await api(
+    endpoint,
+    {
+      query: {
+        pid,
+        artistid,
+        entity_id,
+        entity_type,
+        name,
+        query: !query ? name : query,
+        mode,
+        language: validLangs(lang),
+      },
+    }
+  );
 
-  if (parseBool(raw)) return c.json(result);
+  if (error) throw new Error(typeof error === "string" ? error : error.msg);
 
-  const payload: CustomResponse<RadioStationResponse> = {
-    status: "Success",
-    message: "✅ Featured Radio Station Created Successfully!",
-    data: { station_id: result.stationid },
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
-});
-
-radio.get("/artist", async (c) => {
-  const {
-    song_id: pid = "",
-    artist_id: artistid = "",
-    name = "",
-    mode = "",
-    lang = "",
-    raw = "",
-    camel = "",
-  } = c.req.query();
-
-  if (!name) throw new Error("Radio Station Name is Required!");
-
-  const result: RadioStationRequest = await api(a, {
-    query: {
-      pid,
-      artistid,
-      name,
-      query: name,
-      mode,
-      language: validLangs(lang),
-    },
-  });
-
-  if (result.error) throw new Error(result.error);
-
-  if (parseBool(raw)) return c.json(result);
+  if (parseBool(raw)) return c.json(station_id);
 
   const payload: CustomResponse<RadioStationResponse> = {
     status: "Success",
-    message: "✅ Artist Radio Station Created Successfully!",
-    data: { station_id: result.stationid },
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
-});
-
-radio.get("/entity", async (c) => {
-  const {
-    id: entity_id = "",
-    type: entity_type = "",
-    raw = "",
-    camel = "",
-  } = c.req.query();
-
-  if (!entity_id) throw new Error("Radio Station ID is Required!");
-  if (!entity_type) throw new Error("Radio Station Type is Required!");
-
-  const result: RadioStationRequest = await api(e, {
-    query: { entity_id, entity_type },
-  });
-
-  if (result.error) throw new Error(result.error);
-
-  if (parseBool(raw)) return c.json(result);
-
-  const payload: CustomResponse<RadioStationResponse> = {
-    status: "Success",
-    message: "✅ Entity Radio Station Created Successfully!",
-    data: { station_id: result.stationid },
+    message: `✅ ${
+      path[0].toUpperCase() + path.substring(1)
+    } Radio Station Created Successfully!`,
+    data: { station_id },
   };
 
   return c.json(parseBool(camel) ? toCamelCase(payload) : payload);

@@ -81,133 +81,71 @@ get.get("/trending", async (c) => {
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
-get.get("/featured-playlists", async (c) => {
-  const { page: p = "", n = "10", raw = "", camel = "" } = c.req.query();
+const Paths = [
+  "featured-playlists",
+  "charts",
+  "top-shows",
+  "top-artists",
+  "top-albums",
+  "featured-stations",
+] as const;
 
-  const result: FeaturedPlaylistsRequest = await api(fp, { query: { p, n } });
+type Path = (typeof Paths)[number];
 
-  if (!result.data.length) {
-    throw new Error("Failed to fetch featured playlists");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const response: CustomResponse<FeaturedPlaylistsResponse> = {
-    status: "Success",
-    message: `✅ Featured Playlists fetched successfully`,
-    data: featuredPlaylistsPayload(result),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
-});
-
-get.get("/charts", async (c) => {
+get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
+  const path = c.req.path.split("/").slice(2)[0] as Path;
   const { page: p = "", n = "", raw = "", camel = "" } = c.req.query();
 
-  const result: ChartRequest[] = await api(ch, { query: { p, n } });
+  const [endpoint, payloadFn] = (
+    {
+      "featured-playlists": [fp, featuredPlaylistsPayload],
+      charts: [ch, (c: ChartRequest[]) => c.map(chartPayload)],
+      "top-shows": [ts, topShowsPayload],
+      "top-artists": [tar, topArtistsPayload],
+      "top-albums": [tal, topAlbumsPayload],
+      "featured-stations": [fs, (s: RadioRequest[]) => s.map(radioPayload)],
+    } as Record<string, [Path, <T, U>(a: T) => Required<U>]>
+  )[path];
 
-  if (!result.length) {
-    throw new Error("Failed to fetch charts");
-  }
+  type Response =
+    | FeaturedPlaylistsRequest
+    | ChartRequest[]
+    | TopShowsRequest
+    | TopArtistRequest
+    | TopAlbumRequest
+    | RadioRequest[];
 
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
+  const result: Response = await api(endpoint, { query: { p, n } });
 
-  const response: CustomResponse<ChartResponse[]> = {
+  const isEmpty = <T>(v: T) => (Array.isArray(v) ? !v.length : false);
+
+  const isError =
+    (["charts", "featured-stations"].includes(path) && isEmpty(result)) ||
+    (path === "top-artists" &&
+      isEmpty((result as TopArtistRequest).top_artists)) ||
+    isEmpty((result as TopAlbumRequest).data);
+
+  const payloadName = path
+    .split("-")
+    .map((s) => s[0].toUpperCase() + s.slice(1))
+    .join(" ");
+
+  if (isError) throw new Error(`Failed to fetch ${payloadName}`);
+
+  if (parseBool(raw)) return c.json(result);
+
+  type Payload =
+    | FeaturedPlaylistsResponse
+    | ChartResponse[]
+    | TopShowsResponse
+    | TopArtistResponse
+    | TopAlbumResponse
+    | RadioResponse[];
+
+  const response: CustomResponse<Payload> = {
     status: "Success",
-    message: `✅ Charts fetched successfully`,
-    data: result.map(chartPayload),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
-});
-
-get.get("/top-shows", async (c) => {
-  const { page: p = "", n = "10", raw = "", camel = "" } = c.req.query();
-
-  const result: TopShowsRequest = await api(ts, { query: { p, n } });
-
-  if (!result.data.length) {
-    throw new Error("Failed to fetch top shows");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const response: CustomResponse<TopShowsResponse> = {
-    status: "Success",
-    message: `✅ Top Shows fetched successfully`,
-    data: topShowsPayload(result),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
-});
-
-get.get("/top-artists", async (c) => {
-  const { page: p = "", n = "", raw = "", camel = "" } = c.req.query();
-
-  const result: TopArtistRequest = await api(tar, { query: { p, n } });
-
-  if (!result.top_artists.length) {
-    throw new Error("Failed to fetch top artists");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const response: CustomResponse<TopArtistResponse> = {
-    status: "Success",
-    message: `✅ Top Artists fetched successfully`,
-    data: topArtistsPayload(result),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
-});
-
-get.get("/top-albums", async (c) => {
-  const { page: p = "", n = "10", raw = "", camel = "" } = c.req.query();
-
-  const result: TopAlbumRequest = await api(tal, { query: { p, n } });
-
-  if (!result.data.length) {
-    throw new Error("Failed to fetch top albums");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const response: CustomResponse<TopAlbumResponse> = {
-    status: "Success",
-    message: `✅ Top Albums fetched successfully`,
-    data: topAlbumsPayload(result),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
-});
-
-get.get("/featured-stations", async (c) => {
-  const { page: p = "", n = "10", raw = "", camel = "" } = c.req.query();
-
-  const result: RadioRequest[] = await api(fs, { query: { p, n } });
-
-  if (!result.length) {
-    throw new Error("Failed to fetch Featured Radio Stations");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const response: CustomResponse<RadioResponse[]> = {
-    status: "Success",
-    message: `✅ Featured Radio Stations fetched successfully`,
-    data: result.map(radioPayload),
+    message: `✅ ${payloadName} fetched successfully`,
+    data: payloadFn(result),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
@@ -235,9 +173,7 @@ get.get("/actor-top-songs", async (c) => {
     );
   }
 
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
+  if (parseBool(raw)) return c.json(result);
 
   const response: CustomResponse<SongResponse[]> = {
     status: "Success",
@@ -269,9 +205,7 @@ get.get("/footer-details", async (c) => {
     );
   }
 
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
+  if (parseBool(raw)) return c.json(result);
 
   const response: CustomResponse<FooterDetails> = {
     status: "Success",

@@ -1,7 +1,7 @@
 import { SongRequest, SongResponse } from "./song";
 
 export type RadioStationRequest = {
-  error?: string;
+  error?: string | { code: string; msg: string };
   stationid: string;
 };
 
