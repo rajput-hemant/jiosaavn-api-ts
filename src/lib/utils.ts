@@ -81,7 +81,7 @@ export function tokenFromLink(link: string) {
  */
 export function isJioSaavnLink(url: string) {
   const regex =
-    /^(https?:\/\/)?(www.)?jiosaavn\.com\/(song|shows|album|artist|featured)\/(.+)$/;
+    /^(https?:\/\/)?(www.)?jiosaavn\.com\/(song|shows|album|artist|featured|label|mix)\/(.+)$/;
 
   return regex.test(url);
 }

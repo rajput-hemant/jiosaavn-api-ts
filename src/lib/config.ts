@@ -70,6 +70,8 @@ export const config = {
       top_shows: "content.getTopShows",
       top_artists: "social.getTopArtists",
       top_albums: "content.getAlbums",
+      mix_details: "webapi.get",
+      label_details: "webapi.get",
       footer_details: "webapi.getFooterDetails",
       featured_stations: "webradio.getFeaturedStations",
       actor_top_songs: "search.actorOtherTopSongs",
