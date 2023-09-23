@@ -15,17 +15,21 @@ import {
   playlist,
   radio,
   search,
+  show,
   song,
 } from "./routes";
 import { CustomResponse } from "./types/response";
 
 const app = new Hono({ strict: false }); // match routes w/ or w/o trailing slash
 
-/* middlewares */
+/* -----------------------------------------------------------------------------------------------
+ * middlewares
+ * -----------------------------------------------------------------------------------------------*/
 app.use("*", cors(), prettyJSON(), logger(), rateLimitMiddleware());
 
-/* routes */
-
+/* -----------------------------------------------------------------------------------------------
+ * routes
+ * -----------------------------------------------------------------------------------------------*/
 /* home */
 app.route("/", home);
 
@@ -40,6 +44,10 @@ app.route("/artist", artist);
 
 /* search */
 app.route("/search", search);
+
+/* show */
+app.route("/show", show);
+
 /* get */
 app.route("/get", get);
 
@@ -58,7 +66,9 @@ app.notFound((c) => {
   });
 });
 
-/* error */
+/* -----------------------------------------------------------------------------------------------
+ * error handler
+ * -----------------------------------------------------------------------------------------------*/
 app.onError((err, c) => {
   const response: CustomResponse<null> = {
     status: "Failed",

@@ -7,4 +7,5 @@ export * from "./ping.route";
 export * from "./playlist.route";
 export * from "./radio.route";
 export * from "./search.route";
+export * from "./show.route";
 export * from "./song.route";

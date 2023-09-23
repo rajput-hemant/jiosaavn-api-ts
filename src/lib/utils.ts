@@ -29,7 +29,7 @@ export function createImageLinks(link: string): Quality {
  * @param encryptedMediaUrl - Encrypted media url
  * @returns Download links for different qualities
  */
-export function createDownloadLinks(encryptedMediaUrl: string) {
+export function createDownloadLinks(encryptedMediaUrl: string): Quality {
   const qualities = [
     { id: "_12", bitrate: "12kbps" },
     { id: "_48", bitrate: "48kbps" },
@@ -47,14 +47,19 @@ export function createDownloadLinks(encryptedMediaUrl: string) {
     Crypto.enc.Utf8.parse(key),
     { mode: Crypto.mode.ECB }
   );
+
   const decryptedLink = decrypted.toString(Crypto.enc.Utf8);
 
-  const links = qualities.map((q) => ({
-    quality: q.bitrate,
-    link: decryptedLink.replace("_96", q.id),
-  }));
+  for (const q of qualities) {
+    if (decryptedLink.includes(q.id)) {
+      return qualities.map(({ id, bitrate }) => ({
+        quality: bitrate,
+        link: decryptedLink.replace(q.id, id),
+      }));
+    }
+  }
 
-  return links;
+  return decryptedLink;
 }
 
 /**
@@ -87,8 +92,8 @@ export function isJioSaavnLink(url: string) {
  * @param value string to parse
  * @returns `true` | `false`
  */
-export function parseBool(value: string) {
-  return ["true", "1"].includes(value);
+export function parseBool(value: string | number) {
+  return typeof value === "number" ? !!value : ["true", "1"].includes(value);
 }
 
 /**
