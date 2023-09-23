@@ -1,15 +1,11 @@
 import { config } from "./config";
 
-export const api = async <T>(
+type API = <T>(
   path: string,
-  {
-    isVersion4 = true,
-    query,
-  }: {
-    isVersion4?: boolean;
-    query?: Record<string, string>;
-  }
-) => {
+  options?: { isVersion4?: boolean; query?: Record<string, string> }
+) => Promise<T>;
+
+export const api: API = async (path, { isVersion4 = true, query } = {}) => {
   const params = new URLSearchParams({
     _format: "json",
     _marker: "0",
@@ -29,5 +25,5 @@ export const api = async <T>(
 
   const data = await response.json();
 
-  return data as T;
+  return data;
 };

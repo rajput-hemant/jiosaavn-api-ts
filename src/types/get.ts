@@ -3,11 +3,39 @@ import { Quality, Type } from "./misc";
 import { PlaylistRequest, PlaylistResponse } from "./playlist";
 import { SongRequest, SongResponse } from "./song";
 
+/* -----------------------------------------------------------------------------------------------
+ * Common
+ * -----------------------------------------------------------------------------------------------*/
+
 type A<T> = {
   count: number;
   last_page: boolean;
   data: T[];
 };
+
+type B = {
+  id: string;
+  title: string;
+  action: string;
+};
+
+export type FooterDetails = {
+  playlist: B[];
+  artist: B[];
+  album: B[];
+  actor: B[];
+};
+
+export type Lyrics = {
+  lyrics: string;
+  script_tracking_url: string;
+  lyrics_copyright: string;
+  snippet: string;
+};
+
+/* -----------------------------------------------------------------------------------------------
+ * Request
+ * -----------------------------------------------------------------------------------------------*/
 
 export type TrendingRequest = (AlbumRequest | SongRequest | PlaylistRequest)[];
 
@@ -100,6 +128,67 @@ export type RadioRequest = {
   };
 };
 
+export type MixRequest = {
+  id: string;
+  title: string;
+  subtitle: string;
+  header_desc: string;
+  type: "mix";
+  perma_url: string;
+  image: string;
+  language: string;
+  year: string;
+  play_count: string;
+  explicit_content: string;
+  list_count: string;
+  list_type: string;
+  list: SongRequest[];
+  more_info: {
+    uid: string;
+    last_updated: string;
+    username: string;
+    firstname: string;
+    lastname: string;
+    is_followed: string;
+    playlist_type: string;
+    share: string;
+  };
+  modules: {
+    list: {
+      source: string;
+      position: number;
+      score: string;
+      bucket: string;
+      scroll_type: string;
+      title: string;
+      subtitle: string;
+      highlight: string;
+      simpleHeader: boolean;
+      noHeader: boolean;
+      view_more: unknown[];
+    };
+  };
+};
+
+export type LabelRequest = {
+  labelId: string;
+  name: string;
+  image: string;
+  topSongs: {
+    songs: SongRequest[];
+    total: number;
+  };
+  topAlbums: {
+    albums: AlbumRequest[];
+    total: number;
+  };
+  urls: {
+    albums: string;
+    songs: string;
+  };
+  availableLanguages: string[];
+};
+
 /*---------------------- Response ---------------------- */
 
 export type TrendingResponse = (
@@ -185,22 +274,53 @@ export type RadioResponse = {
   station_display_text: string;
 };
 
-export type FooterDetails = {
-  playlist: B[];
-  artist: B[];
-  album: B[];
-  actor: B[];
-};
-
-type B = {
+export type MixResponse = {
   id: string;
-  title: string;
-  action: string;
+  name: string;
+  subtitle: string;
+  header_desc: string;
+  type: "mix";
+  url: string;
+  image: Quality;
+  language: string;
+  year: number;
+  play_count: number;
+  explicit: boolean;
+  list_count: number;
+  list_type: string;
+  songs: SongResponse[];
+  user_id: string;
+  last_updated: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  is_followed: boolean;
+  share: number;
+  // modules: {
+  //   list: {
+  //     title: string;
+  //     subtitle: string;
+  //     source: string;
+  //     position: number;
+  //   };
+  // };
 };
 
-export type Lyrics = {
-  lyrics: string;
-  script_tracking_url: string;
-  lyrics_copyright: string;
-  snippet: string;
+export type LabelResponse = {
+  id: string;
+  name: string;
+  image: Quality;
+  top_songs: {
+    songs: SongResponse[];
+    total: number;
+  };
+  top_albums: {
+    albums: AlbumResponse[];
+    total: number;
+  };
+  urls: {
+    albums: string;
+    songs: string;
+  };
+  available_languages: string[];
 };

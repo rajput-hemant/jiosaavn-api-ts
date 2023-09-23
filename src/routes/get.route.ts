@@ -2,10 +2,18 @@ import { Hono } from "hono";
 
 import { api } from "../lib/api";
 import { config } from "../lib/config";
-import { parseBool, toCamelCase, validLangs } from "../lib/utils";
+import {
+  isJioSaavnLink,
+  parseBool,
+  toCamelCase,
+  tokenFromLink,
+  validLangs,
+} from "../lib/utils";
 import {
   chartPayload,
   featuredPlaylistsPayload,
+  labelPayload,
+  mixPayload,
   radioPayload,
   topAlbumsPayload,
   topArtistsPayload,
@@ -19,7 +27,11 @@ import {
   FeaturedPlaylistsRequest,
   FeaturedPlaylistsResponse,
   FooterDetails,
+  LabelRequest,
+  LabelResponse,
   Lyrics,
+  MixRequest,
+  MixResponse,
   RadioRequest,
   RadioResponse,
   TopAlbumRequest,
@@ -43,30 +55,35 @@ const {
   top_shows: ts,
   top_artists: tar,
   top_albums: tal,
+  mix_details: md,
+  label_details: ld,
   featured_stations: fs,
   actor_top_songs: ats,
   footer_details: fd,
   lyrics: l,
 } = config.endpoint.get;
 
+/* -----------------------------------------------------------------------------------------------
+ * trending songs/albums/playlists
+ * -----------------------------------------------------------------------------------------------*/
+
 get.get("/trending", async (c) => {
   const {
-    year = new Date().getFullYear().toString(),
     type: entity_type = "",
     lang = "",
-    page: p = "",
-    n = "10",
     raw = "",
     camel = "",
   } = c.req.query();
 
+  if (entity_type && !["song", "album", "playlist"].includes(entity_type)) {
+    throw new Error("Invalid entity type");
+  }
+
   const result: TrendingRequest = await api(t, {
-    query: { year, entity_type, entity_language: validLangs(lang), p, n },
+    query: { entity_type, entity_language: validLangs(lang).split(",")[0] },
   });
 
-  if (!result.length) {
-    throw new Error("Failed to fetch trending, please provide a valid year");
-  }
+  if (!result.length) throw new Error("Failed to fetch trending items");
 
   if (parseBool(raw)) {
     return c.json(result);
@@ -74,12 +91,16 @@ get.get("/trending", async (c) => {
 
   const response: CustomResponse<TrendingResponse> = {
     status: "Success",
-    message: `✅ Currently Trending from ${year} fetched successfully`,
+    message: "✅ Currently Trending fetched successfully",
     data: trendingPayload(result),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
+
+/* -----------------------------------------------------------------------------------------------
+ * featured-playlists | charts | top-shows | top-artists | top-albums | featured-stations
+ * -----------------------------------------------------------------------------------------------*/
 
 const Paths = [
   "featured-playlists",
@@ -151,6 +172,10 @@ get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
+/* -----------------------------------------------------------------------------------------------
+ * actor's top songs
+ * -----------------------------------------------------------------------------------------------*/
+
 get.get("/actor-top-songs", async (c) => {
   const {
     actor_id = "",
@@ -184,6 +209,10 @@ get.get("/actor-top-songs", async (c) => {
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
+/* -----------------------------------------------------------------------------------------------
+ * footer details
+ * -----------------------------------------------------------------------------------------------*/
+
 get.get("/footer-details", async (c) => {
   const {
     lang = "",
@@ -216,6 +245,10 @@ get.get("/footer-details", async (c) => {
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
+/* -----------------------------------------------------------------------------------------------
+ * lyrics
+ * -----------------------------------------------------------------------------------------------*/
+
 get.get("/lyrics", async (c) => {
   const { id: lyrics_id = "", raw = "", camel = "" } = c.req.query();
 
@@ -235,6 +268,104 @@ get.get("/lyrics", async (c) => {
     status: "Success",
     message: `✅ Footer Details fetched successfully`,
     data: result,
+  };
+
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+});
+
+/* -----------------------------------------------------------------------------------------------
+ * mix's details
+ * -----------------------------------------------------------------------------------------------*/
+
+get.get("/mix", async (c) => {
+  const {
+    token = "",
+    link = "",
+    page: p = "",
+    n = "20",
+    lang = "",
+    raw = "",
+    camel = "",
+  } = c.req.query();
+
+  if (!link && !token) throw new Error("Please provide a valid token or link");
+  if (link && !(isJioSaavnLink(link) && link.includes("mix")))
+    throw new Error("Please provide a valid link");
+
+  const query = {
+    token: token ? token : tokenFromLink(link),
+    type: "mix",
+    p,
+    n,
+    language: validLangs(lang),
+  };
+
+  const result: MixRequest = await api(md, { query });
+
+  if (!result.id) {
+    throw new Error(
+      "Failed to fetch mix details, please provide a valid token or link"
+    );
+  }
+
+  if (parseBool(raw)) return c.json(result);
+
+  const response: CustomResponse<MixResponse> = {
+    status: "Success",
+    message: `✅ Mix Details fetched successfully`,
+    data: mixPayload(result),
+  };
+
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+});
+
+/* -----------------------------------------------------------------------------------------------
+ * label details
+ * -----------------------------------------------------------------------------------------------*/
+
+get.get("/label", async (c) => {
+  const {
+    token = "",
+    link = "",
+    page: p = "",
+    n_song = "10",
+    n_album = "10",
+    cat: category = "", // ["latest", "alphabetical", "popularity"]
+    sort: sort_order = "", // ["asc", "desc"]
+    lang = "",
+    raw = "",
+    camel = "",
+  } = c.req.query();
+
+  if (!link && !token) throw new Error("Please provide a token or a link");
+  if (link && !(isJioSaavnLink(link) && link.includes("label")))
+    throw new Error("Please provide a valid link");
+
+  const query = {
+    token: token ? token : tokenFromLink(link),
+    type: "label",
+    p,
+    n_song,
+    n_album,
+    category,
+    sort_order,
+    language: validLangs(lang),
+  };
+
+  const result: LabelRequest = await api(ld, { query });
+
+  if (!result.labelId) {
+    throw new Error(
+      "Failed to fetch label details, please provide a valid token or link"
+    );
+  }
+
+  if (parseBool(raw)) return c.json(result);
+
+  const response: CustomResponse<LabelResponse> = {
+    status: "Success",
+    message: `✅ Label Details fetched successfully`,
+    data: labelPayload(result),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(response) : response);

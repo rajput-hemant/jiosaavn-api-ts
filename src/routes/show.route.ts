@@ -2,7 +2,12 @@ import { Hono } from "hono";
 
 import { api } from "../lib/api";
 import { config } from "../lib/config";
-import { parseBool, toCamelCase, tokenFromLink } from "../lib/utils";
+import {
+  isJioSaavnLink,
+  parseBool,
+  toCamelCase,
+  tokenFromLink,
+} from "../lib/utils";
 import {
   episodeDetailPayload,
   episodePayload,
@@ -26,44 +31,35 @@ const {
 
 export const show = new Hono();
 
-/* -------------------------------------------------------------------------------------------------
- * show's details
+/* -----------------------------------------------------------------------------------------------
+ * middleware
  * -----------------------------------------------------------------------------------------------*/
-show.get("/", async (c) => {
-  const {
-    token = "",
-    link = "",
-    season: season_number = "1",
-    sort: sort_order = "",
-    raw = "",
-    camel = "",
-  } = c.req.query();
 
-  const result: ShowRequest = await api(s, {
-    query: {
-      token: token ? token : tokenFromLink(link),
-      type: "show",
-      season_number,
-      sort_order,
-    },
-  });
+show.use("*", async (c, next) => {
+  const path = "/" + c.req.path.split("/").slice(2).join("/");
+  const { id = "", token = "", link = "" } = c.req.query();
 
-  if (parseBool(raw)) return c.json(result);
+  const entity = path === "/" ? "show" : "episode";
 
-  const payload = showsPayload(result);
+  if (["/", "/episode"].includes(path)) {
+    if (!link && !token)
+      throw new Error(`Please provide ${entity} token or link`);
 
-  const response: CustomResponse<ShowRespone> = {
-    status: "Success",
-    message: "✅ Show details fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
-  };
+    if (link && !(isJioSaavnLink(link) && link.includes("shows")))
+      throw new Error(`Please provide valid ${entity} link`);
+  }
 
-  return c.json(response);
+  if (path === "/episodes") {
+    if (!id) throw new Error(`Please provide show id`);
+  }
+
+  await next();
 });
 
 /* -------------------------------------------------------------------------------------------------
  * show's all episodes
  * -----------------------------------------------------------------------------------------------*/
+
 show.get("/episodes", async (c) => {
   const {
     id: show_id = "",
@@ -91,24 +87,44 @@ show.get("/episodes", async (c) => {
   return c.json(response);
 });
 
-/* -----------------------------------------------------------------------------------------------
- * show's episode details
+/* -------------------------------------------------------------------------------------------------
+ * show's details | show's episode details
  * -----------------------------------------------------------------------------------------------*/
 
-show.get("/episode", async (c) => {
-  const { token = "", link = "", raw = "", camel = "" } = c.req.query();
+show.get("/:episode?", async (c) => {
+  const path = "/" + c.req.path.split("/").slice(2).join("/");
 
-  const result: EpisodeRequest = await api(e_d, {
-    query: { token: token ? token : tokenFromLink(link), type: "episode" },
+  console.log(path);
+
+  const {
+    token = "",
+    link = "",
+    season: season_number = "",
+    sort: sort_order = "",
+    raw = "",
+    camel = "",
+  } = c.req.query();
+
+  const isHome = path === "/";
+
+  const result: ShowRequest | EpisodeRequest = await api(isHome ? s : e_d, {
+    query: {
+      token: token ? token : tokenFromLink(link),
+      type: isHome ? "show" : "episode",
+      season_number,
+      sort_order,
+    },
   });
 
   if (parseBool(raw)) return c.json(result);
 
-  const payload = episodePayload(result);
+  const payload = isHome
+    ? showsPayload(result as ShowRequest)
+    : episodePayload(result as EpisodeRequest);
 
-  const response: CustomResponse<EpisodeResponse> = {
+  const response: CustomResponse<ShowRespone | EpisodeResponse> = {
     status: "Success",
-    message: "✅ Episode details fetched successfully",
+    message: `✅ ${isHome ? "Show" : "Episode"} details fetched successfully`,
     data: parseBool(camel) ? toCamelCase(payload) : payload,
   };
 

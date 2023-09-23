@@ -4,6 +4,10 @@ import {
   ChartResponse,
   FeaturedPlaylistsRequest,
   FeaturedPlaylistsResponse,
+  LabelRequest,
+  LabelResponse,
+  MixRequest,
+  MixResponse,
   RadioRequest,
   RadioResponse,
   TopAlbumRequest,
@@ -197,5 +201,88 @@ export function radioPayload(r: RadioRequest): RadioResponse {
     color,
     description,
     query,
+  };
+}
+
+export function mixPayload(m: MixRequest): MixResponse {
+  const {
+    id,
+    title: name,
+    subtitle,
+    header_desc,
+    type,
+    perma_url: url,
+    image,
+    language,
+    year,
+    play_count,
+    explicit_content,
+    list_count,
+    list_type,
+    list,
+    more_info: {
+      uid: user_id,
+      last_updated,
+      username,
+      firstname,
+      lastname,
+      is_followed,
+      share,
+    },
+    // modules: { list: l },
+  } = m;
+
+  return {
+    id,
+    name,
+    subtitle,
+    header_desc,
+    type,
+    url,
+    image: createImageLinks(image),
+    language,
+    year: +year,
+    play_count: +play_count,
+    explicit: parseBool(explicit_content),
+    list_count: +list_count,
+    list_type,
+    songs: list.map(songPayload),
+    user_id,
+    last_updated,
+    username,
+    firstname,
+    lastname,
+    is_followed: parseBool(is_followed),
+    share: +share,
+    // modules: {
+    //   list: {
+    //     title: l.title,
+    //     subtitle: l.subtitle,
+    //     source: "songs",
+    //     position: l.position,
+    //   },
+    // },
+  };
+}
+
+export function labelPayload(l: LabelRequest): LabelResponse {
+  const {
+    labelId: id,
+    name,
+    image,
+    topSongs: { songs, total: s_t },
+    topAlbums: { albums, total: a_t },
+    urls,
+    availableLanguages: available_languages,
+  } = l;
+
+  return {
+    id,
+    name,
+    image: createImageLinks(image),
+    top_songs: { songs: songs.map(songPayload), total: s_t },
+    top_albums: { albums: albums.map(albumPayload), total: a_t },
+    urls,
+    available_languages,
   };
 }
