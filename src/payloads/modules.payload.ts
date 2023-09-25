@@ -1,4 +1,5 @@
 import { createImageLinks, parseBool } from "../lib/utils";
+import { MiniResponse } from "../types/misc";
 import {
   ArtistRecoRequest,
   ArtistRecoResponse,
@@ -8,6 +9,7 @@ import {
   DiscoverResponse,
   Module,
   ModuleResponse,
+  ModulesMiniResponse,
   ModulesRequest,
   PromoRequest,
   PromoResponse,
@@ -16,10 +18,14 @@ import {
 } from "../types/modules";
 import { albumPayload } from "./album.payload";
 import { chartPayload, radioPayload, trendingPayload } from "./get.payload";
+import { miniPayload } from "./misc.payload";
 import { playlistPayload } from "./playlist.payload";
 import { songPayload } from "./song.payload";
 
-export function modulesPayload(m: ModulesRequest): ModuleResponse {
+export function modulesPayload(
+  m: ModulesRequest,
+  mini: boolean = false
+): ModuleResponse | ModulesMiniResponse {
   const {
     artist_recos,
     browse_discover,
@@ -53,12 +59,12 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
           position: m.modules[key].position,
           source: `promo${i}`,
           featured_text: m.modules[key].featured_text,
-          data: m[key].map(promoPayload),
+          data: m[key].map((p) => (mini ? miniPayload(p) : promoPayload(p))),
         };
 
         return acc;
       },
-      {} as Record<string, Module<PromoResponse>>
+      {} as Record<string, Module<PromoResponse | MiniResponse>>
     );
 
   return {
@@ -68,7 +74,7 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       position: newTrendingMod.position,
       source: "/get/trending",
       featured_text: newTrendingMod.featured_text,
-      data: trendingPayload(new_trending),
+      data: trendingPayload(new_trending, mini),
     },
 
     charts: {
@@ -77,7 +83,7 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       position: chartsMod.position,
       source: "/get/charts",
       featured_text: chartsMod?.featured_text,
-      data: charts.map(chartPayload),
+      data: charts.map((c) => (mini ? miniPayload(c) : chartPayload(c))),
     },
 
     albums: {
@@ -87,7 +93,11 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       source: "/get/albums",
       featured_text: newAlbumsMod.featured_text,
       data: new_albums.map((a) =>
-        a.type === "song" ? songPayload(a) : albumPayload(a)
+        mini
+          ? miniPayload(a)
+          : a.type === "song"
+          ? songPayload(a)
+          : albumPayload(a)
       ),
     },
 
@@ -97,7 +107,9 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       position: topPlaylistsMod.position,
       source: "/get/featured-playlists",
       featured_text: topPlaylistsMod.featured_text,
-      data: top_playlists.map(playlistPayload),
+      data: top_playlists.map((p) =>
+        mini ? miniPayload(p) : playlistPayload(p)
+      ),
     },
 
     radio: {
@@ -106,7 +118,7 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       position: radioMod.position,
       source: "/get/featured-stations",
       featured_text: radioMod.featured_text,
-      data: radio.map(radioPayload),
+      data: radio.map((r) => (mini ? miniPayload(r) : radioPayload(r))),
     },
 
     artist_recos: {
@@ -115,7 +127,11 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       position: artistRecosMod?.position ?? 0,
       source: "artist_recos|artistRecos",
       featured_text: artistRecosMod?.featured_text,
-      data: artist_recos ? artist_recos.map(artistRecoPayload) : [],
+      data: artist_recos
+        ? artist_recos.map((a) =>
+            mini ? miniPayload(a) : artistRecoPayload(a)
+          )
+        : [],
     },
 
     discover: {
@@ -123,7 +139,9 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       subtitle: "",
       position: 0,
       source: "discover",
-      data: browse_discover.map(discoverPayload),
+      data: browse_discover.map((d) =>
+        mini ? miniPayload(d) : discoverPayload(d)
+      ),
     },
 
     city_mod: {
@@ -132,7 +150,9 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       position: cityModMod?.position ?? 0,
       source: "city_mod|cityMod",
       featured_text: cityModMod?.featured_text,
-      data: city_mod ? city_mod.map(cityModPayload) : [],
+      data: city_mod
+        ? city_mod.map((c) => (mini ? miniPayload(c) : cityModPayload(c)))
+        : [],
     },
 
     mixes: {
@@ -141,7 +161,9 @@ export function modulesPayload(m: ModulesRequest): ModuleResponse {
       position: tagMixesMod?.position ?? 0,
       source: "mixes",
       featured_text: tagMixesMod?.featured_text,
-      data: tag_mixes ? tag_mixes.map(tagMixPayload) : [],
+      data: tag_mixes
+        ? tag_mixes.map((t) => (mini ? miniPayload(t) : tagMixPayload(t)))
+        : [],
     },
 
     ...promos,

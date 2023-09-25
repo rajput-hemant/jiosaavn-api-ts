@@ -4,35 +4,34 @@ import { api } from "../lib/api";
 import { config } from "../lib/config";
 import { parseBool, toCamelCase, validLangs } from "../lib/utils";
 import { modulesPayload } from "../payloads/modules.payload";
-import { ModuleResponse, ModulesRequest } from "../types/modules";
-import { CustomResponse } from "../types/response";
+import { CModulesRespose, ModulesRequest } from "../types/modules";
+
+const { launch_data: l } = config.endpoint.modules;
+
+/* -----------------------------------------------------------------------------------------------
+ * Modules Route Handler - GET /modules
+ * -----------------------------------------------------------------------------------------------*/
 
 export const modules = new Hono();
 
-const { launch_data } = config.endpoint.modules;
-
 modules.get("*", async (c) => {
-  const { lang = "", raw = "", camel = "" } = c.req.query();
+  const { lang = "", mini = "", raw = "", camel = "" } = c.req.query();
 
-  const data = await api<ModulesRequest>(launch_data, {
+  const data = await api<ModulesRequest>(l, {
     query: { language: validLangs(lang) },
   });
 
-  if ("error" in data) {
-    throw new Error("Something went wrong");
-  }
+  if ("error" in data) throw new Error("Something went wrong");
 
-  if (parseBool(raw)) {
-    return c.json(data);
-  }
+  if (parseBool(raw)) return c.json(data);
 
-  const payload = modulesPayload(data);
+  const payload = modulesPayload(data, parseBool(mini));
 
-  const response: CustomResponse<ModuleResponse> = {
+  const response: CModulesRespose = {
     status: "Success",
     message: "✅ Home Data fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: payload,
   };
 
-  return c.json(response);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });

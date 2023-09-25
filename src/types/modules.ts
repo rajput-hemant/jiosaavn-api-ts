@@ -7,12 +7,35 @@ import {
   TrendingRequest,
   TrendingResponse,
 } from "./get";
-import { Quality, Type } from "./misc";
+import { MiniResponse, Quality, Type } from "./misc";
 import { PlaylistRequest, PlaylistResponse } from "./playlist";
+import { CustomResponse } from "./response";
 import { SongRequest, SongResponse } from "./song";
 
+/* -----------------------------------------------------------------------------------------------
+ * Common
+ * -----------------------------------------------------------------------------------------------*/
+
+export type GlobalConfig = {
+  random_songs_listid: GlobalConfigItem;
+  weekly_top_songs_listid: GlobalConfigItem;
+};
+
+type GlobalConfigItem = Record<string, GlobalConfigItemLang>;
+
+type GlobalConfigItemLang = {
+  count: number;
+  image: string;
+  listid: string;
+  title?: string;
+};
+
+/* -----------------------------------------------------------------------------------------------
+ * Modules Request
+ * -----------------------------------------------------------------------------------------------*/
+
 export type ModulesRequest = {
-  new_albums: ModuleAlbumRequest;
+  new_albums: (AlbumRequest | SongRequest)[];
   artist_recos?: ArtistRecoRequest[];
   browse_discover: DiscoverRequest[];
   charts: ChartRequest[];
@@ -24,8 +47,6 @@ export type ModulesRequest = {
   tag_mixes?: TagMixRequest[];
   top_playlists: PlaylistRequest[];
 } & Record<string, PromoRequest[]>;
-
-type ModuleAlbumRequest = AlbumRequest[] | SongRequest[];
 
 export type ArtistRecoRequest = {
   explicit_content: string;
@@ -80,23 +101,6 @@ export type CityModRequest = {
       type: Type;
     }[];
   }>;
-};
-
-export type GlobalConfig = {
-  random_songs_listid: GlobalConfigItem;
-  weekly_top_songs_listid: GlobalConfigItem;
-};
-
-type GlobalConfigItem = {
-  english: GlobalConfigItemLang;
-  hindi: GlobalConfigItemLang;
-};
-
-type GlobalConfigItemLang = {
-  count: number;
-  image: string;
-  listid: string;
-  title?: string;
 };
 
 export type TagMixRequest = {
@@ -159,7 +163,9 @@ export type ModuleItemRequest = {
   featured_text?: string;
 };
 
-/*---------------------- Response ---------------------- */
+/* -----------------------------------------------------------------------------------------------
+ * Modules Response
+ * -----------------------------------------------------------------------------------------------*/
 
 export type Module<T> = {
   title: string;
@@ -261,3 +267,28 @@ export type PromoResponse = {
   release_year?: number;
   year?: number;
 };
+
+/* -----------------------------------------------------------------------------------------------
+ * Modules Mini Response
+ * -----------------------------------------------------------------------------------------------*/
+
+export type ModulesMiniResponse = {
+  albums: Module<MiniResponse>;
+  artist_recos: Module<MiniResponse>;
+  charts: Module<MiniResponse>;
+  city_mod?: Module<MiniResponse>;
+  discover: Module<MiniResponse>;
+  mixes: Module<MiniResponse>;
+  playlists: Module<MiniResponse>;
+  radio: Module<MiniResponse>;
+  trending: Module<MiniResponse>;
+  global_config: GlobalConfig;
+};
+// & Record<string, Module<MiniResponse>>;
+
+/* -----------------------------------------------------------------------------------------------
+ * Modules Custom Response
+ * -----------------------------------------------------------------------------------------------*/
+export type CModulesRespose = CustomResponse<
+  ModuleResponse | ModulesMiniResponse
+>;
