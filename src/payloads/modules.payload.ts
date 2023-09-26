@@ -27,25 +27,25 @@ export function modulesPayload(
   mini: boolean = false
 ): ModuleResponse | ModulesMiniResponse {
   const {
-    artist_recos,
-    browse_discover,
-    charts,
-    city_mod,
-    global_config,
-    new_albums,
-    new_trending,
-    radio,
-    tag_mixes,
-    top_playlists,
+    artist_recos: ar,
+    browse_discover: bd,
+    charts: c,
+    city_mod: cm,
+    global_config: { random_songs_listid: rsl, weekly_top_songs_listid: wts },
+    new_albums: na,
+    new_trending: nt,
+    radio: r,
+    tag_mixes: tm,
+    top_playlists: tp,
     modules: {
-      artist_recos: artistRecosMod,
-      charts: chartsMod,
-      city_mod: cityModMod,
-      new_albums: newAlbumsMod,
-      new_trending: newTrendingMod,
-      radio: radioMod,
-      tag_mixes: tagMixesMod,
-      top_playlists: topPlaylistsMod,
+      artist_recos: ar_mod,
+      charts: c_mod,
+      city_mod: cm_mod,
+      new_albums: na_mod,
+      new_trending: nt_mod,
+      radio: r_mod,
+      tag_mixes: tm_mod,
+      top_playlists: tp_mod,
     },
   } = m;
 
@@ -69,30 +69,30 @@ export function modulesPayload(
 
   return {
     trending: {
-      title: newTrendingMod.title,
-      subtitle: newTrendingMod.subtitle,
-      position: newTrendingMod.position,
+      title: nt_mod.title,
+      subtitle: nt_mod.subtitle,
+      position: nt_mod.position,
       source: "/get/trending",
-      featured_text: newTrendingMod.featured_text,
-      data: trendingPayload(new_trending, mini),
+      featured_text: nt_mod.featured_text,
+      data: mini ? nt.map(miniPayload) : trendingPayload(nt),
     },
 
     charts: {
-      title: chartsMod.title,
-      subtitle: chartsMod.subtitle,
-      position: chartsMod.position,
+      title: c_mod.title,
+      subtitle: c_mod.subtitle,
+      position: c_mod.position,
       source: "/get/charts",
-      featured_text: chartsMod?.featured_text,
-      data: charts.map((c) => (mini ? miniPayload(c) : chartPayload(c))),
+      featured_text: c_mod?.featured_text,
+      data: c.map((c) => (mini ? miniPayload(c) : chartPayload(c))),
     },
 
     albums: {
-      title: newAlbumsMod.title,
-      subtitle: newAlbumsMod.subtitle,
-      position: newAlbumsMod.position,
+      title: na_mod.title,
+      subtitle: na_mod.subtitle,
+      position: na_mod.position,
       source: "/get/albums",
-      featured_text: newAlbumsMod.featured_text,
-      data: new_albums.map((a) =>
+      featured_text: na_mod.featured_text,
+      data: na.map((a) =>
         mini
           ? miniPayload(a)
           : a.type === "song"
@@ -102,35 +102,31 @@ export function modulesPayload(
     },
 
     playlists: {
-      title: topPlaylistsMod.title,
-      subtitle: topPlaylistsMod.subtitle,
-      position: topPlaylistsMod.position,
+      title: tp_mod.title,
+      subtitle: tp_mod.subtitle,
+      position: tp_mod.position,
       source: "/get/featured-playlists",
-      featured_text: topPlaylistsMod.featured_text,
-      data: top_playlists.map((p) =>
-        mini ? miniPayload(p) : playlistPayload(p)
-      ),
+      featured_text: tp_mod.featured_text,
+      data: tp.map((p) => (mini ? miniPayload(p) : playlistPayload(p))),
     },
 
     radio: {
-      title: radioMod.title,
-      subtitle: radioMod.subtitle,
-      position: radioMod.position,
+      title: r_mod.title,
+      subtitle: r_mod.subtitle,
+      position: r_mod.position,
       source: "/get/featured-stations",
-      featured_text: radioMod.featured_text,
-      data: radio.map((r) => (mini ? miniPayload(r) : radioPayload(r))),
+      featured_text: r_mod.featured_text,
+      data: r.map((r) => (mini ? miniPayload(r) : radioPayload(r))),
     },
 
     artist_recos: {
-      title: artistRecosMod?.title ?? "",
-      subtitle: artistRecosMod?.subtitle ?? "",
-      position: artistRecosMod?.position ?? 0,
+      title: ar_mod?.title ?? "",
+      subtitle: ar_mod?.subtitle ?? "",
+      position: ar_mod?.position ?? 0,
       source: "artist_recos|artistRecos",
-      featured_text: artistRecosMod?.featured_text,
-      data: artist_recos
-        ? artist_recos.map((a) =>
-            mini ? miniPayload(a) : artistRecoPayload(a)
-          )
+      featured_text: ar_mod?.featured_text,
+      data: ar
+        ? ar.map((a) => (mini ? miniPayload(a) : artistRecoPayload(a)))
         : [],
     },
 
@@ -139,36 +135,35 @@ export function modulesPayload(
       subtitle: "",
       position: 0,
       source: "discover",
-      data: browse_discover.map((d) =>
-        mini ? miniPayload(d) : discoverPayload(d)
-      ),
+      data: bd.map((d) => (mini ? miniPayload(d) : discoverPayload(d))),
     },
 
     city_mod: {
-      title: cityModMod?.title ?? "",
-      subtitle: cityModMod?.subtitle ?? "",
-      position: cityModMod?.position ?? 0,
+      title: cm_mod?.title ?? "",
+      subtitle: cm_mod?.subtitle ?? "",
+      position: cm_mod?.position ?? 0,
       source: "city_mod|cityMod",
-      featured_text: cityModMod?.featured_text,
-      data: city_mod
-        ? city_mod.map((c) => (mini ? miniPayload(c) : cityModPayload(c)))
+      featured_text: cm_mod?.featured_text,
+      data: cm
+        ? cm.map((c) => (mini ? miniPayload(c) : cityModPayload(c)))
         : [],
     },
 
     mixes: {
-      title: tagMixesMod?.title ?? "",
-      subtitle: tagMixesMod?.subtitle ?? "",
-      position: tagMixesMod?.position ?? 0,
+      title: tm_mod?.title ?? "",
+      subtitle: tm_mod?.subtitle ?? "",
+      position: tm_mod?.position ?? 0,
       source: "mixes",
-      featured_text: tagMixesMod?.featured_text,
-      data: tag_mixes
-        ? tag_mixes.map((t) => (mini ? miniPayload(t) : tagMixPayload(t)))
-        : [],
+      featured_text: tm_mod?.featured_text,
+      data: tm ? tm.map((t) => (mini ? miniPayload(t) : tagMixPayload(t))) : [],
     },
 
     ...promos,
 
-    global_config: global_config,
+    global_config: {
+      random_songs_listid: rsl,
+      weekly_top_songs_listid: wts,
+    },
   };
 }
 

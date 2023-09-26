@@ -23,19 +23,13 @@ import {
   TrendingRequest,
   TrendingResponse,
 } from "../types/get";
-import { miniPayload, MiniResponse } from "../types/misc";
 import { albumPayload } from "./album.payload";
 import { playlistPayload } from "./playlist.payload";
 import { songPayload } from "./song.payload";
 
-export function trendingPayload(
-  t: TrendingRequest,
-  mini: boolean
-): TrendingResponse | MiniResponse[] {
+export function trendingPayload(t: TrendingRequest): TrendingResponse {
   return t.map((i) =>
-    mini
-      ? miniPayload(i)
-      : i.type === "song"
+    i.type === "song"
       ? songPayload(i)
       : i.type === "album"
       ? albumPayload(i)
