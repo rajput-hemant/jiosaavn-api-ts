@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { createDownloadLinks, createImageLinks, parseBool } from "../lib/utils";
 import {
   EpisodeDetailRequest,
@@ -62,7 +64,7 @@ export function showsPayload(s: ShowRequest): ShowRespone {
 function showDetailsPayload(s: ShowDetailsRequest): ShowDetailsResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     header_desc,
     type,
@@ -107,9 +109,9 @@ function showDetailsPayload(s: ShowDetailsRequest): ShowDetailsResponse {
 
   return {
     id,
-    name,
-    subtitle,
-    header_desc,
+    name: decode(title),
+    subtitle: decode(subtitle),
+    header_desc: decode(header_desc),
     type,
     url,
     image: createImageLinks(square_image),
@@ -127,7 +129,7 @@ function showDetailsPayload(s: ShowDetailsRequest): ShowDetailsResponse {
     latest_season_sequence: +latest_season_sequence,
     parental_advisory: parseBool(parental_advisory),
     partner_id: +partner_id,
-    partner_name,
+    partner_name: decode(partner_name),
     release_date: new Date(release_date).toISOString(),
     tags,
     followers_count: +followers_count,
@@ -173,8 +175,8 @@ function seasonPayload(s: SeasonRequest): SeasonResponse {
 
   return {
     id,
-    name: title,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     image: createImageLinks(image),
     url: perma_url,
@@ -185,7 +187,7 @@ function seasonPayload(s: SeasonRequest): SeasonResponse {
       (JSON.parse(song_info) as { parental_advisory: string }).parental_advisory
     ),
     show_id,
-    show_title,
+    show_title: decode(show_title),
     episodes_count: +numEpisodes,
     download_url: createDownloadLinks(encrypted_media_url),
     season_number: +season_number,
@@ -224,7 +226,7 @@ export function episodeDetailPayload(
 ): EpisodeDetailResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     header_desc,
     type,
@@ -261,9 +263,9 @@ export function episodeDetailPayload(
 
   return {
     id,
-    name,
-    subtitle,
-    header_desc,
+    name: decode(title),
+    subtitle: decode(subtitle),
+    header_desc: decode(header_desc),
     type,
     url,
     image: createImageLinks(image),
@@ -276,14 +278,14 @@ export function episodeDetailPayload(
     list,
     release_date: new Date(release_time).toISOString(),
     label_id,
-    label,
+    label: decode(label),
     duration: +duration,
     entity_title_exact_match,
     description,
     season_no: +season_no,
     episode_number: +episode_number,
     show_id,
-    show_title,
+    show_title: decode(show_title),
     season_id,
     season_title,
     artist_map: artistMapPayload(artistMap),

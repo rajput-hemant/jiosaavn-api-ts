@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { createImageLinks, parseBool } from "../lib/utils";
 import { MiniResponse } from "../types/misc";
 import {
@@ -54,11 +56,11 @@ export function modulesPayload(
     .reduce(
       (acc, key, i) => {
         acc[`promo${i}`] = {
-          title: m.modules[key].title,
-          subtitle: m.modules[key].subtitle,
+          title: decode(m.modules[key].title),
+          subtitle: decode(m.modules[key].subtitle),
           position: m.modules[key].position,
           source: `promo${i}`,
-          featured_text: m.modules[key].featured_text,
+          featured_text: decode(m.modules[key].featured_text ?? ""),
           data: m[key].map((p) => (mini ? miniPayload(p) : promoPayload(p))),
         };
 
@@ -69,29 +71,29 @@ export function modulesPayload(
 
   return {
     trending: {
-      title: nt_mod.title,
-      subtitle: nt_mod.subtitle,
+      title: decode(nt_mod.title),
+      subtitle: decode(nt_mod.subtitle),
       position: nt_mod.position,
       source: "/get/trending",
-      featured_text: nt_mod.featured_text,
+      featured_text: decode(nt_mod.featured_text ?? ""),
       data: mini ? nt.map(miniPayload) : trendingPayload(nt),
     },
 
     charts: {
-      title: c_mod.title,
-      subtitle: c_mod.subtitle,
+      title: decode(c_mod.title),
+      subtitle: decode(c_mod.subtitle),
       position: c_mod.position,
       source: "/get/charts",
-      featured_text: c_mod?.featured_text,
+      featured_text: decode(c_mod?.featured_text ?? ""),
       data: c.map((c) => (mini ? miniPayload(c) : chartPayload(c))),
     },
 
     albums: {
-      title: na_mod.title,
-      subtitle: na_mod.subtitle,
+      title: decode(na_mod.title),
+      subtitle: decode(na_mod.subtitle),
       position: na_mod.position,
       source: "/get/albums",
-      featured_text: na_mod.featured_text,
+      featured_text: decode(na_mod.featured_text ?? ""),
       data: na.map((a) =>
         mini
           ? miniPayload(a)
@@ -102,29 +104,29 @@ export function modulesPayload(
     },
 
     playlists: {
-      title: tp_mod.title,
-      subtitle: tp_mod.subtitle,
+      title: decode(tp_mod.title),
+      subtitle: decode(tp_mod.subtitle),
       position: tp_mod.position,
       source: "/get/featured-playlists",
-      featured_text: tp_mod.featured_text,
+      featured_text: decode(tp_mod.featured_text ?? ""),
       data: tp.map((p) => (mini ? miniPayload(p) : playlistPayload(p))),
     },
 
     radio: {
-      title: r_mod.title,
-      subtitle: r_mod.subtitle,
+      title: decode(r_mod.title),
+      subtitle: decode(r_mod.subtitle),
       position: r_mod.position,
       source: "/get/featured-stations",
-      featured_text: r_mod.featured_text,
+      featured_text: decode(r_mod.featured_text ?? ""),
       data: r.map((r) => (mini ? miniPayload(r) : radioPayload(r))),
     },
 
     artist_recos: {
-      title: ar_mod?.title ?? "",
-      subtitle: ar_mod?.subtitle ?? "",
+      title: decode(ar_mod?.title ?? ""),
+      subtitle: decode(ar_mod?.subtitle ?? ""),
       position: ar_mod?.position ?? 0,
       source: "artist_recos|artistRecos",
-      featured_text: ar_mod?.featured_text,
+      featured_text: decode(ar_mod?.featured_text ?? ""),
       data: ar
         ? ar.map((a) => (mini ? miniPayload(a) : artistRecoPayload(a)))
         : [],
@@ -139,22 +141,22 @@ export function modulesPayload(
     },
 
     city_mod: {
-      title: cm_mod?.title ?? "",
-      subtitle: cm_mod?.subtitle ?? "",
+      title: decode(cm_mod?.title ?? ""),
+      subtitle: decode(cm_mod?.subtitle ?? ""),
       position: cm_mod?.position ?? 0,
       source: "city_mod|cityMod",
-      featured_text: cm_mod?.featured_text,
+      featured_text: decode(cm_mod?.featured_text ?? ""),
       data: cm
         ? cm.map((c) => (mini ? miniPayload(c) : cityModPayload(c)))
         : [],
     },
 
     mixes: {
-      title: tm_mod?.title ?? "",
-      subtitle: tm_mod?.subtitle ?? "",
+      title: decode(tm_mod?.title ?? ""),
+      subtitle: decode(tm_mod?.subtitle ?? ""),
       position: tm_mod?.position ?? 0,
       source: "mixes",
-      featured_text: tm_mod?.featured_text,
+      featured_text: decode(tm_mod?.featured_text ?? ""),
       data: tm ? tm.map((t) => (mini ? miniPayload(t) : tagMixPayload(t))) : [],
     },
 
@@ -170,7 +172,7 @@ export function modulesPayload(
 function artistRecoPayload(a: ArtistRecoRequest): ArtistRecoResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     image,
@@ -181,22 +183,22 @@ function artistRecoPayload(a: ArtistRecoRequest): ArtistRecoResponse {
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     url,
     image: createImageLinks(image),
     explicit: parseBool(explicit_content),
     query,
     featured_station_type,
-    station_display_text,
+    station_display_text: decode(station_display_text),
   };
 }
 
 function discoverPayload(d: DiscoverRequest): DiscoverResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     image,
@@ -214,8 +216,8 @@ function discoverPayload(d: DiscoverRequest): DiscoverResponse {
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     url,
     explicit: parseBool(explicit_content),
@@ -232,7 +234,7 @@ function discoverPayload(d: DiscoverRequest): DiscoverResponse {
 function cityModPayload(c: CityModRequest): CityModResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     image,
@@ -243,8 +245,8 @@ function cityModPayload(c: CityModRequest): CityModResponse {
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     url,
     image: createImageLinks(image),
@@ -258,7 +260,7 @@ function cityModPayload(c: CityModRequest): CityModResponse {
 function tagMixPayload(t: TagMixRequest): TagMixResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     perma_url: url,
@@ -275,8 +277,8 @@ function tagMixPayload(t: TagMixRequest): TagMixResponse {
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     url,
     explicit: parseBool(explicit_content),
@@ -295,7 +297,7 @@ function tagMixPayload(t: TagMixRequest): TagMixResponse {
 function promoPayload(p: PromoRequest): PromoResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     perma_url: url,
@@ -312,8 +314,8 @@ function promoPayload(p: PromoRequest): PromoResponse {
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     url,
     explicit: parseBool(explicit_content),

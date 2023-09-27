@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { createImageLinks, parseBool } from "../lib/utils";
 import {
   AlbumModulesRequest,
@@ -14,7 +16,7 @@ export function albumPayload(
 ): AlbumResponse {
   const {
     id,
-    title: name,
+    title,
     type,
     subtitle,
     language,
@@ -39,17 +41,18 @@ export function albumPayload(
 
   return {
     id,
-    name,
-    subtitle:
+    name: decode(title),
+    subtitle: decode(
       subtitle ||
-      (artistMap ? artistMap.artists.map((a) => a.name).join(", ") : ""),
+        (artistMap ? artistMap.artists.map((a) => a.name).join(", ") : "")
+    ),
     type,
     language,
     play_count: +play_count,
     explicit: parseBool(explicit_content),
     year: +year,
     url,
-    header_desc,
+    header_desc: decode(header_desc),
     list_count: +list_count,
     list_type,
     image: createImageLinks(image),

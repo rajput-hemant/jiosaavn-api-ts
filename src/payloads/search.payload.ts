@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { createImageLinks, parseBool } from "../lib/utils";
 import {
   AlbumSearchRequest,
@@ -24,7 +26,7 @@ import { songPayload } from "./song.payload";
 export function topSearchesPayload(s: TopSearchRequest): TopSearchResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     perma_url: url,
@@ -35,8 +37,8 @@ export function topSearchesPayload(s: TopSearchRequest): TopSearchResponse {
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     url,
     image: createImageLinks(image),
@@ -63,7 +65,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
       data: al.data.map((a) => {
         const {
           id,
-          title: name,
+          title,
           subtitle,
           type,
           image,
@@ -75,7 +77,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
 
         return {
           id,
-          name,
+          name: decode(title),
           subtitle,
           type,
           image: createImageLinks(image),
@@ -97,7 +99,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
       data: so.data.map((s) => {
         const {
           id,
-          title: name,
+          title,
           subtitle,
           type,
           image,
@@ -119,8 +121,8 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
 
         return {
           id,
-          name,
-          subtitle,
+          name: decode(title),
+          subtitle: decode(subtitle),
           type,
           image: createImageLinks(image),
           description,
@@ -144,7 +146,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
       data: pl.data.map((p) => {
         const {
           id,
-          title: name,
+          title,
           subtitle,
           type,
           image,
@@ -166,13 +168,13 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
 
         return {
           id,
-          name,
-          subtitle,
+          name: decode(title),
+          subtitle: decode(subtitle),
           type,
           image: createImageLinks(image),
           url,
           explicit: parseBool(explicit_content),
-          artist_name,
+          artist_name: decode(artist_name),
           description,
           entity_sub_type,
           entity_type,
@@ -191,7 +193,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
       data: ar.data.map((a) => {
         const {
           id,
-          title: name,
+          title,
           type,
           image,
           description,
@@ -204,7 +206,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
 
         return {
           id,
-          name,
+          name: decode(title),
           type,
           image: createImageLinks(image),
           description,
@@ -222,7 +224,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
       data: tq.data.map((t) => {
         const {
           id,
-          title: name,
+          title,
           subtitle,
           type,
           image,
@@ -244,8 +246,8 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
 
         return {
           id,
-          name,
-          subtitle,
+          name: decode(title),
+          subtitle: decode(subtitle),
           type,
           image: createImageLinks(image),
           description,
@@ -269,7 +271,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
       data: sh.data.map((s) => {
         const {
           id,
-          title: name,
+          title,
           subtitle,
           type,
           image,
@@ -281,8 +283,8 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
 
         return {
           id,
-          name,
-          subtitle,
+          name: decode(title),
+          subtitle: decode(subtitle),
           type,
           image: createImageLinks(image),
           description,
@@ -356,7 +358,7 @@ export function artistSearchPayload(
 
       return {
         id,
-        name,
+        name: decode(name),
         type,
         role,
         url,
@@ -403,8 +405,8 @@ export function podcastsSearchPayload(
         image: createImageLinks(image_file_url),
         url,
         explicit: parseBool(`${explicit_content}`),
-        partner_name,
-        label_name,
+        partner_name: decode(partner_name),
+        label_name: decode(label_name),
         artists: artists.map(artistMiniPayload),
         featured_artists: featured_artists.map(artistMiniPayload),
         primary_artists: primary_artists.map(artistMiniPayload),

@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { createDownloadLinks, createImageLinks, parseBool } from "../lib/utils";
 import { MiniResponse } from "../types/misc";
 import {
@@ -29,7 +31,7 @@ export function songPayload(
 ): SongResponse | MiniResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     header_desc,
@@ -75,26 +77,26 @@ export function songPayload(
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     url,
     image: createImageLinks(image),
     language,
     year: +year,
-    header_desc,
+    header_desc: decode(header_desc),
     play_count: +play_count,
     explicit: parseBool(explicit_content),
     list,
     list_type,
     list_count: +list_count,
-    music,
+    music: decode(music),
     artist_map: artistMapPayload(artistMap),
     song,
-    album,
+    album: decode(album),
     album_id,
     album_url,
-    label,
+    label: decode(label),
     label_url,
     origin,
     is_dolby_content,

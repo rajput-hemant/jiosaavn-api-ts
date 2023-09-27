@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { createImageLinks, parseBool } from "../lib/utils";
 import { AlbumRequest } from "../types/album";
 import { ChartRequest, RadioRequest } from "../types/get";
@@ -31,7 +33,7 @@ type MiniPayloadRequest =
 export function miniPayload(item: MiniPayloadRequest): MiniResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     perma_url: url,
@@ -47,12 +49,12 @@ export function miniPayload(item: MiniPayloadRequest): MiniResponse {
 
   return {
     id,
-    name,
-    subtitle: subs ?? subtitle,
+    name: decode(title),
+    subtitle: decode(subs ?? subtitle ?? ""),
     type,
     url,
     image: createImageLinks(image),
-    header_desc: "header_desc" in item ? item.header_desc : "",
+    header_desc: "header_desc" in item ? decode(item.header_desc) : "",
     explicit: explicit_content ? parseBool(explicit_content) : undefined,
     color:
       type === "radio_station" && "color" in item.more_info

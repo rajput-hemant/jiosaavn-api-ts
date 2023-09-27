@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { parseBool } from "../lib/utils";
 import {
   PlaylistModulesRequest,
@@ -14,7 +16,7 @@ export function playlistPayload(
 ): PlaylistResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     header_desc,
     type,
@@ -46,10 +48,10 @@ export function playlistPayload(
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
-    header_desc,
+    header_desc: decode(header_desc ?? ""),
     url,
     image,
     language,
@@ -75,7 +77,7 @@ export function playlistPayload(
       !list || typeof list === "string"
         ? []
         : list.map((s) => songPayload(s, mini)),
-    subtitle_desc,
+    subtitle_desc: subtitle_desc,
     modules: modules ? playlistModulesPayload(modules) : undefined,
   };
 }

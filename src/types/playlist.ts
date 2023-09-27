@@ -11,7 +11,7 @@ export type PlaylistRequest = {
   id: string;
   title: string;
   subtitle: string;
-  header_desc: string;
+  header_desc?: string;
   type: "playlist";
   perma_url: string;
   image: string;
@@ -71,7 +71,7 @@ export type PlaylistResponse = {
   id: string;
   name: string;
   subtitle: string;
-  header_desc: string;
+  header_desc?: string;
   type: "playlist";
   url: string;
   image: Quality;

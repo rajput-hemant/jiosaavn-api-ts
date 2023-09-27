@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { createImageLinks } from "../lib/utils";
 import {
   ArtistMapRequest,
@@ -62,8 +64,8 @@ export function artistPayload(
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(name),
+    subtitle: decode(subtitle),
     image: createImageLinks(image),
     follower_count: +follower_count,
     type,
@@ -166,7 +168,7 @@ export function similarArtistPayload(
 
   return {
     id,
-    name,
+    name: decode(name),
     roles: JSON.parse(roles) as SimilarArtistResponse["roles"],
     aka,
     fb,
@@ -196,7 +198,7 @@ export function artistSongPayload(a: ArtistSongRequest): ArtistSongResponse {
     perma_url: url,
     play_count,
     subtitle,
-    title: name,
+    title,
     type,
     year,
     more_info: { artistMap, query, song_count, text, music },
@@ -204,11 +206,11 @@ export function artistSongPayload(a: ArtistSongRequest): ArtistSongResponse {
 
   return {
     id,
-    name,
+    name: decode(title),
     url,
     type,
     image: createImageLinks(image),
-    subtitle,
+    subtitle: decode(subtitle),
     language,
     year: +year,
     play_count: +play_count,
@@ -242,7 +244,7 @@ export function artistTopSongsOrAlbumsPayload(
 
   return {
     id,
-    name,
+    name: decode(name),
     type,
     image: createImageLinks(image),
     follower_count: +follower_count,
@@ -288,7 +290,7 @@ export function artistMiniPayload(a: ArtistMiniRequest): ArtistMiniResponse {
   const { id, image, name, perma_url: url, role, type } = a;
   return {
     id,
-    name,
+    name: decode(name),
     url,
     role,
     type,

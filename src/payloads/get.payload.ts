@@ -1,3 +1,5 @@
+import { decode } from "entities";
+
 import { createImageLinks, parseBool } from "../lib/utils";
 import {
   ChartRequest,
@@ -58,7 +60,7 @@ export function featuredPlaylistsPayload(
 export function chartPayload(c: ChartRequest): ChartResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     image,
@@ -71,14 +73,14 @@ export function chartPayload(c: ChartRequest): ChartResponse {
 
   return {
     id,
-    name,
+    name: decode(title),
     listname,
-    subtitle,
+    subtitle: decode(subtitle ?? ""),
     type,
     url,
     explicit: explicit_content ? parseBool(explicit_content) : false,
     image: createImageLinks(image),
-    first_name: more_info?.firstname,
+    first_name: decode(more_info?.firstname ?? ""),
     language: language,
     count: c.count ?? more_info?.song_count,
   };
@@ -87,7 +89,7 @@ export function chartPayload(c: ChartRequest): ChartResponse {
 function topShowPayload(s: TopShowRequest): TopShowResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     image,
@@ -98,8 +100,8 @@ function topShowPayload(s: TopShowRequest): TopShowResponse {
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     image: createImageLinks(image),
     url,
@@ -121,8 +123,8 @@ function trendingPodcastsPayload(
   return {
     items: items.map((i) => ({
       id: i.id,
-      name: i.title,
-      subtitle: i.subtitle,
+      name: decode(i.title),
+      subtitle: decode(i.subtitle),
       type: i.type,
       image: createImageLinks(i.image),
       url: i.perma_url,
@@ -155,7 +157,7 @@ export function topArtistsPayload(a: TopArtistRequest): TopArtistResponse {
 
     return {
       id,
-      name,
+      name: decode(name),
       image: createImageLinks(image),
       url,
       is_followed,
@@ -186,7 +188,7 @@ export function topAlbumsPayload(
 export function radioPayload(r: RadioRequest): RadioResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     type,
     perma_url: url,
@@ -204,8 +206,8 @@ export function radioPayload(r: RadioRequest): RadioResponse {
 
   return {
     id,
-    name,
-    subtitle,
+    name: decode(title),
+    subtitle: decode(subtitle),
     type,
     url,
     explicit: parseBool(explicit_content),
@@ -222,7 +224,7 @@ export function radioPayload(r: RadioRequest): RadioResponse {
 export function mixPayload(m: MixRequest, mini: boolean = false): MixResponse {
   const {
     id,
-    title: name,
+    title,
     subtitle,
     header_desc,
     type,
@@ -249,9 +251,9 @@ export function mixPayload(m: MixRequest, mini: boolean = false): MixResponse {
 
   return {
     id,
-    name,
-    subtitle,
-    header_desc,
+    name: decode(title),
+    subtitle: decode(subtitle),
+    header_desc: decode(header_desc),
     type,
     url,
     image: createImageLinks(image),
@@ -296,7 +298,7 @@ export function labelPayload(
 
   return {
     id,
-    name,
+    name: decode(name),
     image: createImageLinks(image),
     top_songs: { songs: songs.map((s) => songPayload(s, mini)), total: s_t },
     top_albums: {
