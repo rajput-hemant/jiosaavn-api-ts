@@ -17,6 +17,7 @@ import {
 } from "../types/search";
 import { albumPayload } from "./album.payload";
 import { artistMapPayload, artistMiniPayload } from "./artist.payload";
+import { miniPayload } from "./misc.payload";
 import { playlistPayload } from "./playlist.payload";
 import { songPayload } from "./song.payload";
 
@@ -296,24 +297,39 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
   };
 }
 
-export function songSearchPayload(s: SongSearchRequest): SongSearchResponse {
+export function songSearchPayload(
+  s: SongSearchRequest,
+  mini: boolean = false
+): SongSearchResponse {
   const { total, start, results } = s;
 
-  return { total, start, results: results.map(songPayload) };
+  return { total, start, results: results.map((s) => songPayload(s, mini)) };
 }
 
-export function albumSearchPayload(a: AlbumSearchRequest): AlbumSearchResponse {
+export function albumSearchPayload(
+  a: AlbumSearchRequest,
+  mini: boolean = false
+): AlbumSearchResponse {
   const { total, start, results } = a;
 
-  return { total, start, results: results.map(albumPayload) };
+  return {
+    total,
+    start,
+    results: results.map((a) => (mini ? miniPayload(a) : albumPayload(a))),
+  };
 }
 
 export function playlistSearchPayload(
-  s: PlaylistSearchRequest
+  s: PlaylistSearchRequest,
+  mini: boolean = false
 ): PlaylistSearchResponse {
   const { total, start, results } = s;
 
-  return { total, start, results: results.map(playlistPayload) };
+  return {
+    total,
+    start,
+    results: results.map((p) => (mini ? miniPayload(p) : playlistPayload(p))),
+  };
 }
 
 export function artistSearchPayload(

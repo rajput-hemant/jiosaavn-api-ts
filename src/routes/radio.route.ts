@@ -12,15 +12,19 @@ import {
 } from "../types/radio";
 import { CustomResponse } from "../types/response";
 
-export const radio = new Hono();
-
 const { featured: f, artist: a, entity: e, songs: s } = config.endpoint.radio;
 
-radio.get("/:path{(featured|artist|entity)}", async (c) => {
-  const path = c.req.path.split("/").slice(2)[0] as
-    | "featured"
-    | "artist"
-    | "entity";
+export const radio = new Hono();
+
+/* -----------------------------------------------------------------------------------------------
+ * Create Radio Route Handler - /radio/:create/{featured|artist|entity}
+ *                                      ^^^^^^ <--- Optional
+ * -----------------------------------------------------------------------------------------------*/
+
+radio.get("/:path{(create/)?(featured|artist|entity)}", async (c) => {
+  const path = c.req.path.split("/").at(-1) as "featured" | "artist" | "entity";
+
+  console.log(path);
 
   const {
     song_id: pid = "",
@@ -75,12 +79,17 @@ radio.get("/:path{(featured|artist|entity)}", async (c) => {
   return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
 });
 
+/* -----------------------------------------------------------------------------------------------
+ * Get Radio Songs Route Handler - /radio/songs
+ * -----------------------------------------------------------------------------------------------*/
+
 radio.get("/songs", async (c) => {
   const {
     id: stationid = "",
     n: k = "10",
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
   if (!stationid) throw new Error("Radio Station ID is Required!");
@@ -96,7 +105,7 @@ radio.get("/songs", async (c) => {
   const payload: CustomResponse<RadioSongResponse> = {
     status: "Success",
     message: "✅ Radio Station Songs Fetched Successfully!",
-    data: radioSongsPayload(result),
+    data: radioSongsPayload(result, parseBool(mini)),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(payload) : payload);

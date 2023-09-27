@@ -15,22 +15,17 @@ import {
 import { CustomResponse } from "../types/response";
 import {
   AlbumSearchRequest,
-  AlbumSearchResponse,
   AllSearchRequest,
-  AllSearchResponse,
   ArtistSearchRequest,
-  ArtistSearchResponse,
+  CAllSearchResponse,
+  CSearchXResponse,
+  CTopSearchResponse,
   PlaylistSearchRequest,
-  PlaylistSearchResponse,
   PodcastSearchRequest,
   PodcastSearchResposne,
   SongSearchRequest,
-  SongSearchResponse,
   TopSearchRequest,
-  TopSearchResponse,
 } from "../types/search";
-
-export const search = new Hono();
 
 const {
   top_search: t,
@@ -41,6 +36,12 @@ const {
   artists: ar,
   more: m,
 } = config.endpoint.search;
+
+export const search = new Hono();
+
+/* -----------------------------------------------------------------------------------------------
+ * Search All Route Handler - /search
+ * -----------------------------------------------------------------------------------------------*/
 
 search.get("/", async (c) => {
   const { q: query = "", raw = "", camel = "" } = c.req.query();
@@ -55,7 +56,7 @@ search.get("/", async (c) => {
     return c.json(result);
   }
 
-  const payload: CustomResponse<AllSearchResponse> = {
+  const payload: CAllSearchResponse = {
     status: "Success",
     message: "✅ Search results fetched successfully",
     data: allSearchPayload(result),
@@ -77,7 +78,7 @@ search.get("/top", async (c) => {
     return c.json(result);
   }
 
-  const payload: CustomResponse<TopSearchResponse[]> = {
+  const payload: CTopSearchResponse = {
     status: "Success",
     message: "✅ Top searches fetched successfully",
     data: result.map(topSearchesPayload),
@@ -86,10 +87,35 @@ search.get("/top", async (c) => {
   return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
 });
 
-search.get("/songs", async (c) => {
+/* -----------------------------------------------------------------------------------------------
+ * Search Songs, Albums, Playlists, Artists Route Handler - /search/{songs|albums|playlists|artists}
+ * -----------------------------------------------------------------------------------------------*/
+
+search.get("/:path{(songs|albums|playlists|artists)}", async (c) => {
+  const path = c.req.path.split("/")[2];
+
   const { q = "", page: p = "", n = "", raw = "", camel = "" } = c.req.query();
 
-  const result: SongSearchRequest = await api(s, { query: { q, p, n } });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _artistSearchPayload = (a: ArtistSearchRequest, _?: boolean) =>
+    artistSearchPayload(a);
+
+  const [endpoint, payloadFn] = (
+    {
+      songs: [s, songSearchPayload],
+      albums: [al, albumSearchPayload],
+      playlists: [pl, playlistSearchPayload],
+      artists: [ar, _artistSearchPayload],
+    } as Record<string, [string, <T, U>(a: T) => Required<U>]>
+  )[path];
+
+  type A =
+    | SongSearchRequest
+    | AlbumSearchRequest
+    | PlaylistSearchRequest
+    | ArtistSearchRequest;
+
+  const result: A = await api(endpoint, { query: { q, p, n } });
 
   if (!result.results.length) {
     throw new Error("No search results found");
@@ -99,80 +125,18 @@ search.get("/songs", async (c) => {
     return c.json(result);
   }
 
-  const payload: CustomResponse<SongSearchResponse> = {
+  const response: CSearchXResponse = {
     status: "Success",
     message: "✅ Search results fetched successfully",
-    data: songSearchPayload(result),
+    data: payloadFn(result),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
-search.get("/albums", async (c) => {
-  const { q = "", page: p = "", n = "", raw = "", camel = "" } = c.req.query();
-
-  const result: AlbumSearchRequest = await api(al, { query: { q, p, n } });
-
-  if (!result.results.length) {
-    throw new Error("No search results found");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const payload: CustomResponse<AlbumSearchResponse> = {
-    status: "Success",
-    message: "✅ Search results fetched successfully",
-    data: albumSearchPayload(result),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
-});
-
-search.get("/playlists", async (c) => {
-  const { q = "", page: p = "", n = "", raw = "", camel = "" } = c.req.query();
-
-  const result: PlaylistSearchRequest = await api(pl, { query: { q, p, n } });
-
-  if (!result.results.length) {
-    throw new Error("No search results found");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const payload: CustomResponse<PlaylistSearchResponse> = {
-    status: "Success",
-    message: "✅ Search results fetched successfully",
-    data: playlistSearchPayload(result),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
-});
-
-search.get("/artists", async (c) => {
-  const { q = "", page: p = "", n = "", raw = "", camel = "" } = c.req.query();
-
-  const result: ArtistSearchRequest = await api(ar, { query: { q, p, n } });
-
-  if (!result.results.length) {
-    throw new Error("No search results found");
-  }
-
-  if (parseBool(raw)) {
-    return c.json(result);
-  }
-
-  const payload: CustomResponse<ArtistSearchResponse> = {
-    status: "Success",
-    message: "✅ Search results fetched successfully",
-    data: artistSearchPayload(result),
-  };
-
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
-});
+/* -----------------------------------------------------------------------------------------------
+ * Search Podcasts Route Handler - /search/podcasts
+ * -----------------------------------------------------------------------------------------------*/
 
 search.get("/podcasts", async (c) => {
   const {

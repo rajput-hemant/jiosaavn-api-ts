@@ -1,4 +1,9 @@
+import { MiniResponse } from "./misc";
 import { SongRequest, SongResponse } from "./song";
+
+/* -----------------------------------------------------------------------------------------------
+ * Request
+ * -----------------------------------------------------------------------------------------------*/
 
 export type RadioStationRequest = {
   error?: string | { code: string; msg: string };
@@ -11,7 +16,9 @@ export type RadioSongRequest = {
   song?: SongRequest;
 } & Record<string, { song: SongRequest }>;
 
-/*---------------------- Response ---------------------- */
+/* -----------------------------------------------------------------------------------------------
+ * Response
+ * -----------------------------------------------------------------------------------------------*/
 
 export type RadioStationResponse = {
   station_id: string;
@@ -19,5 +26,5 @@ export type RadioStationResponse = {
 
 export type RadioSongResponse = {
   station_id: string;
-  songs: SongResponse[];
+  songs: (SongResponse | MiniResponse)[];
 };

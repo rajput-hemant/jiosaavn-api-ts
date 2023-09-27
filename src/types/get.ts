@@ -1,6 +1,7 @@
 import { AlbumRequest, AlbumResponse } from "./album";
-import { Quality, Type } from "./misc";
+import { MiniResponse, Quality, Type } from "./misc";
 import { PlaylistRequest, PlaylistResponse } from "./playlist";
+import { CustomResponse } from "./response";
 import { SongRequest, SongResponse } from "./song";
 
 /* -----------------------------------------------------------------------------------------------
@@ -189,7 +190,9 @@ export type LabelRequest = {
   availableLanguages: string[];
 };
 
-/*---------------------- Response ---------------------- */
+/* -----------------------------------------------------------------------------------------------
+ * Response
+ * -----------------------------------------------------------------------------------------------*/
 
 export type TrendingResponse = (
   | AlbumResponse
@@ -197,7 +200,7 @@ export type TrendingResponse = (
   | PlaylistResponse
 )[];
 
-export type FeaturedPlaylistsResponse = A<PlaylistResponse>;
+export type FeaturedPlaylistsResponse = A<PlaylistResponse | MiniResponse>;
 
 export type ChartResponse = {
   id: string;
@@ -256,7 +259,7 @@ export type TopArtistResponse = {
   is_followed: boolean;
 }[];
 
-export type TopAlbumResponse = A<SongResponse | AlbumResponse>;
+export type TopAlbumResponse = A<SongResponse | AlbumResponse | MiniResponse>;
 
 export type RadioResponse = {
   id: string;
@@ -288,7 +291,7 @@ export type MixResponse = {
   explicit: boolean;
   list_count: number;
   list_type: string;
-  songs: SongResponse[];
+  songs: (SongResponse | MiniResponse)[];
   user_id: string;
   last_updated: string;
   username: string;
@@ -311,11 +314,11 @@ export type LabelResponse = {
   name: string;
   image: Quality;
   top_songs: {
-    songs: SongResponse[];
+    songs: (SongResponse | MiniResponse)[];
     total: number;
   };
   top_albums: {
-    albums: AlbumResponse[];
+    albums: (AlbumResponse | MiniResponse)[];
     total: number;
   };
   urls: {
@@ -324,3 +327,28 @@ export type LabelResponse = {
   };
   available_languages: string[];
 };
+
+/* -----------------------------------------------------------------------------------------------
+ * Get Custom Response(s)
+ * -----------------------------------------------------------------------------------------------*/
+
+export type CGetTrendingResponse = CustomResponse<
+  TrendingResponse | MiniResponse[]
+>;
+
+export type CGetXResponse = CustomResponse<
+  | FeaturedPlaylistsResponse
+  | ChartResponse[]
+  | TopShowsResponse
+  | TopArtistResponse
+  | TopAlbumResponse
+  | RadioResponse[]
+>;
+
+export type CGetFooterDetails = CustomResponse<FooterDetails>;
+
+export type CGetLyricsResponse = CustomResponse<Lyrics>;
+
+export type CGetMixResponse = CustomResponse<MixResponse>;
+
+export type CGetLabelResponse = CustomResponse<LabelResponse>;

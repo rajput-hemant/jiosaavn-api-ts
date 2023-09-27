@@ -5,14 +5,29 @@ import {
   ArtistMiniRequest,
   ArtistMiniResponse,
 } from "./artist";
-import { Quality, Type } from "./misc";
+import { MiniResponse, Quality, Type } from "./misc";
 import { PlaylistRequest, PlaylistResponse } from "./playlist";
+import { CustomResponse } from "./response";
 import { SongRequest, SongResponse } from "./song";
+
+/* -----------------------------------------------------------------------------------------------
+ * Common
+ * -----------------------------------------------------------------------------------------------*/
 
 type A<T> = {
   position: number;
   data: T[];
 };
+
+export type Search<T> = {
+  total: number;
+  start: number;
+  results: T[];
+};
+
+/* -----------------------------------------------------------------------------------------------
+ * Request
+ * -----------------------------------------------------------------------------------------------*/
 
 export type TopSearchRequest = {
   id: string;
@@ -154,13 +169,9 @@ export type PodcastSearchRequest = Search<{
   subtitle: string;
 }>;
 
-/*---------------------- Response ---------------------- */
-
-export type Search<T> = {
-  total: number;
-  start: number;
-  results: T[];
-};
+/* -----------------------------------------------------------------------------------------------
+ * Response
+ * -----------------------------------------------------------------------------------------------*/
 
 export type TopSearchResponse = {
   id: string;
@@ -256,11 +267,11 @@ export type AllSearchResponse = {
   episodes: A<unknown>;
 };
 
-export type SongSearchResponse = Search<SongResponse>;
+export type SongSearchResponse = Search<SongResponse | MiniResponse>;
 
-export type AlbumSearchResponse = Search<AlbumResponse>;
+export type AlbumSearchResponse = Search<AlbumResponse | MiniResponse>;
 
-export type PlaylistSearchResponse = Search<PlaylistResponse>;
+export type PlaylistSearchResponse = Search<PlaylistResponse | MiniResponse>;
 
 export type ArtistSearchResponse = Search<{
   id: string;
@@ -290,3 +301,18 @@ export type PodcastSearchResposne = Search<{
   primary_artists: ArtistMiniResponse[];
   url: string;
 }>;
+
+/* -----------------------------------------------------------------------------------------------
+ * Artist Custom Response(s)
+ * -----------------------------------------------------------------------------------------------*/
+
+export type CAllSearchResponse = CustomResponse<AllSearchResponse>;
+
+export type CTopSearchResponse = CustomResponse<TopSearchResponse[]>;
+
+export type CSearchXResponse = CustomResponse<
+  | SongSearchResponse
+  | AlbumSearchResponse
+  | PlaylistSearchResponse
+  | ArtistSearchResponse
+>;

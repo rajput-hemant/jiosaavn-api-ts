@@ -20,31 +20,28 @@ import {
   topShowsPayload,
   trendingPayload,
 } from "../payloads/get.payload";
+import { miniPayload } from "../payloads/misc.payload";
 import { songPayload } from "../payloads/song.payload";
 import {
+  CGetFooterDetails,
+  CGetLabelResponse,
+  CGetLyricsResponse,
+  CGetMixResponse,
+  CGetTrendingResponse,
+  CGetXResponse,
   ChartRequest,
-  ChartResponse,
   FeaturedPlaylistsRequest,
-  FeaturedPlaylistsResponse,
   FooterDetails,
   LabelRequest,
-  LabelResponse,
   Lyrics,
   MixRequest,
-  MixResponse,
   RadioRequest,
-  RadioResponse,
   TopAlbumRequest,
-  TopAlbumResponse,
   TopArtistRequest,
-  TopArtistResponse,
   TopShowsRequest,
-  TopShowsResponse,
   TrendingRequest,
-  TrendingResponse,
 } from "../types/get";
-import { CustomResponse } from "../types/response";
-import { SongRequest, SongResponse } from "../types/song";
+import { CSongsResponse, SongRequest } from "../types/song";
 
 export const get = new Hono();
 
@@ -64,7 +61,7 @@ const {
 } = config.endpoint.get;
 
 /* -----------------------------------------------------------------------------------------------
- * trending songs/albums/playlists
+ * Trending Route Handler - /get/trending
  * -----------------------------------------------------------------------------------------------*/
 
 get.get("/trending", async (c) => {
@@ -73,6 +70,7 @@ get.get("/trending", async (c) => {
     lang = "",
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
   if (entity_type && !["song", "album", "playlist"].includes(entity_type)) {
@@ -89,17 +87,18 @@ get.get("/trending", async (c) => {
     return c.json(result);
   }
 
-  const response: CustomResponse<TrendingResponse> = {
+  const response: CGetTrendingResponse = {
     status: "Success",
     message: "✅ Currently Trending fetched successfully",
-    data: trendingPayload(result),
+    data: trendingPayload(result, parseBool(mini)),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
 /* -----------------------------------------------------------------------------------------------
- * featured-playlists | charts | top-shows | top-artists | top-albums | featured-stations
+ * Featured Playlists/Charts/Top Shows/Top Artists/Top Albums/Featured Stations Route Handler
+ * - /get/{featured-playlists|charts|top-shows|top-artists|top-albums|featured-stations}
  * -----------------------------------------------------------------------------------------------*/
 
 const Paths = [
@@ -115,20 +114,35 @@ type Path = (typeof Paths)[number];
 
 get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
   const path = c.req.path.split("/").slice(2)[0] as Path;
-  const { page: p = "", n = "", raw = "", camel = "" } = c.req.query();
+  const {
+    page: p = "",
+    n = "",
+    raw = "",
+    camel = "",
+    mini = "",
+  } = c.req.query();
+
+  const _featuredPlaylistsPayload = (f: FeaturedPlaylistsRequest) =>
+    featuredPlaylistsPayload(f, parseBool(mini));
+
+  const _chartPayload = (c: ChartRequest[]) =>
+    c.map((c) => (mini ? miniPayload(c) : chartPayload(c)));
+
+  const _topAlbumsPayload = (t: TopAlbumRequest) =>
+    topAlbumsPayload(t, parseBool(mini));
 
   const [endpoint, payloadFn] = (
     {
-      "featured-playlists": [fp, featuredPlaylistsPayload],
-      charts: [ch, (c: ChartRequest[]) => c.map(chartPayload)],
+      "featured-playlists": [fp, _featuredPlaylistsPayload],
+      charts: [ch, _chartPayload],
       "top-shows": [ts, topShowsPayload],
       "top-artists": [tar, topArtistsPayload],
-      "top-albums": [tal, topAlbumsPayload],
+      "top-albums": [tal, _topAlbumsPayload],
       "featured-stations": [fs, (s: RadioRequest[]) => s.map(radioPayload)],
     } as Record<string, [Path, <T, U>(a: T) => Required<U>]>
   )[path];
 
-  type Response =
+  type A =
     | FeaturedPlaylistsRequest
     | ChartRequest[]
     | TopShowsRequest
@@ -136,7 +150,7 @@ get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
     | TopAlbumRequest
     | RadioRequest[];
 
-  const result: Response = await api(endpoint, { query: { p, n } });
+  const result: A = await api(endpoint, { query: { p, n } });
 
   const isEmpty = <T>(v: T) => (Array.isArray(v) ? !v.length : false);
 
@@ -155,15 +169,7 @@ get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
 
   if (parseBool(raw)) return c.json(result);
 
-  type Payload =
-    | FeaturedPlaylistsResponse
-    | ChartResponse[]
-    | TopShowsResponse
-    | TopArtistResponse
-    | TopAlbumResponse
-    | RadioResponse[];
-
-  const response: CustomResponse<Payload> = {
+  const response: CGetXResponse = {
     status: "Success",
     message: `✅ ${payloadName} fetched successfully`,
     data: payloadFn(result),
@@ -173,7 +179,7 @@ get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
 });
 
 /* -----------------------------------------------------------------------------------------------
- * actor's top songs
+ * Actor Top Songs Route Handler - /get/actor-top-songs
  * -----------------------------------------------------------------------------------------------*/
 
 get.get("/actor-top-songs", async (c) => {
@@ -183,6 +189,7 @@ get.get("/actor-top-songs", async (c) => {
     lang = "",
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
   if (!actor_id) throw new Error("Actor ID(s) param is required");
@@ -200,17 +207,17 @@ get.get("/actor-top-songs", async (c) => {
 
   if (parseBool(raw)) return c.json(result);
 
-  const response: CustomResponse<SongResponse[]> = {
+  const response: CSongsResponse = {
     status: "Success",
     message: `✅ Actor Top Songs fetched successfully`,
-    data: result.map(songPayload),
+    data: result.map((s) => songPayload(s, parseBool(mini))),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
 /* -----------------------------------------------------------------------------------------------
- * footer details
+ * Footer Details Route Handler - /get/footer-details
  * -----------------------------------------------------------------------------------------------*/
 
 get.get("/footer-details", async (c) => {
@@ -236,7 +243,7 @@ get.get("/footer-details", async (c) => {
 
   if (parseBool(raw)) return c.json(result);
 
-  const response: CustomResponse<FooterDetails> = {
+  const response: CGetFooterDetails = {
     status: "Success",
     message: `✅ Footer Details fetched successfully`,
     data: result,
@@ -246,7 +253,7 @@ get.get("/footer-details", async (c) => {
 });
 
 /* -----------------------------------------------------------------------------------------------
- * lyrics
+ * Lyrics Route Handler - /get/lyrics
  * -----------------------------------------------------------------------------------------------*/
 
 get.get("/lyrics", async (c) => {
@@ -264,7 +271,7 @@ get.get("/lyrics", async (c) => {
     return c.json(result);
   }
 
-  const response: CustomResponse<Lyrics> = {
+  const response: CGetLyricsResponse = {
     status: "Success",
     message: `✅ Footer Details fetched successfully`,
     data: result,
@@ -274,7 +281,7 @@ get.get("/lyrics", async (c) => {
 });
 
 /* -----------------------------------------------------------------------------------------------
- * mix's details
+ * Mix details Route Handler - /get/mix
  * -----------------------------------------------------------------------------------------------*/
 
 get.get("/mix", async (c) => {
@@ -286,6 +293,7 @@ get.get("/mix", async (c) => {
     lang = "",
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
   if (!link && !token) throw new Error("Please provide a valid token or link");
@@ -310,17 +318,17 @@ get.get("/mix", async (c) => {
 
   if (parseBool(raw)) return c.json(result);
 
-  const response: CustomResponse<MixResponse> = {
+  const response: CGetMixResponse = {
     status: "Success",
     message: `✅ Mix Details fetched successfully`,
-    data: mixPayload(result),
+    data: mixPayload(result, parseBool(mini)),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
 /* -----------------------------------------------------------------------------------------------
- * label details
+ * Label details Route Handler - /get/label
  * -----------------------------------------------------------------------------------------------*/
 
 get.get("/label", async (c) => {
@@ -335,6 +343,7 @@ get.get("/label", async (c) => {
     lang = "",
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
   if (!link && !token) throw new Error("Please provide a token or a link");
@@ -362,10 +371,10 @@ get.get("/label", async (c) => {
 
   if (parseBool(raw)) return c.json(result);
 
-  const response: CustomResponse<LabelResponse> = {
+  const response: CGetLabelResponse = {
     status: "Success",
     message: `✅ Label Details fetched successfully`,
-    data: labelPayload(result),
+    data: labelPayload(result, parseBool(mini)),
   };
 
   return c.json(parseBool(camel) ? toCamelCase(response) : response);

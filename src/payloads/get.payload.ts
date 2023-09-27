@@ -23,13 +23,20 @@ import {
   TrendingRequest,
   TrendingResponse,
 } from "../types/get";
+import { MiniResponse } from "../types/misc";
 import { albumPayload } from "./album.payload";
+import { miniPayload } from "./misc.payload";
 import { playlistPayload } from "./playlist.payload";
 import { songPayload } from "./song.payload";
 
-export function trendingPayload(t: TrendingRequest): TrendingResponse {
+export function trendingPayload(
+  t: TrendingRequest,
+  mini: boolean = false
+): TrendingResponse | MiniResponse[] {
   return t.map((i) =>
-    i.type === "song"
+    mini
+      ? miniPayload(i)
+      : i.type === "song"
       ? songPayload(i)
       : i.type === "album"
       ? albumPayload(i)
@@ -38,12 +45,13 @@ export function trendingPayload(t: TrendingRequest): TrendingResponse {
 }
 
 export function featuredPlaylistsPayload(
-  f: FeaturedPlaylistsRequest
+  f: FeaturedPlaylistsRequest,
+  mini: boolean = false
 ): FeaturedPlaylistsResponse {
   return {
     count: f.count,
     last_page: f.last_page,
-    data: f.data.map(playlistPayload),
+    data: f.data.map((p) => (mini ? miniPayload(p) : playlistPayload(p))),
   };
 }
 
@@ -156,14 +164,21 @@ export function topArtistsPayload(a: TopArtistRequest): TopArtistResponse {
   });
 }
 
-export function topAlbumsPayload(a: TopAlbumRequest): TopAlbumResponse {
+export function topAlbumsPayload(
+  a: TopAlbumRequest,
+  mini: boolean = false
+): TopAlbumResponse | MiniResponse[] {
   const { count, last_page, data } = a;
 
   return {
     count,
     last_page,
     data: data.map((a) =>
-      a.type === "song" ? songPayload(a) : albumPayload(a)
+      mini
+        ? miniPayload(a)
+        : a.type === "song"
+        ? songPayload(a)
+        : albumPayload(a)
     ),
   };
 }
@@ -204,7 +219,7 @@ export function radioPayload(r: RadioRequest): RadioResponse {
   };
 }
 
-export function mixPayload(m: MixRequest): MixResponse {
+export function mixPayload(m: MixRequest, mini: boolean = false): MixResponse {
   const {
     id,
     title: name,
@@ -246,7 +261,7 @@ export function mixPayload(m: MixRequest): MixResponse {
     explicit: parseBool(explicit_content),
     list_count: +list_count,
     list_type,
-    songs: list.map(songPayload),
+    songs: list.map((s) => songPayload(s, mini)),
     user_id,
     last_updated,
     username,
@@ -265,7 +280,10 @@ export function mixPayload(m: MixRequest): MixResponse {
   };
 }
 
-export function labelPayload(l: LabelRequest): LabelResponse {
+export function labelPayload(
+  l: LabelRequest,
+  mini: boolean = false
+): LabelResponse {
   const {
     labelId: id,
     name,
@@ -280,8 +298,11 @@ export function labelPayload(l: LabelRequest): LabelResponse {
     id,
     name,
     image: createImageLinks(image),
-    top_songs: { songs: songs.map(songPayload), total: s_t },
-    top_albums: { albums: albums.map(albumPayload), total: a_t },
+    top_songs: { songs: songs.map((s) => songPayload(s, mini)), total: s_t },
+    top_albums: {
+      albums: albums.map((a) => (mini ? miniPayload(a) : albumPayload(a))),
+      total: a_t,
+    },
     urls,
     available_languages,
   };
