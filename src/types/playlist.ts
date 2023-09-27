@@ -1,6 +1,11 @@
 import { ArtistMiniRequest, ArtistMiniResponse } from "./artist";
-import { Quality } from "./misc";
+import { MiniResponse, Quality } from "./misc";
+import { CustomResponse } from "./response";
 import { SongRequest, SongResponse } from "./song";
+
+/* -----------------------------------------------------------------------------------------------
+ * Request
+ * -----------------------------------------------------------------------------------------------*/
 
 export type PlaylistRequest = {
   id: string;
@@ -58,7 +63,9 @@ export type PlaylistModulesRequest = {
   };
 };
 
-/*---------------------- Response ---------------------- */
+/* -----------------------------------------------------------------------------------------------
+ * Response
+ * -----------------------------------------------------------------------------------------------*/
 
 export type PlaylistResponse = {
   id: string;
@@ -86,7 +93,7 @@ export type PlaylistResponse = {
   video_count?: number;
   artists?: ArtistMiniResponse[];
   subtitle_desc: string[];
-  songs?: SongResponse[];
+  songs?: (SongResponse | MiniResponse)[];
   modules?: PlaylistModulesResponse;
 };
 
@@ -112,3 +119,10 @@ export type PlaylistModulesResponse = {
     subtitle: string;
   };
 };
+
+/* -----------------------------------------------------------------------------------------------
+ * Playlist Custom Response(s)
+ * -----------------------------------------------------------------------------------------------*/
+export type CPlaylistResponse = CustomResponse<PlaylistResponse>;
+
+export type CPlaylistsResponse = CustomResponse<PlaylistResponse[]>;

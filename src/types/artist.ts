@@ -1,7 +1,37 @@
 import { AlbumRequest, AlbumResponse } from "./album";
-import { Quality, Type } from "./misc";
+import { MiniResponse, Quality, Type } from "./misc";
 import { PlaylistRequest, PlaylistResponse } from "./playlist";
+import { CustomResponse } from "./response";
 import { SongRequest, SongResponse } from "./song";
+
+/* -----------------------------------------------------------------------------------------------
+ * Common
+ * -----------------------------------------------------------------------------------------------*/
+
+type Module = {
+  title: string;
+  subtitle: string;
+  source: string;
+  position: number;
+};
+
+export type Urls = {
+  albums: string;
+  bio: string;
+  comments: string;
+  songs: string;
+};
+
+export type ArtistTopSongsOrAlbums<T> = {
+  total: number;
+  last_page: boolean;
+  songs: T[];
+  albums: T[];
+};
+
+/* -----------------------------------------------------------------------------------------------
+ * Request
+ * -----------------------------------------------------------------------------------------------*/
 
 export type ArtistRequest = {
   artistId: string;
@@ -41,13 +71,6 @@ export type ArtistRequest = {
   }>;
 };
 
-type Module = {
-  title: string;
-  subtitle: string;
-  source: string;
-  position: number;
-};
-
 export type SimilarArtistRequest = {
   id: string;
   name: string;
@@ -68,13 +91,6 @@ export type SimilarArtistRequest = {
   type: "artist";
   isRadioPresent: boolean;
   dominantType: string;
-};
-
-export type Urls = {
-  albums: string;
-  bio: string;
-  comments: string;
-  songs: string;
 };
 
 export type ArtistMapRequest = {
@@ -102,13 +118,6 @@ export type ArtistSongRequest = Omit<SongRequest, "more_info"> & {
   };
 };
 
-export type ArtistTopSongsOrAlbums<T> = {
-  total: number;
-  last_page: boolean;
-  songs: T[];
-  albums: T[];
-};
-
 export type ArtistSongsOrAlbumsRequest = {
   artistId: string;
   name: string;
@@ -122,7 +131,9 @@ export type ArtistSongsOrAlbumsRequest = {
   topAlbums?: Omit<ArtistTopSongsOrAlbums<AlbumRequest>, "songs">;
 };
 
-/*---------------------- Response ---------------------- */
+/* -----------------------------------------------------------------------------------------------
+ * Response
+ * -----------------------------------------------------------------------------------------------*/
 
 export type ArtistResponse = {
   id: string;
@@ -134,10 +145,10 @@ export type ArtistResponse = {
   is_verified: boolean;
   dominant_language: string;
   dominant_type: string;
-  top_songs: SongResponse[];
-  top_albums: AlbumResponse[];
-  dedicated_artist_playlist: PlaylistResponse[];
-  featured_artist_playlist: PlaylistResponse[];
+  top_songs: (SongResponse | MiniResponse)[];
+  top_albums: (AlbumResponse | MiniResponse)[];
+  dedicated_artist_playlist: (PlaylistResponse | MiniResponse)[];
+  featured_artist_playlist: (PlaylistResponse | MiniResponse)[];
   singles: ArtistSongResponse[];
   latest_release: ArtistSongResponse[];
   similar_artists: SimilarArtistResponse[];
@@ -235,6 +246,21 @@ export type ArtistSongsOrAlbumsResponse = {
   is_verified: boolean;
   dominant_language: string;
   dominant_type: string;
-  top_songs?: Omit<ArtistTopSongsOrAlbums<SongResponse>, "albums">;
-  top_albums?: Omit<ArtistTopSongsOrAlbums<AlbumResponse>, "songs">;
+  top_songs?: Omit<
+    ArtistTopSongsOrAlbums<SongResponse | MiniResponse>,
+    "albums"
+  >;
+  top_albums?: Omit<
+    ArtistTopSongsOrAlbums<AlbumResponse | MiniResponse>,
+    "songs"
+  >;
 };
+
+/* -----------------------------------------------------------------------------------------------
+ * Artist Custom Response(s)
+ * -----------------------------------------------------------------------------------------------*/
+
+export type CArtistResponse = CustomResponse<ArtistResponse>;
+
+export type CArtistSongsOrAlbumsResponse =
+  CustomResponse<ArtistSongsOrAlbumsResponse>;

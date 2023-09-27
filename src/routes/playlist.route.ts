@@ -10,23 +10,27 @@ import {
   validLangs,
 } from "../lib/utils";
 import { playlistPayload } from "../payloads/playlist.payload";
-import { PlaylistRequest, PlaylistResponse } from "../types/playlist";
-import { CustomResponse } from "../types/response";
+import {
+  CPlaylistResponse,
+  CPlaylistsResponse,
+  PlaylistRequest,
+} from "../types/playlist";
+
+const { id: i, link: l, recommend: r } = config.endpoint.playlist;
 
 export const playlist = new Hono();
 
-const { id: _id, link: _link, recommend } = config.endpoint.playlist;
+/* -----------------------------------------------------------------------------------------------
+ * MIDDLEWARE to check if query params are provided and are valid
+ * -----------------------------------------------------------------------------------------------*/
 
-// middleware to check if query params are provided and are valid
 playlist.use("*", async (c, next) => {
   const { id, link, token } = c.req.query();
   const path = "/" + c.req.path.split("/").slice(2).join("/");
 
-  if (path === "/" && !token) {
-    if (!id && !link) throw new Error("Please provide playlist id or link");
-
-    if (id && link)
-      throw new Error("Please provide either playlist id or link");
+  if (path === "/") {
+    if (!id && !link && !token)
+      throw new Error("Please provide playlist id, link or a token");
 
     if (link && !(isJioSaavnLink(link) && link.includes("featured"))) {
       throw new Error("Please provide a valid JioSaavn link");
@@ -40,6 +44,10 @@ playlist.use("*", async (c, next) => {
   await next();
 });
 
+/* -----------------------------------------------------------------------------------------------
+ * Playlist Details Route Handler - GET /playlist
+ * -----------------------------------------------------------------------------------------------*/
+
 playlist.get("/", async (c) => {
   const {
     id: listid = "",
@@ -47,9 +55,10 @@ playlist.get("/", async (c) => {
     token = "",
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
-  const result: PlaylistRequest = await api(listid ? _id : _link, {
+  const result: PlaylistRequest = await api(listid ? i : l, {
     query: {
       listid,
       token: token ? token : tokenFromLink(link),
@@ -58,32 +67,40 @@ playlist.get("/", async (c) => {
   });
 
   if (!result.id) {
-    throw new Error("No playlist found, please check the id or link");
+    throw new Error("No playlist found, please check the id, link or token");
   }
 
   if (parseBool(raw)) {
     return c.json(result);
   }
 
-  const payload = playlistPayload(result);
-
-  const response: CustomResponse<PlaylistResponse> = {
+  const response: CPlaylistResponse = {
     status: "Success",
     message: "✅ Playlist Details fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: playlistPayload(result, parseBool(mini)),
   };
 
-  return c.json(response);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
+/* -----------------------------------------------------------------------------------------------
+ * Playlist Recommendations Route Handler - GET /playlist/recommend
+ * -----------------------------------------------------------------------------------------------*/
+
 playlist.get("/recommend", async (c) => {
-  const { id: listid, lang = "", raw = "", camel = "" } = c.req.query();
+  const {
+    id: listid,
+    lang = "",
+    raw = "",
+    camel = "",
+    mini = "",
+  } = c.req.query();
 
   if (!listid) {
     throw new Error("Please provide playlist id");
   }
 
-  const result = await api<PlaylistRequest[]>(recommend, {
+  const result = await api<PlaylistRequest[]>(r, {
     query: { listid, language: validLangs(lang) },
   });
 
@@ -95,13 +112,11 @@ playlist.get("/recommend", async (c) => {
     return c.json(result);
   }
 
-  const payload = result.map(playlistPayload);
-
-  const response: CustomResponse<PlaylistResponse[]> = {
+  const response: CPlaylistsResponse = {
     status: "Success",
     message: "✅ Playlist Recommendations fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: result.map((p) => playlistPayload(p, parseBool(mini))),
   };
 
-  return c.json(response);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });

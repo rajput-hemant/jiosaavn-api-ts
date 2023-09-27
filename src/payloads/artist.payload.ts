@@ -14,10 +14,14 @@ import {
   SimilarArtistResponse,
 } from "../types/artist";
 import { albumPayload } from "./album.payload";
+import { miniPayload } from "./misc.payload";
 import { playlistPayload } from "./playlist.payload";
 import { songPayload } from "./song.payload";
 
-export function artistPayload(a: ArtistRequest): ArtistResponse {
+export function artistPayload(
+  a: ArtistRequest,
+  mini: boolean = false
+): ArtistResponse {
   const {
     artistId: id,
     availableLanguages: available_languages,
@@ -66,12 +70,17 @@ export function artistPayload(a: ArtistRequest): ArtistResponse {
     is_verified,
     dominant_language,
     dominant_type,
-    top_songs: topSongs?.map(songPayload) ?? [],
-    top_albums: topAlbums?.map(albumPayload) ?? [],
+    top_songs: topSongs?.map((s) => songPayload(s, mini)) ?? [],
+    top_albums:
+      topAlbums?.map((a) => (mini ? miniPayload(a) : albumPayload(a))) ?? [],
     dedicated_artist_playlist:
-      dedicated_artist_playlist?.map(playlistPayload) ?? [],
+      dedicated_artist_playlist?.map((p) =>
+        mini ? miniPayload(p) : playlistPayload(p)
+      ) ?? [],
     featured_artist_playlist:
-      featured_artist_playlist?.map(playlistPayload) ?? [],
+      featured_artist_playlist?.map((p) =>
+        mini ? miniPayload(p) : playlistPayload(p)
+      ) ?? [],
     singles: singles?.map(artistSongPayload) ?? [],
     latest_release: latest_release?.map(artistSongPayload) ?? [],
     similar_artists: similarArtists.map(similarArtistPayload),
@@ -215,7 +224,8 @@ export function artistSongPayload(a: ArtistSongRequest): ArtistSongResponse {
 }
 
 export function artistTopSongsOrAlbumsPayload(
-  a: ArtistSongsOrAlbumsRequest
+  a: ArtistSongsOrAlbumsRequest,
+  mini: boolean = false
 ): ArtistSongsOrAlbumsResponse {
   const {
     artistId: id,
@@ -243,14 +253,16 @@ export function artistTopSongsOrAlbumsPayload(
       ? {
           total: topSongs.total,
           last_page: topSongs.last_page,
-          songs: topSongs.songs.map(songPayload),
+          songs: topSongs.songs.map((s) => songPayload(s, mini)),
         }
       : undefined,
     top_albums: topAlbums
       ? {
           total: topAlbums.total,
           last_page: topAlbums.last_page,
-          albums: topAlbums.albums.map(albumPayload),
+          albums: topAlbums.albums.map((a) =>
+            mini ? miniPayload(a) : albumPayload(a)
+          ),
         }
       : undefined,
   };

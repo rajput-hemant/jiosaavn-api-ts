@@ -16,26 +16,28 @@ import {
 import { songPayload } from "../payloads/song.payload";
 import {
   ArtistRequest,
-  ArtistResponse,
   ArtistSongsOrAlbumsRequest,
-  ArtistSongsOrAlbumsResponse,
+  CArtistResponse,
+  CArtistSongsOrAlbumsResponse,
 } from "../types/artist";
-import { CustomResponse } from "../types/response";
-import { SongRequest, SongResponse } from "../types/song";
+import { CSongsResponse, SongRequest } from "../types/song";
+
+const {
+  id: i,
+  link: l,
+  songs: s,
+  albums: a,
+  top_songs: t,
+} = config.endpoint.artist;
 
 export const artist = new Hono();
 
-const {
-  id: _id,
-  link: _link,
-  songs,
-  albums,
-  top_songs,
-} = config.endpoint.artist;
+/* -----------------------------------------------------------------------------------------------
+ * MIDDLEWARE to check if query params are provided and are valid
+ * -----------------------------------------------------------------------------------------------*/
 
-// middleware to check if query params are provided and are valid
 artist.use("*", async (c, next) => {
-  const { id, link, token, artist_id, song_id } = c.req.query();
+  const { id, link, token, artisti, songi } = c.req.query();
   const path = "/" + c.req.path.split("/").slice(2).join("/");
 
   if (path === "/") {
@@ -54,12 +56,16 @@ artist.use("*", async (c, next) => {
   }
 
   if (["/top-songs", "/recommend"].includes(path)) {
-    if (!artist_id) throw new Error("Please provide artist id.");
-    if (!song_id) throw new Error("Please provide song id.");
+    if (!artisti) throw new Error("Please provide artist id.");
+    if (!songi) throw new Error("Please provide song id.");
   }
 
   await next();
 });
+
+/* -----------------------------------------------------------------------------------------------
+ * Artist Details Route Handler - GET /artist
+ * -----------------------------------------------------------------------------------------------*/
 
 artist.get("/", async (c) => {
   const {
@@ -71,9 +77,10 @@ artist.get("/", async (c) => {
     n_album = "10",
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
-  const result: ArtistRequest = await api(id ? _id : _link, {
+  const result: ArtistRequest = await api(id ? i : l, {
     query: {
       artistId: id,
       token: token ? token : tokenFromLink(link),
@@ -91,16 +98,18 @@ artist.get("/", async (c) => {
     return c.json(result);
   }
 
-  const payload = artistPayload(result);
-
-  const response: CustomResponse<ArtistResponse> = {
+  const response: CArtistResponse = {
     status: "Success",
     message: "✅ Artist Details fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: artistPayload(result, parseBool(mini)),
   };
 
-  return c.json(response);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
+
+/* -----------------------------------------------------------------------------------------------
+ * Artist Top Songs or Albums Route Handler - GET /artist/{songs|albums}
+ * -----------------------------------------------------------------------------------------------*/
 
 artist.get("/:path{(songs|albums)}", async (c) => {
   const path = c.req.path.split("/")[2];
@@ -111,10 +120,11 @@ artist.get("/:path{(songs|albums)}", async (c) => {
     sort: sort_order = "", // ["asc", "desc"]
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
   const result: ArtistSongsOrAlbumsRequest = await api(
-    path === "songs" ? songs : albums,
+    path === "songs" ? s : a,
     { query: { artistId: id, page, category, sort_order } }
   );
 
@@ -130,33 +140,36 @@ artist.get("/:path{(songs|albums)}", async (c) => {
     return c.json(result);
   }
 
-  const payload = artistTopSongsOrAlbumsPayload(result);
-
-  const response: CustomResponse<ArtistSongsOrAlbumsResponse> = {
+  const response: CArtistSongsOrAlbumsResponse = {
     status: "Success",
     message: `✅ Artist's ${path} fetched successfully`,
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: artistTopSongsOrAlbumsPayload(result, parseBool(mini)),
   };
 
-  return c.json(response);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
+
+/* -----------------------------------------------------------------------------------------------
+ * Artist Top Songs/Recommend Route Handler - GET /artist/{top-songs|recommend}
+ * -----------------------------------------------------------------------------------------------*/
 
 artist.get("/:path{(top-songs|recommend)}", async (c) => {
   const {
-    artist_id: artist_ids,
-    song_id,
+    artisti: artistis,
+    songi,
     page = "",
     lang = "",
-    cat: category = "", // ["latest", "alphabetical"]
+    cat: category = "", // ["latest", "alphabetical", "popularity"]
     sort: sort_order = "", // ["asc", "desc"]
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
-  const result: SongRequest[] = await api(top_songs, {
+  const result: SongRequest[] = await api(t, {
     query: {
-      artist_ids,
-      song_id,
+      artistis,
+      songi,
       page,
       category,
       sort_order,
@@ -172,13 +185,11 @@ artist.get("/:path{(top-songs|recommend)}", async (c) => {
     return c.json(result);
   }
 
-  const payload = result.map(songPayload);
-
-  const response: CustomResponse<SongResponse[]> = {
+  const response: CSongsResponse = {
     status: "Success",
     message: "✅ Artist's top songs fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: result.map((s) => songPayload(s, parseBool(mini))),
   };
 
-  return c.json(response);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });

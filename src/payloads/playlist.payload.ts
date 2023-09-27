@@ -8,7 +8,10 @@ import {
 import { artistMiniPayload } from "./artist.payload";
 import { songPayload } from "./song.payload";
 
-export function playlistPayload(p: PlaylistRequest): PlaylistResponse {
+export function playlistPayload(
+  p: PlaylistRequest,
+  mini: boolean = false
+): PlaylistResponse {
   const {
     id,
     title: name,
@@ -68,7 +71,10 @@ export function playlistPayload(p: PlaylistRequest): PlaylistResponse {
     share: share ? +share : undefined,
     video_count: video_count ? +video_count : undefined,
     artists: artists?.map(artistMiniPayload),
-    songs: !list || typeof list === "string" ? [] : list.map(songPayload),
+    songs:
+      !list || typeof list === "string"
+        ? []
+        : list.map((s) => songPayload(s, mini)),
     subtitle_desc,
     modules: modules ? playlistModulesPayload(modules) : undefined,
   };

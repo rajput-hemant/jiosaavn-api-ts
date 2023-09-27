@@ -1,4 +1,5 @@
 import { createDownloadLinks, createImageLinks, parseBool } from "../lib/utils";
+import { MiniResponse } from "../types/misc";
 import {
   SongModulesRequest,
   SongModulesResponse,
@@ -8,17 +9,24 @@ import {
   SongResponse,
 } from "../types/song";
 import { artistMapPayload } from "./artist.payload";
+import { miniPayload } from "./misc.payload";
 
-export function songObjPayload(s: SongObjRequest): SongObjResponse {
+export function songObjPayload(
+  s: SongObjRequest,
+  mini: boolean = false
+): SongObjResponse {
   const { songs, modules } = s;
 
   return {
-    songs: songs.map(songPayload),
+    songs: songs.map((s) => songPayload(s, mini)),
     modules: modules ? songModulesPayload(modules) : undefined,
   };
 }
 
-export function songPayload(s: SongRequest): SongResponse {
+export function songPayload(
+  s: SongRequest,
+  mini: boolean = false
+): SongResponse | MiniResponse {
   const {
     id,
     title: name,
@@ -60,6 +68,10 @@ export function songPayload(s: SongRequest): SongResponse {
       vlink,
     },
   } = s;
+
+  if (mini) {
+    return miniPayload(s);
+  }
 
   return {
     id,

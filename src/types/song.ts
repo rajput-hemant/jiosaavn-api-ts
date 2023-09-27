@@ -1,5 +1,10 @@
 import { ArtistMapRequest, ArtistMapResponse } from "./artist";
-import { Quality, Rights } from "./misc";
+import { MiniResponse, Quality, Rights } from "./misc";
+import { CustomResponse } from "./response";
+
+/* -----------------------------------------------------------------------------------------------
+ * Request
+ * -----------------------------------------------------------------------------------------------*/
 
 export type SongObjRequest = {
   songs: SongRequest[];
@@ -103,10 +108,12 @@ export type SongModulesRequest = {
   };
 };
 
-/*---------------------- Response ---------------------- */
+/* -----------------------------------------------------------------------------------------------
+ * Response
+ * -----------------------------------------------------------------------------------------------*/
 
 export type SongObjResponse = {
-  songs: SongResponse[];
+  songs: (SongResponse | MiniResponse)[];
   modules?: SongModulesResponse;
 };
 
@@ -200,3 +207,11 @@ export type SongModulesResponse = {
     position: number;
   };
 };
+
+/* -----------------------------------------------------------------------------------------------
+ * Song Custom Response(s)
+ * -----------------------------------------------------------------------------------------------*/
+
+export type CSongResponse = CustomResponse<SongObjResponse>;
+
+export type CSongsResponse = CustomResponse<(SongResponse | MiniResponse)[]>;

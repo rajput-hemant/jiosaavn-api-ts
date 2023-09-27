@@ -8,7 +8,10 @@ import {
 import { artistMapPayload } from "./artist.payload";
 import { songPayload } from "./song.payload";
 
-export function albumPayload(a: AlbumRequest): AlbumResponse {
+export function albumPayload(
+  a: AlbumRequest,
+  mini: boolean = false
+): AlbumResponse {
   const {
     id,
     title: name,
@@ -37,7 +40,9 @@ export function albumPayload(a: AlbumRequest): AlbumResponse {
   return {
     id,
     name,
-    subtitle,
+    subtitle:
+      subtitle ||
+      (artistMap ? artistMap.artists.map((a) => a.name).join(", ") : ""),
     type,
     language,
     play_count: +play_count,
@@ -53,7 +58,10 @@ export function albumPayload(a: AlbumRequest): AlbumResponse {
     is_dolby_content,
     copyright_text,
     label_url,
-    songs: !list || typeof list === "string" ? [] : list.map(songPayload),
+    songs:
+      !list || typeof list === "string"
+        ? []
+        : list.map((s) => songPayload(s, mini)),
     modules: modules ? albumModulesPayload(modules) : undefined,
   };
 }

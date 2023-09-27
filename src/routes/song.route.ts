@@ -10,28 +10,29 @@ import {
   validLangs,
 } from "../lib/utils";
 import { songObjPayload, songPayload } from "../payloads/song.payload";
-import { CustomResponse } from "../types/response";
 import {
+  CSongResponse,
+  CSongsResponse,
   SongObjRequest,
-  SongObjResponse,
   SongRequest,
-  SongResponse,
 } from "../types/song";
+
+const { id: i, link: l, recommend: r } = config.endpoint.song;
 
 export const song = new Hono();
 
-const { id: _id, link: _link, recommend } = config.endpoint.song;
+/* -----------------------------------------------------------------------------------------------
+ * MIDDLEWARE to check if query params are provided and are valid
+ * -----------------------------------------------------------------------------------------------*/
 
-// middleware to check if query params are provided and are valid
 song.use("*", async (c, next) => {
   const { id, link, token } = c.req.query();
   const path = c.req.path.split("/").slice(2).join("/");
 
-  if (path === "" && !token) {
-    if (!id && !link) throw new Error("Please provide song id(s) or a link");
-
-    if (id && link)
-      throw new Error("Please provide either song id(s) or a link");
+  if (path === "") {
+    if (!id && !link && !token) {
+      throw new Error("Please provide song id(s), link or a token");
+    }
 
     if (link && !(isJioSaavnLink(link) && link.includes("song"))) {
       throw new Error("Please provide a valid JioSaavn link");
@@ -45,6 +46,10 @@ song.use("*", async (c, next) => {
   await next();
 });
 
+/* -----------------------------------------------------------------------------------------------
+ * Songs Details Route Handler - GET /song
+ * -----------------------------------------------------------------------------------------------*/
+
 song.get("/", async (c) => {
   const {
     id: pids = "",
@@ -52,35 +57,38 @@ song.get("/", async (c) => {
     token = "",
     raw = "",
     camel = "",
+    mini = "",
   } = c.req.query();
 
-  const result: SongObjRequest = await api(pids ? _id : _link, {
+  const result: SongObjRequest = await api(pids ? i : l, {
     query: { pids, token: token ? token : tokenFromLink(link), type: "song" },
   });
 
   if (!("songs" in result)) {
-    throw new Error("Song not found, please check the id or link");
+    throw new Error("Song not found, please check the id, link or token");
   }
 
   if (parseBool(raw)) {
     return c.json(result);
   }
 
-  const payload = songObjPayload(result);
-
-  const response: CustomResponse<SongObjResponse> = {
+  const response: CSongResponse = {
     status: "Success",
     message: "✅ Song(s) Details fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: songObjPayload(result, parseBool(mini)),
   };
 
-  return c.json(response);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });
 
-song.get("/recommend", async (c) => {
-  const { id: pid, lang = "", raw = "", camel = "" } = c.req.query();
+/* -----------------------------------------------------------------------------------------------
+ * Songs Recommendations Route Handler - GET /song/recommend
+ * -----------------------------------------------------------------------------------------------*/
 
-  const result: SongRequest[] = await api(recommend, {
+song.get("/recommend", async (c) => {
+  const { id: pid, lang = "", raw = "", camel = "", mini = "" } = c.req.query();
+
+  const result: SongRequest[] = await api(r, {
     query: { pid, language: validLangs(lang) },
   });
 
@@ -92,13 +100,11 @@ song.get("/recommend", async (c) => {
     return c.json(result);
   }
 
-  const payload = result.map(songPayload);
-
-  const response: CustomResponse<SongResponse[]> = {
+  const response: CSongsResponse = {
     status: "Success",
     message: "✅ Song Recommendations fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: result.map((s) => songPayload(s, parseBool(mini))),
   };
 
-  return c.json(response);
+  return c.json(parseBool(camel) ? toCamelCase(response) : response);
 });

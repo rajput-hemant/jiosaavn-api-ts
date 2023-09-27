@@ -1,6 +1,11 @@
 import { ArtistMapRequest, ArtistMapResponse } from "./artist";
-import { Quality, Type } from "./misc";
+import { MiniResponse, Quality, Type } from "./misc";
+import { CustomResponse } from "./response";
 import { SongRequest, SongResponse } from "./song";
+
+/* -----------------------------------------------------------------------------------------------
+ * Request
+ * -----------------------------------------------------------------------------------------------*/
 
 export type AlbumRequest = {
   id: string;
@@ -57,7 +62,9 @@ export interface AlbumModulesRequest {
   };
 }
 
-/*---------------------- Response ---------------------- */
+/* -----------------------------------------------------------------------------------------------
+ * Response
+ * -----------------------------------------------------------------------------------------------*/
 
 export type AlbumResponse = {
   explicit: boolean;
@@ -78,7 +85,7 @@ export type AlbumResponse = {
   label_url?: string;
   copyright_text?: string;
   is_dolby_content?: boolean;
-  songs?: SongResponse[];
+  songs?: (SongResponse | MiniResponse)[];
   modules?: AlbumModulesResponse;
 };
 
@@ -111,3 +118,11 @@ export type AlbumModulesResponse = {
     subtitle: string;
   };
 };
+
+/* -----------------------------------------------------------------------------------------------
+ * Album Custom Response(s)
+ * -----------------------------------------------------------------------------------------------*/
+
+export type CAlbumResponse = CustomResponse<AlbumResponse>;
+
+export type CAlbumsResponse = CustomResponse<AlbumResponse[]>;
