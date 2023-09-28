@@ -54,7 +54,7 @@ export function miniPayload(item: MiniPayloadRequest): MiniResponse {
     type,
     url,
     image: createImageLinks(image),
-    header_desc: "header_desc" in item ? decode(item.header_desc) : "",
+    header_desc: "header_desc" in item ? decode(item.header_desc ?? "") : "",
     explicit: explicit_content ? parseBool(explicit_content) : undefined,
     color:
       type === "radio_station" && "color" in item.more_info

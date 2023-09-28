@@ -14,6 +14,30 @@
     "fmt:write": "prettier --write \"**/*.{ts,json}\" --cache",
     "prepare": "husky install"
   },
+  "prettier": {
+    "endOfLine": "lf",
+    "semi": true,
+    "singleQuote": false,
+    "tabWidth": 2,
+    "trailingComma": "es5"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2020": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    }
+  },
   "dependencies": {
     "@hono/node-server": "^1.2.0",
     "crypto-js": "^4.1.1",
@@ -25,7 +49,6 @@
     "@cloudflare/workers-types": "^4.20230914.0",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/crypto-js": "^4.1.2",
     "@types/node": "^20.6.5",
