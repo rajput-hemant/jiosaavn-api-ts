@@ -2,6 +2,8 @@
 
 ![][ci] ![][views] ![][stars] ![][forks] ![][issues] ![][license] ![][code-size] ![][commit-activity]
 
+<img src="./public/jiosaavn-2.png" width="200px"/>
+
 # 🎵 Jio Saavn API
 
 ### A simple wrapper for the Jio Saavn API powered by Hono.js 🔥.
