@@ -44,7 +44,7 @@ export function albumPayload(
     name: decode(title),
     subtitle: decode(
       subtitle ||
-        (artistMap ? artistMap.artists.map((a) => a.name).join(", ") : "")
+        (artistMap?.artists.map((a) => a.name.trim()).join(", ") ?? "")
     ),
     type,
     language,

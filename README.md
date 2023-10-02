@@ -117,6 +117,10 @@ You can easily deploy your own hosted version of the `JioSaavn API` by clicking 
 bun run deploy:vercel || pnpm deploy:vercel || npm run deploy:vercel || yarn deploy:vercel
 ```
 
+> **Note**
+> We are using community based [🐰 Bun runtime for ▲ Vercel Serverless Functions](https://github.com/vercel-community/bun) by default, You can also use [▲ Vercel Serverless Functions](https://vercel.com/docs/functions/serverless-functions) w/ `Node Runtime` or [▲ Vercel Edge Functions](https://vercel.com/docs/functions/edge-functions) to deploy the project.
+> To use `Node Runtime` or `Edge Functions` rename the `_api` folder to `api` and remove 'buildCommand' from `vercel.json` file.
+
 ### Cloudfare Workers
 
 ```

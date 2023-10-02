@@ -44,7 +44,9 @@ export function miniPayload(item: MiniPayloadRequest): MiniResponse {
   let subs: string | undefined;
 
   if (type === "album" && "artistMap" in item.more_info) {
-    subs = item.more_info?.artistMap?.artists.map((a) => a.name).join(", ");
+    subs = item.more_info?.artistMap?.artists
+      .map((a) => a.name.trim())
+      .join(",");
   }
 
   return {

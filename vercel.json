@@ -37,5 +37,6 @@
         }
       ]
     }
-  ]
+  ],
+  "buildCommand": "bun run build:vercel"
 }

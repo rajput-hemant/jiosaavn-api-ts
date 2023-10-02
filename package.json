@@ -5,6 +5,7 @@
     "dev": "bun run --hot src/index.ts",
     "dev:node": "tsx src/node.ts",
     "dev:vercel": "vercel dev",
+    "build:vercel": "bun-vercel ./src/bun.ts",
     "deploy:vercel": "vercel",
     "dev:cf": "wrangler dev src/index.ts",
     "deploy:cf": "wrangler deploy --minify src/index.ts",
@@ -38,8 +39,18 @@
       "sourceType": "module"
     }
   },
+  "lint-staged": {
+    "*.{ts,json}": [
+      "prettier --write \"**/*.{ts,json}\" --cache",
+      "eslint --fix ."
+    ],
+    "*.ts": [
+      "tsc --noEmit --esModuleInterop --skipLibCheck"
+    ]
+  },
   "dependencies": {
     "@hono/node-server": "^1.2.0",
+    "bun-vercel": "^1.0.0-alpha.5",
     "crypto-js": "^4.1.1",
     "entities": "^4.5.0",
     "hono": "^3.7.3",
