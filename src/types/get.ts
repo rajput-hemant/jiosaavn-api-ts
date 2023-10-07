@@ -190,6 +190,19 @@ export type LabelRequest = {
   availableLanguages: string[];
 };
 
+export type MegaMenuRequest = {
+  mega_menu: {
+    top_artists: MegaMenuItemRequest[];
+    top_playlists: MegaMenuItemRequest[];
+    new_releases: MegaMenuItemRequest[];
+  };
+};
+
+export type MegaMenuItemRequest = {
+  title: string;
+  perma_url: string;
+};
+
 /* -----------------------------------------------------------------------------------------------
  * Response
  * -----------------------------------------------------------------------------------------------*/
@@ -198,6 +211,7 @@ export type TrendingResponse = (
   | AlbumResponse
   | SongResponse
   | PlaylistResponse
+  | MiniResponse
 )[];
 
 export type FeaturedPlaylistsResponse = A<PlaylistResponse | MiniResponse>;
@@ -328,6 +342,17 @@ export type LabelResponse = {
   available_languages: string[];
 };
 
+export type MegaMenuResponse = {
+  top_artists: MegaMenuItemResponse[];
+  top_playlists: MegaMenuItemResponse[];
+  new_releases: MegaMenuItemResponse[];
+};
+
+export type MegaMenuItemResponse = {
+  name: string;
+  url: string;
+};
+
 /* -----------------------------------------------------------------------------------------------
  * Get Custom Response(s)
  * -----------------------------------------------------------------------------------------------*/
@@ -352,3 +377,5 @@ export type CGetLyricsResponse = CustomResponse<Lyrics>;
 export type CGetMixResponse = CustomResponse<MixResponse>;
 
 export type CGetLabelResponse = CustomResponse<LabelResponse>;
+
+export type CGetMegaMenuResponse = CustomResponse<MegaMenuResponse>;

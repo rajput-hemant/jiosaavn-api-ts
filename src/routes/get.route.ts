@@ -13,6 +13,7 @@ import {
   chartPayload,
   featuredPlaylistsPayload,
   labelPayload,
+  megaMenuPayload,
   mixPayload,
   radioPayload,
   topAlbumsPayload,
@@ -26,6 +27,7 @@ import {
   CGetFooterDetails,
   CGetLabelResponse,
   CGetLyricsResponse,
+  CGetMegaMenuResponse,
   CGetMixResponse,
   CGetTrendingResponse,
   CGetXResponse,
@@ -34,6 +36,7 @@ import {
   FooterDetails,
   LabelRequest,
   Lyrics,
+  MegaMenuRequest,
   MixRequest,
   RadioRequest,
   TopAlbumRequest,
@@ -56,8 +59,9 @@ const {
   label_details: ld,
   featured_stations: fs,
   actor_top_songs: ats,
-  footer_details: fd,
   lyrics: l,
+  footer_details: fd,
+  mega_menu: mm,
 } = config.endpoint.get;
 
 /* -----------------------------------------------------------------------------------------------
@@ -378,4 +382,29 @@ get.get("/label", async (c) => {
   };
 
   return c.json(parseBool(camel) ? toCamelCase(response) : response);
+});
+
+/* -----------------------------------------------------------------------------------------------
+ * Mega Menu Route Handler - /get/mega-menu
+ * -----------------------------------------------------------------------------------------------*/
+
+get.get("/mega-menu", async (c) => {
+  const { entity = "", lang = "", raw = "" } = c.req.query();
+
+  const result: MegaMenuRequest = await api(mm, {
+    query: {
+      is_entity_page: `${parseBool(entity)}`,
+      language: validLangs(lang),
+    },
+  });
+
+  if (parseBool(raw)) return c.json(result);
+
+  const response: CGetMegaMenuResponse = {
+    status: "Success",
+    message: `✅ Mega Menu Details fetched successfully`,
+    data: megaMenuPayload(result),
+  };
+
+  return c.json(response);
 });

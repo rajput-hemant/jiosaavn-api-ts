@@ -72,10 +72,11 @@ export const config = {
       top_albums: "content.getAlbums",
       mix_details: "webapi.get",
       label_details: "webapi.get",
-      footer_details: "webapi.getFooterDetails",
       featured_stations: "webradio.getFeaturedStations",
       actor_top_songs: "search.actorOtherTopSongs",
       lyrics: "lyrics.getLyrics",
+      footer_details: "webapi.getFooterDetails",
+      mega_menu: "webapi.getBrowseHoverDetails",
     },
   },
 };

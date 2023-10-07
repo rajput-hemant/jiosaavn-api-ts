@@ -8,6 +8,10 @@ import {
   FeaturedPlaylistsResponse,
   LabelRequest,
   LabelResponse,
+  MegaMenuItemRequest,
+  MegaMenuItemResponse,
+  MegaMenuRequest,
+  MegaMenuResponse,
   MixRequest,
   MixResponse,
   RadioRequest,
@@ -34,7 +38,7 @@ import { songPayload } from "./song.payload";
 export function trendingPayload(
   t: TrendingRequest,
   mini: boolean = false
-): TrendingResponse | MiniResponse[] {
+): TrendingResponse {
   return t.map((i) =>
     mini
       ? miniPayload(i)
@@ -308,4 +312,20 @@ export function labelPayload(
     urls,
     available_languages,
   };
+}
+
+export function megaMenuPayload(m: MegaMenuRequest): MegaMenuResponse {
+  const {
+    mega_menu: { new_releases: n, top_artists: a, top_playlists: p },
+  } = m;
+
+  return {
+    new_releases: megaMenuItemPayload(n),
+    top_artists: megaMenuItemPayload(a),
+    top_playlists: megaMenuItemPayload(p),
+  };
+}
+
+function megaMenuItemPayload(i: MegaMenuItemRequest[]): MegaMenuItemResponse[] {
+  return i.map(({ title, perma_url: url }) => ({ name: decode(title), url }));
 }
