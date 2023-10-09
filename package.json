@@ -53,27 +53,27 @@
     "bun-vercel": "^1.0.0-alpha.5",
     "crypto-js": "^4.1.1",
     "entities": "^4.5.0",
-    "hono": "^3.7.3",
+    "hono": "^3.7.5",
     "lru-cache": "^10.0.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230922.0",
+    "@cloudflare/workers-types": "^4.20231002.0",
     "@commitlint/cli": "^17.7.2",
     "@commitlint/config-conventional": "^17.7.0",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/crypto-js": "^4.1.2",
-    "@types/node": "^20.8.0",
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.7.3",
-    "bun-types": "^1.0.3",
-    "eslint": "^8.50.0",
+    "@types/node": "^20.8.3",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "bun-types": "^1.0.4",
+    "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
     "tsx": "^3.13.0",
     "typescript": "^5.2.2",
-    "vercel": "^32.3.1",
-    "wrangler": "^3.10.1"
+    "vercel": "^32.4.1",
+    "wrangler": "^3.11.0"
   }
 }
