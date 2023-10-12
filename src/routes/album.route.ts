@@ -100,9 +100,9 @@ album.get("/recommend", async (c) => {
     query: { albumid, language: validLangs(lang) },
   });
 
-  if (!result.length) {
-    throw new Error("No recommendations found, please check the id");
-  }
+  // if (!result.length) {
+  //   throw new Error("No recommendations found, please check the id");
+  // }
 
   if (parseBool(raw)) {
     return c.json(result);

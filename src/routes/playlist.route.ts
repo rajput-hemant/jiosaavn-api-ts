@@ -63,6 +63,8 @@ playlist.get("/", async (c) => {
       listid,
       token: token ? token : tokenFromLink(link),
       type: "playlist",
+      p: "1",
+      n: "50",
     },
   });
 

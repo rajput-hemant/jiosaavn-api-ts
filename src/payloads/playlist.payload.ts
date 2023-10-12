@@ -1,6 +1,6 @@
 import { decode } from "entities";
 
-import { parseBool } from "../lib/utils";
+import { capitalize, parseBool } from "../lib/utils";
 import {
   PlaylistModulesRequest,
   PlaylistModulesResponse,
@@ -9,6 +9,7 @@ import {
 } from "../types/playlist";
 import { artistMiniPayload } from "./artist.payload";
 import { songPayload } from "./song.payload";
+import { ArtistMiniRequest } from "../types/artist";
 
 export function playlistPayload(
   p: PlaylistRequest,
@@ -46,6 +47,25 @@ export function playlistPayload(
     modules,
   } = p;
 
+  function getSongs() {
+    return !list || typeof list === "string" ? [] : list;
+  }
+
+  function dedupArtists() {
+    if (!artists) return;
+
+    const uniqueArtists: { [id: string]: ArtistMiniRequest } = {};
+    artists.forEach((artist) => {
+      if (uniqueArtists[artist.id]) {
+        uniqueArtists[artist.id].role += `, ${capitalize(artist.role)}`;
+      } else {
+        uniqueArtists[artist.id] = { ...artist, role: capitalize(artist.role) };
+      }
+    });
+
+    return Object.values(uniqueArtists);
+  }
+
   return {
     id,
     name: decode(title),
@@ -72,11 +92,8 @@ export function playlistPayload(
     fan_count: fan_count ? +fan_count.replace(/,/g, "") : undefined,
     share: share ? +share : undefined,
     video_count: video_count ? +video_count : undefined,
-    artists: artists?.map(artistMiniPayload),
-    songs:
-      !list || typeof list === "string"
-        ? []
-        : list.map((s) => songPayload(s, mini)),
+    artists: dedupArtists()?.map(artistMiniPayload),
+    songs: getSongs().map((s) => songPayload(s, mini)),
     subtitle_desc: subtitle_desc,
     modules: modules ? playlistModulesPayload(modules) : undefined,
   };

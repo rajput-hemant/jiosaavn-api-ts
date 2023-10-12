@@ -1,9 +1,9 @@
 import { decode } from "entities";
 
-import { createImageLinks, parseBool } from "../lib/utils";
+import { createDownloadLinks, createImageLinks, parseBool } from "../lib/utils";
 import { AlbumRequest } from "../types/album";
 import { ChartRequest, RadioRequest } from "../types/get";
-import { MiniResponse } from "../types/misc";
+import { MiniResponse, Quality } from "../types/misc";
 import {
   ArtistRecoRequest,
   CityModRequest,
@@ -13,6 +13,7 @@ import {
 } from "../types/modules";
 import { PlaylistRequest } from "../types/playlist";
 import { SongRequest } from "../types/song";
+import { artistMapPayload } from "./artist.payload";
 
 /* -----------------------------------------------------------------------------------------------
  * Mini Payload
@@ -39,14 +40,28 @@ export function miniPayload(item: MiniPayloadRequest): MiniResponse {
     perma_url: url,
     image,
     explicit_content,
+    more_info,
   } = item;
 
   let subs: string | undefined;
+  let color: string | undefined;
+  let duration: number | undefined;
+  let download_url: Quality | undefined;
+  let list: string | undefined;
 
-  if (type === "album" && "artistMap" in item.more_info) {
-    subs = item.more_info?.artistMap?.artists
-      .map((a) => a.name.trim())
-      .join(",");
+  if (type === "song" && "duration" in more_info) {
+    subs = subtitle.split("-")[0].trim();
+    duration = +more_info.duration;
+    download_url = createDownloadLinks(more_info.encrypted_media_url);
+  }
+  if (type === "album" && "artistMap" in more_info) {
+    subs = more_info?.artistMap?.artists.map((a) => a.name.trim()).join(",");
+  }
+  if (type === "radio_station" && "color" in more_info) {
+    color = more_info.color;
+  }
+  if ("list" in item && typeof item.list === "object") {
+    list = item.list.map((i) => i.id).join(",");
   }
 
   return {
@@ -58,15 +73,13 @@ export function miniPayload(item: MiniPayloadRequest): MiniResponse {
     image: createImageLinks(image),
     header_desc: "header_desc" in item ? decode(item.header_desc ?? "") : "",
     explicit: explicit_content ? parseBool(explicit_content) : undefined,
-    color:
-      type === "radio_station" && "color" in item.more_info
-        ? item.more_info?.color
+    color,
+    artist_map:
+      more_info && "artistMap" in more_info && more_info.artistMap
+        ? artistMapPayload(more_info.artistMap)
         : undefined,
-    list:
-      "list" in item
-        ? typeof item.list === "object"
-          ? item.list.map((i) => i.id).join(",")
-          : item.list
-        : "",
+    duration,
+    download_url,
+    list,
   };
 }

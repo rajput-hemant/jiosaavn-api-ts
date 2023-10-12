@@ -1,3 +1,5 @@
+import { ArtistMapResponse } from "./artist";
+
 export type Type =
   | "artist"
   | "album"
@@ -8,6 +10,8 @@ export type Type =
   | "channel"
   | "mix"
   | "show"
+  | "episode"
+  | "season"
   | "label";
 
 export type Quality = string | { quality: string; link: string }[];
@@ -19,15 +23,18 @@ export type Rights = {
   reason: unknown;
 };
 
-export type MiniResponse = Partial<{
+export type MiniResponse = {
   id: string;
   name: string;
-  subtitle: string;
-  header_desc: string;
+  subtitle?: string;
+  header_desc?: string;
   type: Type;
   url: string;
   image: Quality;
   color?: string;
-  explicit: boolean;
-  list: string;
-}>;
+  duration?: number;
+  download_url?: Quality;
+  artist_map?: ArtistMapResponse;
+  explicit?: boolean;
+  list?: string;
+};

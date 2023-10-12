@@ -60,7 +60,23 @@ export type ChartRequest = {
 };
 
 export type TopShowsRequest = A<TopShowRequest> & {
-  trendingPodcasts: TrendingPodcastsRequest[];
+  trendingPodcasts: {
+    items: {
+      id: string;
+      title: string;
+      subtitle: string;
+      type: "show";
+      image: string;
+      perma_url: string;
+      explicit_content: string;
+      more_info: { square_image: string };
+    }[];
+    module: {
+      source: string;
+      title: string;
+      subtitle: string;
+    };
+  }[];
 };
 
 export type TopShowRequest = {
@@ -77,24 +93,6 @@ export type TopShowRequest = {
     year: string;
     badge: string;
     square_image: string;
-  };
-};
-
-export type TrendingPodcastsRequest = {
-  items: {
-    id: string;
-    title: string;
-    subtitle: string;
-    type: "show";
-    image: string;
-    perma_url: string;
-    explicit_content: string;
-    more_info: { square_image: string };
-  }[];
-  module: {
-    source: string;
-    title: string;
-    subtitle: string;
   };
 };
 
@@ -231,7 +229,20 @@ export type ChartResponse = {
 };
 
 export type TopShowsResponse = A<TopShowResponse> & {
-  trending_podcasts: TrendingPodcastsResponse[];
+  trending_podcasts: {
+    title: string;
+    subtitle: string;
+    source: string;
+    data: {
+      id: string;
+      name: string;
+      subtitle: string;
+      type: "show";
+      image: Quality;
+      url: string;
+      explicit: boolean;
+    }[];
+  };
 };
 
 export type TopShowResponse = {
@@ -240,28 +251,12 @@ export type TopShowResponse = {
   subtitle: string;
   type: "show";
   image: Quality;
+  banner_image: Quality;
   url: string;
   explicit: boolean;
   season_number: number;
   release_date: string;
   badge: string;
-};
-
-export type TrendingPodcastsResponse = {
-  items: {
-    id: string;
-    name: string;
-    subtitle: string;
-    type: "show";
-    image: Quality;
-    url: string;
-    explicit: boolean;
-  }[];
-  module: {
-    source: string;
-    title: string;
-    subtitle: string;
-  };
 };
 
 export type TopArtistResponse = {

@@ -2,7 +2,7 @@
  * Community Based Bun Runtime
  * -----------------------------------------------------------------------------------------------*/
 
-import { app } from "../src";
+import { app } from ".";
 
 export default {
   async fetch(req: Request) {

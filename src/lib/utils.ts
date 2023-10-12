@@ -160,3 +160,12 @@ export function toCamelCase<T>(obj: A | A[]): T {
 
   return result as T;
 }
+
+/**
+ * Utility function to capitalize the first letter of a string
+ * @param str String to capitalize
+ * @returns Capitalized string
+ */
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

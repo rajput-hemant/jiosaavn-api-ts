@@ -39,6 +39,14 @@ export function albumPayload(
     modules,
   } = a;
 
+  function getSongs() {
+    return !list || typeof list === "string" ? [] : list;
+  }
+
+  function getPlayCount() {
+    return +play_count || getSongs().reduce((a, s) => a + +s.play_count, 0);
+  }
+
   return {
     id,
     name: decode(title),
@@ -48,7 +56,8 @@ export function albumPayload(
     ),
     type,
     language,
-    play_count: +play_count,
+    play_count: getPlayCount(),
+    duration: getSongs().reduce((a, s) => a + +s.more_info.duration, 0),
     explicit: parseBool(explicit_content),
     year: +year,
     url,
@@ -61,10 +70,7 @@ export function albumPayload(
     is_dolby_content,
     copyright_text,
     label_url,
-    songs:
-      !list || typeof list === "string"
-        ? []
-        : list.map((s) => songPayload(s, mini)),
+    songs: getSongs().map((s) => songPayload(s, mini)),
     modules: modules ? albumModulesPayload(modules) : undefined,
   };
 }

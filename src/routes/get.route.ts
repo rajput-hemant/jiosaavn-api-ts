@@ -121,6 +121,7 @@ get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
   const {
     page: p = "",
     n = "",
+    lang = "",
     raw = "",
     camel = "",
     mini = "",
@@ -154,7 +155,9 @@ get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
     | TopAlbumRequest
     | RadioRequest[];
 
-  const result: A = await api(endpoint, { query: { p, n } });
+  const result: A = await api(endpoint, {
+    query: { p, n, languages: validLangs(lang) },
+  });
 
   const isEmpty = <T>(v: T) => (Array.isArray(v) ? !v.length : false);
 

@@ -34,13 +34,13 @@ export function showsPayload(s: ShowRequest): ShowRespone {
     episodes: episodes.map(episodeDetailPayload),
     modules: {
       seasons: {
-        title: `Season ${show_details.more_info.season_number} Episodes`,
+        title: se.title,
         source: "seasons",
         position: se.position,
         subtitle: se.subtitle,
       },
       episodes: {
-        title: e.title,
+        title: `Season ${show_details.more_info.season_number} Episodes`,
         source: "episodes",
         position: e.position,
         subtitle: e.subtitle,

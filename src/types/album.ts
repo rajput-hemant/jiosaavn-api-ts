@@ -77,6 +77,7 @@ export type AlbumResponse = {
   header_desc: string;
   language: string;
   play_count: number;
+  duration: number;
   year: number;
   list_count: number;
   list_type: Type;

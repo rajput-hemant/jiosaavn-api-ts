@@ -13,7 +13,7 @@ export type ShowDetailsRequest = {
   title: string;
   subtitle: string;
   header_desc: string;
-  type: string;
+  type: "season";
   perma_url: string;
   image: string;
   language: string;
@@ -188,7 +188,7 @@ export type ShowDetailsResponse = {
   name: string;
   subtitle: string;
   header_desc: string;
-  type: string;
+  type: "season";
   url: string;
   image: Quality;
   language: string;

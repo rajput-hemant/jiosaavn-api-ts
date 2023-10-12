@@ -94,8 +94,6 @@ show.get("/episodes", async (c) => {
 show.get("/:episode?", async (c) => {
   const path = "/" + c.req.path.split("/").slice(2).join("/");
 
-  console.log(path);
-
   const {
     token = "",
     link = "",

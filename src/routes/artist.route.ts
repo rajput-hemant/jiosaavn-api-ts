@@ -37,7 +37,7 @@ export const artist = new Hono();
  * -----------------------------------------------------------------------------------------------*/
 
 artist.use("*", async (c, next) => {
-  const { id, link, token, artisti, songi } = c.req.query();
+  const { id, link, token, artist_id, song_id } = c.req.query();
   const path = "/" + c.req.path.split("/").slice(2).join("/");
 
   if (path === "/") {
@@ -56,8 +56,8 @@ artist.use("*", async (c, next) => {
   }
 
   if (["/top-songs", "/recommend"].includes(path)) {
-    if (!artisti) throw new Error("Please provide artist id.");
-    if (!songi) throw new Error("Please provide song id.");
+    if (!artist_id) throw new Error("Please provide artist id.");
+    if (!song_id) throw new Error("Please provide song id.");
   }
 
   await next();
@@ -155,8 +155,8 @@ artist.get("/:path{(songs|albums)}", async (c) => {
 
 artist.get("/:path{(top-songs|recommend)}", async (c) => {
   const {
-    artisti: artistis,
-    songi,
+    artist_id: artist_ids,
+    song_id,
     page = "",
     lang = "",
     cat: category = "", // ["latest", "alphabetical", "popularity"]
@@ -168,8 +168,8 @@ artist.get("/:path{(top-songs|recommend)}", async (c) => {
 
   const result: SongRequest[] = await api(t, {
     query: {
-      artistis,
-      songi,
+      artist_ids,
+      song_id,
       page,
       category,
       sort_order,

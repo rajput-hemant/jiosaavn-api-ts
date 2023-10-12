@@ -24,8 +24,6 @@ import {
   TopShowResponse,
   TopShowsRequest,
   TopShowsResponse,
-  TrendingPodcastsRequest,
-  TrendingPodcastsResponse,
   TrendingRequest,
   TrendingResponse,
 } from "../types/get";
@@ -99,7 +97,7 @@ function topShowPayload(s: TopShowRequest): TopShowResponse {
     image,
     perma_url: url,
     explicit_content,
-    more_info: { badge, release_date, season_number },
+    more_info: { badge, release_date, square_image, season_number },
   } = s;
 
   return {
@@ -107,7 +105,8 @@ function topShowPayload(s: TopShowRequest): TopShowResponse {
     name: decode(title),
     subtitle: decode(subtitle),
     type,
-    image: createImageLinks(image),
+    image: createImageLinks(square_image),
+    banner_image: createImageLinks(image),
     url,
     explicit: parseBool(explicit_content),
     badge,
@@ -116,35 +115,27 @@ function topShowPayload(s: TopShowRequest): TopShowResponse {
   };
 }
 
-function trendingPodcastsPayload(
-  p: TrendingPodcastsRequest
-): TrendingPodcastsResponse {
-  const {
-    items,
-    module: { title, subtitle },
-  } = p;
-
-  return {
-    items: items.map((i) => ({
-      id: i.id,
-      name: decode(i.title),
-      subtitle: decode(i.subtitle),
-      type: i.type,
-      image: createImageLinks(i.image),
-      url: i.perma_url,
-      explicit: parseBool(i.explicit_content),
-    })),
-    module: { title, subtitle, source: "client" },
-  };
-}
 export function topShowsPayload(s: TopShowsRequest): TopShowsResponse {
-  const { last_page, data, trendingPodcasts } = s;
+  const { last_page, data, trendingPodcasts: t } = s;
 
   return {
     count: data.length,
     last_page: last_page,
     data: data.map(topShowPayload),
-    trending_podcasts: trendingPodcasts.map(trendingPodcastsPayload),
+    trending_podcasts: {
+      title: t[0].module.title,
+      subtitle: t[0].module.subtitle,
+      source: "trending_podcasts|trendingPodcasts",
+      data: t[0].items.map((i) => ({
+        id: i.id,
+        name: decode(i.title),
+        subtitle: decode(i.subtitle),
+        type: i.type,
+        image: createImageLinks(i.image),
+        url: i.perma_url,
+        explicit: parseBool(i.explicit_content),
+      })),
+    },
   };
 }
 
