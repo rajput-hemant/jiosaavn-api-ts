@@ -45,7 +45,7 @@
       "eslint --fix ."
     ],
     "*.ts": [
-      "tsc --noEmit --esModuleInterop --skipLibCheck"
+      "tsc --noEmit --esModuleInterop --skipLibCheck --types bun-types"
     ]
   },
   "dependencies": {

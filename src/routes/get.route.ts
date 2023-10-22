@@ -119,8 +119,8 @@ type Path = (typeof Paths)[number];
 get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
   const path = c.req.path.split("/").slice(2)[0] as Path;
   const {
-    page: p = "",
-    n = "",
+    page: p = "1",
+    n = "20",
     lang = "",
     raw = "",
     camel = "",

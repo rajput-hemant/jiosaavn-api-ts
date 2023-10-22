@@ -119,7 +119,7 @@ export function albumModulesPayload(
       title: ar.title,
       subtitle: ar.subtitle,
       position: ar.position,
-      source: ar.source,
+      source: "artist_map|artistMap > artists",
     },
   };
 }

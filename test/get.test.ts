@@ -60,7 +60,8 @@ describe("Get Route", () => {
     expect(shows.data).toHaveProperty("data");
     expect(shows.data.data).toBeArray();
     expect(shows.data).toHaveProperty("trending_podcasts");
-    expect(shows.data.trending_podcasts).toBeArray();
+    expect(shows.data.trending_podcasts).toHaveProperty("data");
+    expect(shows.data.trending_podcasts.data).toBeArray();
   });
 
   test("Get /get/top-shows?camel=1 | Top Shows (Camel Case)", async () => {
@@ -74,7 +75,8 @@ describe("Get Route", () => {
     expect(shows.data).toHaveProperty("data");
     expect(shows.data.data).toBeArray();
     expect(shows.data).toHaveProperty("trendingPodcasts");
-    expect(shows.data.trendingPodcasts).toBeArray();
+    expect(shows.data.trendingPodcasts).toHaveProperty("data");
+    expect(shows.data.trendingPodcasts.data).toBeArray();
   });
 
   test("Get /get/top-artists | Top Artists", async () => {
