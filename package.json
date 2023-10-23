@@ -53,7 +53,7 @@
     "bun-vercel": "^1.0.0-alpha.5",
     "crypto-js": "^4.1.1",
     "entities": "^4.5.0",
-    "hono": "^3.8.2",
+    "hono": "^3.8.3",
     "lru-cache": "^10.0.1"
   },
   "devDependencies": {
