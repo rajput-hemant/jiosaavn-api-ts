@@ -46,7 +46,10 @@ export const search = new Hono();
 search.get("/", async (c) => {
   const { q: query = "", raw = "", camel = "" } = c.req.query();
 
-  const result: AllSearchRequest = await api(all, { query: { query } });
+  const result: AllSearchRequest = await api(all, {
+    query: { query },
+    isVersion4: false,
+  });
 
   if (!result.albums) {
     throw new Error("No search results found");

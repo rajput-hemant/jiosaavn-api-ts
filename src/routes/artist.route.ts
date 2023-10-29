@@ -125,7 +125,7 @@ artist.get("/:path{(songs|albums)}", async (c) => {
 
   const result: ArtistSongsOrAlbumsRequest = await api(
     path === "songs" ? s : a,
-    { query: { artistId: id, page, category, sort_order } }
+    { query: { artistId: id, page, category, sort_order, n_song: "50" } }
   );
 
   if (

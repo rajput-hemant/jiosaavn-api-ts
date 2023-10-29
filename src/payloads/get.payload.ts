@@ -294,6 +294,7 @@ export function labelPayload(
   return {
     id,
     name: decode(name),
+    type: "label",
     image: createImageLinks(image),
     top_songs: { songs: songs.map((s) => songPayload(s, mini)), total: s_t },
     top_albums: {

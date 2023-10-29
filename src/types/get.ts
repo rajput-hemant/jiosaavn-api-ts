@@ -322,6 +322,7 @@ export type LabelResponse = {
   id: string;
   name: string;
   image: Quality;
+  type: "label";
   top_songs: {
     songs: (SongResponse | MiniResponse)[];
     total: number;
