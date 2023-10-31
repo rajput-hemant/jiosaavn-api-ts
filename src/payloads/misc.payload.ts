@@ -48,11 +48,17 @@ export function miniPayload(item: MiniPayloadRequest): MiniResponse {
   let duration: number | undefined;
   let download_url: Quality | undefined;
   let list: string | undefined;
+  let album: string | undefined;
+  let album_id: string | undefined;
+  let album_url: string | undefined;
 
   if (type === "song" && "duration" in more_info) {
     subs = subtitle.split("-")[0].trim();
     duration = +more_info.duration;
     download_url = createDownloadLinks(more_info.encrypted_media_url);
+    album = decode(more_info.album);
+    album_id = more_info.album_id;
+    album_url = more_info.album_url;
   }
   if (type === "album" && "artistMap" in more_info) {
     subs = more_info?.artistMap?.artists.map((a) => a.name.trim()).join(",");
@@ -74,6 +80,9 @@ export function miniPayload(item: MiniPayloadRequest): MiniResponse {
     header_desc: "header_desc" in item ? decode(item.header_desc ?? "") : "",
     explicit: explicit_content ? parseBool(explicit_content) : undefined,
     color,
+    album,
+    album_id,
+    album_url,
     artist_map:
       more_info && "artistMap" in more_info && more_info.artistMap
         ? artistMapPayload(more_info.artistMap)

@@ -33,6 +33,9 @@ export type MiniResponse = {
   image: Quality;
   color?: string;
   duration?: number;
+  album?: string;
+  album_id?: string;
+  album_url?: string;
   download_url?: Quality;
   artist_map?: ArtistMapResponse;
   explicit?: boolean;
