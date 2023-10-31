@@ -8,7 +8,7 @@ describe("Radio", () => {
 
     expect(response.status).toBe(200);
 
-    const station = await response.json();
+    const station: any = await response.json();
 
     expect(station.status).toBe("Success");
     expect(station.data).toHaveProperty("station_id");
@@ -19,7 +19,7 @@ describe("Radio", () => {
 
     expect(response.status).toBe(400);
 
-    const station = await response.json();
+    const station: any = await response.json();
 
     expect(station.status).toBe("Failed");
   });
@@ -29,7 +29,7 @@ describe("Radio", () => {
 
     expect(response.status).toBe(200);
 
-    const station = await response.json();
+    const station: any = await response.json();
 
     expect(station.status).toBe("Success");
     expect(station.data).toHaveProperty("station_id");
@@ -40,7 +40,7 @@ describe("Radio", () => {
 
     expect(response.status).toBe(400);
 
-    const station = await response.json();
+    const station: any = await response.json();
 
     expect(station.status).toBe("Failed");
   });
@@ -50,7 +50,7 @@ describe("Radio", () => {
 
     expect(response.status).toBe(200);
 
-    const station = await response.json();
+    const station: any = await response.json();
 
     expect(station.status).toBe("Success");
     expect(station.data).toHaveProperty("station_id");
@@ -61,7 +61,7 @@ describe("Radio", () => {
 
     expect(response.status).toBe(400);
 
-    const station = await response.json();
+    const station: any = await response.json();
 
     expect(station.status).toBe("Failed");
   });
@@ -70,12 +70,12 @@ describe("Radio", () => {
     "GET /radio/songs?id=${station_id} | Create Songs Radio Station",
     async () => {
       let response = await app.request("/get/featured-stations");
-      const featuredStations = await response.json();
+      const featuredStations: any = await response.json();
 
       response = await app.request(
         `/radio/featured?name=${featuredStations.data[0].name}`
       );
-      const stationID = (await response.json()).data.station_id;
+      const stationID = ((await response.json()) as any).data.station_id;
 
       response = await app.request(
         `/radio/songs?id=${stationID.data.station_id}`
@@ -83,7 +83,7 @@ describe("Radio", () => {
 
       expect(response.status).toBe(200);
 
-      const station = await response.json();
+      const station: any = await response.json();
 
       expect(station.status).toBe("Success");
       expect(station.data).toHaveProperty("station_id");

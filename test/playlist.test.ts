@@ -8,7 +8,7 @@ describe("Playlist", () => {
 
     expect(response.status).toBe(400);
 
-    const playlists = await response.json();
+    const playlists: any = await response.json();
 
     expect(playlists.status).toBe("Failed");
     expect(playlists.data).toBeNull();
@@ -19,7 +19,7 @@ describe("Playlist", () => {
 
     expect(response.status).toBe(200);
 
-    const playlists = await response.json();
+    const playlists: any = await response.json();
 
     expect(playlists.status).toBe("Success");
     expect(playlists.data).toHaveProperty("fan_count");
@@ -32,7 +32,7 @@ describe("Playlist", () => {
 
     expect(response.status).toBe(200);
 
-    const playlists = await response.json();
+    const playlists: any = await response.json();
 
     expect(playlists.status).toBe("Success");
     expect(playlists.data).toHaveProperty("fanCount");
@@ -45,7 +45,7 @@ describe("Playlist", () => {
 
     expect(response.status).toBe(400);
 
-    const playlists = await response.json();
+    const playlists: any = await response.json();
 
     expect(playlists.status).toBe("Failed");
     expect(playlists.data).toBeNull();
@@ -58,7 +58,7 @@ describe("Playlist", () => {
 
     expect(response.status).toBe(200);
 
-    const playlists = await response.json();
+    const playlists: any = await response.json();
 
     expect(playlists.status).toBe("Success");
     expect(playlists.data).toHaveProperty("fan_count");
@@ -71,7 +71,7 @@ describe("Playlist", () => {
 
     expect(response.status).toBe(200);
 
-    const recos = await response.json();
+    const recos: any = await response.json();
 
     expect(recos.status).toBe("Success");
     expect(recos.data).toBeArray();
@@ -83,7 +83,7 @@ describe("Playlist", () => {
 
     expect(response.status).toBe(400);
 
-    const playlists = await response.json();
+    const playlists: any = await response.json();
 
     expect(playlists.status).toBe("Failed");
     expect(playlists.data).toBeNull();

@@ -37,7 +37,10 @@
     "parserOptions": {
       "ecmaVersion": "latest",
       "sourceType": "module"
-    }
+    },
+    "ignorePatterns": [
+      "test"
+    ]
   },
   "lint-staged": {
     "*.{ts,json}": [

@@ -8,7 +8,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(400);
 
-    const shows = await response.json();
+    const shows: any = await response.json();
 
     expect(shows.status).toBe("Failed");
     expect(shows.data).toBeNull();
@@ -19,7 +19,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(200);
 
-    const shows = await response.json();
+    const shows: any = await response.json();
 
     expect(shows.status).toBe("Success");
     expect(shows.data).toHaveProperty("show_details");
@@ -41,7 +41,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(200);
 
-    const shows = await response.json();
+    const shows: any = await response.json();
 
     expect(shows.status).toBe("Success");
     expect(shows.data).toHaveProperty("show_details");
@@ -61,7 +61,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(200);
 
-    const shows = await response.json();
+    const shows: any = await response.json();
 
     expect(shows.status).toBe("Success");
     expect(shows.data).toHaveProperty("showDetails");
@@ -81,7 +81,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(400);
 
-    const episodes = await response.json();
+    const episodes: any = await response.json();
 
     expect(episodes.status).toBe("Failed");
     expect(episodes.data).toBeNull();
@@ -92,7 +92,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(200);
 
-    const episodes = await response.json();
+    const episodes: any = await response.json();
 
     expect(episodes.status).toBe("Success");
     expect(episodes.data).toBeArray();
@@ -105,7 +105,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(200);
 
-    const episodes = await response.json();
+    const episodes: any = await response.json();
 
     expect(episodes.status).toBe("Success");
     expect(episodes.data).toBeArray();
@@ -118,7 +118,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(400);
 
-    const episodes = await response.json();
+    const episodes: any = await response.json();
 
     expect(episodes.status).toBe("Failed");
     expect(episodes.data).toBeNull();
@@ -129,7 +129,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(200);
 
-    const episodes = await response.json();
+    const episodes: any = await response.json();
 
     expect(episodes.status).toBe("Success");
     expect(episodes.data).toHaveProperty("episodes");
@@ -145,7 +145,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(200);
 
-    const episodes = await response.json();
+    const episodes: any = await response.json();
 
     expect(episodes.status).toBe("Success");
     expect(episodes.data).toHaveProperty("episodes");
@@ -161,7 +161,7 @@ describe("Show", () => {
 
     expect(response.status).toBe(200);
 
-    const episodes = await response.json();
+    const episodes: any = await response.json();
 
     expect(episodes.status).toBe("Success");
     expect(episodes.data).toHaveProperty("episodes");

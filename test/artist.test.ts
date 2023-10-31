@@ -8,7 +8,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(400);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Failed");
     expect(artists.data).toBeNull();
@@ -19,7 +19,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(200);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Success");
     expect(artists.data).toHaveProperty("follower_count");
@@ -30,7 +30,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(400);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Failed");
     expect(artists.data).toBeNull();
@@ -41,7 +41,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(200);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Success");
     expect(artists.data).toHaveProperty("followerCount");
@@ -54,7 +54,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(200);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Success");
     expect(artists.data).toHaveProperty("follower_count");
@@ -65,7 +65,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(200);
 
-    const recos = await response.json();
+    const recos: any = await response.json();
 
     expect(recos.status).toBe("Success");
     expect(recos.data).toHaveProperty("top_songs");
@@ -78,7 +78,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(400);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Failed");
     expect(artists.data).toBeNull();
@@ -89,7 +89,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(200);
 
-    const recos = await response.json();
+    const recos: any = await response.json();
     +expect(recos.status).toBe("Success");
     expect(recos.data).toHaveProperty("top_albums");
     expect(recos.data.top_albums.albums).toBeArray();
@@ -101,7 +101,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(400);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Failed");
     expect(artists.data).toBeNull();
@@ -114,7 +114,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(400);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Failed");
     expect(artists.data).toBeNull();
@@ -127,7 +127,7 @@ describe("Artist", () => {
 
     expect(response.status).toBe(400);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Failed");
     expect(artists.data).toBeNull();

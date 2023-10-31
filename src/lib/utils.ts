@@ -1,6 +1,7 @@
 import Crypto from "crypto-js";
 
 import { Quality } from "../types/misc";
+import { ArtistMiniRequest, ArtistMiniResponse } from "../types/artist";
 
 /**
  * Utility function to create image links for different qualities
@@ -168,4 +169,29 @@ export function toCamelCase<T>(obj: A | A[]): T {
  */
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+type Artist = (ArtistMiniRequest | ArtistMiniResponse)[];
+
+/**
+ * Utility function to remove duplicate artists, and combine their roles
+ * @param artists Array of artists
+ * @returns Array of unique artists
+ */
+export function dedupArtists(artists: Artist) {
+  const uniqueArtists: { [id: string]: ArtistMiniResponse } = {};
+
+  artists.forEach((artist) => {
+    if (uniqueArtists[artist.id]) {
+      uniqueArtists[artist.id].role += `, ${capitalize(artist.role)}`;
+    } else {
+      uniqueArtists[artist.id] = {
+        ...artist,
+        url: "url" in artist ? artist.url : artist.perma_url,
+        role: capitalize(artist.role),
+      };
+    }
+  });
+
+  return Object.values(uniqueArtists);
 }

@@ -8,7 +8,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(200);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Success");
     expect(results.data).toHaveProperty("songs");
@@ -30,7 +30,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(200);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Success");
     expect(results.data).toHaveProperty("songs");
@@ -52,7 +52,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(400);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Failed");
     expect(results.data).toBeNull();
@@ -63,7 +63,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(200);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Success");
     expect(results.data).toBeArray();
@@ -74,7 +74,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(200);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Success");
     expect(results.data).toHaveProperty("total");
@@ -88,7 +88,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(400);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Failed");
     expect(results.data).toBeNull();
@@ -99,7 +99,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(200);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Success");
     expect(results.data).toHaveProperty("total");
@@ -113,7 +113,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(400);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Failed");
     expect(results.data).toBeNull();
@@ -124,7 +124,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(200);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Success");
     expect(results.data).toHaveProperty("total");
@@ -138,7 +138,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(400);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Failed");
     expect(results.data).toBeNull();
@@ -149,7 +149,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(200);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Success");
     expect(results.data).toHaveProperty("total");
@@ -163,7 +163,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(400);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Failed");
     expect(results.data).toBeNull();
@@ -174,7 +174,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(200);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Success");
     expect(results.data).toHaveProperty("total");
@@ -188,7 +188,7 @@ describe("Search", () => {
 
     expect(response.status).toBe(400);
 
-    const results = await response.json();
+    const results: any = await response.json();
 
     expect(results.status).toBe("Failed");
     expect(results.data).toBeNull();

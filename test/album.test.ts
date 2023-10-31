@@ -8,7 +8,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(400);
 
-    const albums = await response.json();
+    const albums: any = await response.json();
 
     expect(albums.status).toBe("Failed");
     expect(albums.data).toBeNull();
@@ -19,7 +19,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(200);
 
-    const albums = await response.json();
+    const albums: any = await response.json();
 
     expect(albums.status).toBe("Success");
     expect(albums.data).toHaveProperty("play_count");
@@ -32,7 +32,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(200);
 
-    const albums = await response.json();
+    const albums: any = await response.json();
 
     expect(albums.status).toBe("Success");
     expect(albums.data).toHaveProperty("playCount");
@@ -45,7 +45,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(400);
 
-    const albums = await response.json();
+    const albums: any = await response.json();
 
     expect(albums.status).toBe("Failed");
     expect(albums.data).toBeNull();
@@ -58,7 +58,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(200);
 
-    const albums = await response.json();
+    const albums: any = await response.json();
 
     expect(albums.status).toBe("Success");
     expect(albums.data).toHaveProperty("play_count");
@@ -71,7 +71,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(400);
 
-    const recos = await response.json();
+    const recos: any = await response.json();
 
     expect(recos.status).toBe("Failed");
     expect(recos.data).toBeNull();
@@ -82,7 +82,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(200);
 
-    const recos = await response.json();
+    const recos: any = await response.json();
 
     expect(recos.status).toBe("Success");
     expect(recos.data).toBeArray();
@@ -94,7 +94,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(400);
 
-    const recos = await response.json();
+    const recos: any = await response.json();
 
     expect(recos.status).toBe("Failed");
     expect(recos.data).toBeNull();
@@ -105,7 +105,7 @@ describe("Album", () => {
 
     expect(response.status).toBe(200);
 
-    const recos = await response.json();
+    const recos: any = await response.json();
 
     expect(recos.status).toBe("Success");
     expect(recos.data).toBeArray();

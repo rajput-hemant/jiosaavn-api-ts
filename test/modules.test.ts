@@ -8,7 +8,7 @@ describe("Modules", () => {
 
     expect(response.status).toBe(200);
 
-    const modules = await response.json();
+    const modules: any = await response.json();
 
     expect(modules.status).toBe("Success");
     expect(modules.data).toHaveProperty("albums");
@@ -20,7 +20,7 @@ describe("Modules", () => {
 
     expect(response.status).toBe(200);
 
-    const modules = await response.json();
+    const modules: any = await response.json();
 
     expect(modules.status).toBe("Success");
     expect(modules.data).toHaveProperty("albums");

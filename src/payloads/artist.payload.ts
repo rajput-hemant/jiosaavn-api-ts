@@ -1,6 +1,6 @@
 import { decode } from "entities";
 
-import { createImageLinks } from "../lib/utils";
+import { createImageLinks, dedupArtists } from "../lib/utils";
 import {
   ArtistMapRequest,
   ArtistMapResponse,
@@ -280,9 +280,11 @@ export function artistMapPayload(
         primary_artists: [],
       }
     : {
-        artists: a.artists.map(artistMiniPayload),
-        featured_artists: a.featured_artists.map(artistMiniPayload),
-        primary_artists: a.primary_artists.map(artistMiniPayload),
+        artists: dedupArtists(a.artists.map(artistMiniPayload)),
+        featured_artists: dedupArtists(
+          a.featured_artists.map(artistMiniPayload)
+        ),
+        primary_artists: dedupArtists(a.primary_artists.map(artistMiniPayload)),
       };
 }
 

@@ -8,7 +8,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const trending = await response.json();
+    const trending: any = await response.json();
 
     expect(trending.status).toBe("Success");
     expect(trending.data).toBeArray();
@@ -19,7 +19,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const featured = await response.json();
+    const featured: any = await response.json();
 
     expect(featured.status).toBe("Success");
     expect(featured.data).toHaveProperty("last_page");
@@ -31,7 +31,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const featured = await response.json();
+    const featured: any = await response.json();
 
     expect(featured.status).toBe("Success");
     expect(featured.data).toHaveProperty("lastPage");
@@ -43,7 +43,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const charts = await response.json();
+    const charts: any = await response.json();
 
     expect(charts.status).toBe("Success");
     expect(charts.data).toBeArray();
@@ -54,7 +54,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const shows = await response.json();
+    const shows: any = await response.json();
 
     expect(shows.status).toBe("Success");
     expect(shows.data).toHaveProperty("data");
@@ -69,7 +69,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const shows = await response.json();
+    const shows: any = await response.json();
 
     expect(shows.status).toBe("Success");
     expect(shows.data).toHaveProperty("data");
@@ -84,7 +84,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const artists = await response.json();
+    const artists: any = await response.json();
 
     expect(artists.status).toBe("Success");
     expect(artists.data).toBeArray();
@@ -95,7 +95,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const albums = await response.json();
+    const albums: any = await response.json();
 
     expect(albums.status).toBe("Success");
     expect(albums.data).toHaveProperty("last_page");
@@ -107,7 +107,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const albums = await response.json();
+    const albums: any = await response.json();
 
     expect(albums.status).toBe("Success");
     expect(albums.data).toHaveProperty("lastPage");
@@ -119,7 +119,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const stations = await response.json();
+    const stations: any = await response.json();
 
     expect(stations.status).toBe("Success");
     expect(stations.data).toBeArray();
@@ -132,7 +132,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const songs = await response.json();
+    const songs: any = await response.json();
 
     expect(songs.status).toBe("Success");
     expect(songs.data).toBeArray();
@@ -143,7 +143,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(400);
 
-    const songs = await response.json();
+    const songs: any = await response.json();
 
     expect(songs.status).toBe("Failed");
     expect(songs.data).toBeNull();
@@ -156,7 +156,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(400);
 
-    const songs = await response.json();
+    const songs: any = await response.json();
 
     expect(songs.status).toBe("Failed");
     expect(songs.data).toBeNull();
@@ -167,7 +167,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(400);
 
-    const footer = await response.json();
+    const footer: any = await response.json();
 
     expect(footer.status).toBe("Failed");
     expect(footer.data).toBeNull();
@@ -178,7 +178,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const footer = await response.json();
+    const footer: any = await response.json();
 
     expect(footer.status).toBe("Success");
     expect(footer.data).toHaveProperty("playlist");
@@ -196,7 +196,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(400);
 
-    const lyrics = await response.json();
+    const lyrics: any = await response.json();
 
     expect(lyrics.status).toBe("Failed");
     expect(lyrics.data).toBeNull();
@@ -207,7 +207,7 @@ describe("Get Route", () => {
 
     expect(response.status).toBe(200);
 
-    const lyrics = await response.json();
+    const lyrics: any = await response.json();
 
     expect(lyrics.status).toBe("Success");
     expect(lyrics.data).toHaveProperty("lyrics");
