@@ -53,11 +53,12 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.2.0",
+    "@upstash/ratelimit": "^0.4.4",
+    "@upstash/redis": "^1.24.3",
     "bun-vercel": "^1.0.0-alpha.5",
     "crypto-js": "^4.2.0",
     "entities": "^4.5.0",
-    "hono": "^3.9.1",
-    "lru-cache": "^10.0.1"
+    "hono": "^3.9.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231025.0",

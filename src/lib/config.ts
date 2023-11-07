@@ -5,7 +5,10 @@ export const config = {
     siteUrl: "https://jiosaavn-api-ts.vercel.app",
   },
 
-  enableRateLimit: process.env.ENABLE_RATE_LIMIT === "true" ?? false,
+  rateLimit: {
+    enable: process.env.ENABLE_RATE_LIMIT === "true" ?? false,
+    limitedReqCount: +(process.env.LIMITED_REQ_COUNT ?? 5),
+  },
 
   endpoint: {
     modules: {
