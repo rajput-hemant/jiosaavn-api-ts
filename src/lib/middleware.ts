@@ -8,17 +8,17 @@ import { config } from "./config";
  * Rate Limit Middleware using Upstash Redis Ratelimit
  * -----------------------------------------------------------------------------------------------*/
 
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(config.rateLimit.limitedReqCount, "1s"),
-});
-
 export function rateLimitMiddleware(): MiddlewareHandler {
   return async (c, next) => {
     // skip middleware if rate limit is disabled
     if (!config.rateLimit.enable || c.req.path === "/") {
       return await next();
     }
+
+    const ratelimit = new Ratelimit({
+      redis: Redis.fromEnv(),
+      limiter: Ratelimit.slidingWindow(config.rateLimit.limitedReqCount, "1s"),
+    });
 
     const ip = c.req.header("x-forwarded-for") ?? "anonymous";
 

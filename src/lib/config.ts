@@ -1,8 +1,8 @@
 export const config = {
   urls: {
     baseUrl: "https://www.jiosaavn.com/api.php",
-    docsUrl: "https://docs-jiosaavn.netlify.app",
-    siteUrl: "https://jiosaavn-api-ts.vercel.app",
+    docsUrl: "https://docs.jiosaavn.rajputhemant.me",
+    siteUrl: "https://jiosaavn.rajputhemant.me",
   },
 
   rateLimit: {
