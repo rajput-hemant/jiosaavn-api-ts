@@ -93,6 +93,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
         };
       }),
     },
+
     songs: {
       position: so.position,
       data: so.data.map((s) => {
@@ -141,25 +142,39 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
           language,
           extra,
           position,
-          more_info: {
-            artist_name,
-            entity_sub_type,
-            entity_type,
-            firstname,
-            is_dolby_content,
-            lastname,
-            sub_types,
-            video_available,
-          },
+          more_info,
         } = p;
 
-        return {
+        const playlist = {
           id,
           name: decode(title),
           subtitle: decode(description),
           type,
           image: createImageLinks(image),
           url,
+          description,
+          language,
+          extra,
+          position,
+        };
+
+        if (!more_info) {
+          return playlist;
+        }
+
+        const {
+          artist_name,
+          entity_sub_type,
+          entity_type,
+          firstname,
+          is_dolby_content,
+          lastname,
+          sub_types,
+          video_available,
+        } = more_info;
+
+        return {
+          ...playlist,
           artist_name: decode(artist_name),
           description,
           entity_sub_type,
@@ -170,8 +185,6 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
           lastname,
           sub_types,
           video_available,
-          extra,
-          position,
         };
       }),
     },

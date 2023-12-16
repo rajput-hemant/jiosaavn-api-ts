@@ -101,7 +101,7 @@ export type AllSearchRequest = {
       sub_types: string;
       lastname: string;
       language: string;
-    };
+    } | null;
   }>;
   artists: A<{
     id: string;
@@ -221,13 +221,13 @@ export type AllSearchResponse = {
     language: string;
     type: string;
     position: number;
-    firstname: string;
-    lastname: string;
-    artist_name: string;
-    entity_type: string;
-    entity_sub_type: string;
-    is_dolby_content: boolean;
-    sub_types: string;
+    firstname?: string;
+    lastname?: string;
+    artist_name?: string;
+    entity_type?: string;
+    entity_sub_type?: string;
+    is_dolby_content?: boolean;
+    sub_types?: string;
   }>;
   artists: A<{
     id: string;
