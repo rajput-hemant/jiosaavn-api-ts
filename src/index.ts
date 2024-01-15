@@ -4,7 +4,7 @@ import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 
 import { config } from "./lib/config";
-import { rateLimitMiddleware } from "./lib/middleware";
+import { camelCaseMiddleware, rateLimitMiddleware } from "./lib/middleware";
 import {
   album,
   artist,
@@ -25,7 +25,14 @@ const app = new Hono({ strict: false }); // match routes w/ or w/o trailing slas
 /* -----------------------------------------------------------------------------------------------
  * middlewares
  * -----------------------------------------------------------------------------------------------*/
-app.use("*", cors(), prettyJSON(), logger(), rateLimitMiddleware());
+app.use(
+  "*",
+  cors(),
+  prettyJSON(),
+  logger(),
+  rateLimitMiddleware(),
+  camelCaseMiddleware()
+);
 
 /* -----------------------------------------------------------------------------------------------
  * routes
@@ -70,7 +77,7 @@ app.notFound((c) => {
  * error handler
  * -----------------------------------------------------------------------------------------------*/
 app.onError((err, c) => {
-  const response: CustomResponse<null> = {
+  const response: CustomResponse = {
     status: "Failed",
     message: `❌ ${err.message}`,
     data: null,

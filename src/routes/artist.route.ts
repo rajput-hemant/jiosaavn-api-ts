@@ -5,7 +5,6 @@ import { config } from "../lib/config";
 import {
   isJioSaavnLink,
   parseBool,
-  toCamelCase,
   tokenFromLink,
   validLangs,
 } from "../lib/utils";
@@ -76,7 +75,6 @@ artist.get("/", async (c) => {
     n_song = "10",
     n_album = "10",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -104,7 +102,7 @@ artist.get("/", async (c) => {
     data: artistPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -119,7 +117,6 @@ artist.get("/:path{(songs|albums)}", async (c) => {
     cat: category = "", // ["latest", "alphabetical"]
     sort: sort_order = "", // ["asc", "desc"]
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -146,7 +143,7 @@ artist.get("/:path{(songs|albums)}", async (c) => {
     data: artistTopSongsOrAlbumsPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -162,7 +159,6 @@ artist.get("/:path{(top-songs|recommend)}", async (c) => {
     cat: category = "", // ["latest", "alphabetical", "popularity"]
     sort: sort_order = "", // ["asc", "desc"]
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -191,5 +187,5 @@ artist.get("/:path{(top-songs|recommend)}", async (c) => {
     data: result.map((s) => songPayload(s, parseBool(mini))),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });

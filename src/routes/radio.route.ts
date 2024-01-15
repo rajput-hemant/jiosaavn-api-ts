@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 import { api } from "../lib/api";
 import { config } from "../lib/config";
-import { parseBool, toCamelCase, validLangs } from "../lib/utils";
+import { parseBool, validLangs } from "../lib/utils";
 import { radioSongsPayload } from "../payloads/radio.payload";
 import {
   RadioSongRequest,
@@ -36,7 +36,6 @@ radio.get("/:path{(create/)?(featured|artist|entity)}", async (c) => {
     mode = "",
     lang = "",
     raw = "",
-    camel = "",
   } = c.req.query();
 
   if (path === "entity") {
@@ -76,7 +75,7 @@ radio.get("/:path{(create/)?(featured|artist|entity)}", async (c) => {
     data: { station_id },
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
+  return c.json(payload);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -88,7 +87,6 @@ radio.get("/songs", async (c) => {
     id: stationid = "",
     n: k = "10",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -108,5 +106,5 @@ radio.get("/songs", async (c) => {
     data: radioSongsPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
+  return c.json(payload);
 });

@@ -5,7 +5,6 @@ import { config } from "../lib/config";
 import {
   isJioSaavnLink,
   parseBool,
-  toCamelCase,
   tokenFromLink,
   validLangs,
 } from "../lib/utils";
@@ -54,7 +53,6 @@ playlist.get("/", async (c) => {
     link = "",
     token = "",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -82,7 +80,7 @@ playlist.get("/", async (c) => {
     data: playlistPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -90,13 +88,7 @@ playlist.get("/", async (c) => {
  * -----------------------------------------------------------------------------------------------*/
 
 playlist.get("/recommend", async (c) => {
-  const {
-    id: listid,
-    lang = "",
-    raw = "",
-    camel = "",
-    mini = "",
-  } = c.req.query();
+  const { id: listid, lang = "", raw = "", mini = "" } = c.req.query();
 
   if (!listid) {
     throw new Error("Please provide playlist id");
@@ -120,5 +112,5 @@ playlist.get("/recommend", async (c) => {
     data: result.map((p) => playlistPayload(p, parseBool(mini))),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });

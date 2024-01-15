@@ -2,12 +2,7 @@ import { Hono } from "hono";
 
 import { api } from "../lib/api";
 import { config } from "../lib/config";
-import {
-  isJioSaavnLink,
-  parseBool,
-  toCamelCase,
-  tokenFromLink,
-} from "../lib/utils";
+import { isJioSaavnLink, parseBool, tokenFromLink } from "../lib/utils";
 import {
   episodeDetailPayload,
   episodePayload,
@@ -67,7 +62,6 @@ show.get("/episodes", async (c) => {
     page: p = "",
     sort: sort_order = "",
     raw = "",
-    camel = "",
   } = c.req.query();
 
   const result: EpisodeDetailRequest[] = await api(e, {
@@ -81,7 +75,7 @@ show.get("/episodes", async (c) => {
   const response: CustomResponse<EpisodeDetailResponse[]> = {
     status: "Success",
     message: "✅ Episodes fetched successfully",
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: payload,
   };
 
   return c.json(response);
@@ -100,7 +94,6 @@ show.get("/:episode?", async (c) => {
     season: season_number = "",
     sort: sort_order = "",
     raw = "",
-    camel = "",
   } = c.req.query();
 
   const isHome = path === "/";
@@ -123,7 +116,7 @@ show.get("/:episode?", async (c) => {
   const response: CustomResponse<ShowRespone | EpisodeResponse> = {
     status: "Success",
     message: `✅ ${isHome ? "Show" : "Episode"} details fetched successfully`,
-    data: parseBool(camel) ? toCamelCase(payload) : payload,
+    data: payload,
   };
 
   return c.json(response);

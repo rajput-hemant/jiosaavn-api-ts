@@ -5,7 +5,6 @@ import { config } from "../lib/config";
 import {
   isJioSaavnLink,
   parseBool,
-  toCamelCase,
   tokenFromLink,
   validLangs,
 } from "../lib/utils";
@@ -73,7 +72,6 @@ get.get("/trending", async (c) => {
     type: entity_type = "",
     lang = "",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -97,7 +95,7 @@ get.get("/trending", async (c) => {
     data: trendingPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -123,7 +121,6 @@ get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
     n = "20",
     lang = "",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -182,7 +179,7 @@ get.get(`/:path{(${Paths.join("|")})}`, async (c) => {
     data: payloadFn(result),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -195,7 +192,6 @@ get.get("/actor-top-songs", async (c) => {
     song_id = "",
     lang = "",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -220,7 +216,7 @@ get.get("/actor-top-songs", async (c) => {
     data: result.map((s) => songPayload(s, parseBool(mini))),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -228,13 +224,7 @@ get.get("/actor-top-songs", async (c) => {
  * -----------------------------------------------------------------------------------------------*/
 
 get.get("/footer-details", async (c) => {
-  const {
-    lang = "",
-    page: p = "",
-    n = "",
-    raw = "",
-    camel = "",
-  } = c.req.query();
+  const { lang = "", page: p = "", n = "", raw = "" } = c.req.query();
 
   if (!lang) throw new Error("Language param is required");
 
@@ -256,7 +246,7 @@ get.get("/footer-details", async (c) => {
     data: result,
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -264,7 +254,7 @@ get.get("/footer-details", async (c) => {
  * -----------------------------------------------------------------------------------------------*/
 
 get.get("/lyrics", async (c) => {
-  const { id: lyrics_id = "", raw = "", camel = "" } = c.req.query();
+  const { id: lyrics_id = "", raw = "" } = c.req.query();
 
   if (!lyrics_id) throw new Error("Songs/Lyrics ID is required");
 
@@ -284,7 +274,7 @@ get.get("/lyrics", async (c) => {
     data: result,
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -299,7 +289,6 @@ get.get("/mix", async (c) => {
     n = "20",
     lang = "",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -331,7 +320,7 @@ get.get("/mix", async (c) => {
     data: mixPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -349,7 +338,6 @@ get.get("/label", async (c) => {
     sort: sort_order = "", // ["asc", "desc"]
     lang = "",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -384,7 +372,7 @@ get.get("/label", async (c) => {
     data: labelPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------

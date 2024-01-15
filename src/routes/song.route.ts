@@ -5,7 +5,6 @@ import { config } from "../lib/config";
 import {
   isJioSaavnLink,
   parseBool,
-  toCamelCase,
   tokenFromLink,
   validLangs,
 } from "../lib/utils";
@@ -56,7 +55,7 @@ song.get("/", async (c) => {
     link = "",
     token = "",
     raw = "",
-    camel = "",
+
     mini = "",
   } = c.req.query();
 
@@ -78,7 +77,7 @@ song.get("/", async (c) => {
     data: songObjPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -86,7 +85,7 @@ song.get("/", async (c) => {
  * -----------------------------------------------------------------------------------------------*/
 
 song.get("/recommend", async (c) => {
-  const { id: pid, lang = "", raw = "", camel = "", mini = "" } = c.req.query();
+  const { id: pid, lang = "", raw = "", mini = "" } = c.req.query();
 
   const result: SongRequest[] = await api(r, {
     query: { pid, language: validLangs(lang) },
@@ -106,5 +105,5 @@ song.get("/recommend", async (c) => {
     data: result.map((s) => songPayload(s, parseBool(mini))),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });

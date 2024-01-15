@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 import { api } from "../lib/api";
 import { config } from "../lib/config";
-import { parseBool, toCamelCase, validLangs } from "../lib/utils";
+import { parseBool, validLangs } from "../lib/utils";
 import { modulesPayload } from "../payloads/modules.payload";
 import { CModulesRespose, ModulesRequest } from "../types/modules";
 
@@ -15,7 +15,7 @@ const { launch_data: l } = config.endpoint.modules;
 export const modules = new Hono();
 
 modules.get("*", async (c) => {
-  const { lang = "", mini = "", raw = "", camel = "" } = c.req.query();
+  const { lang = "", mini = "", raw = "" } = c.req.query();
 
   const data = await api<ModulesRequest>(l, {
     query: { language: validLangs(lang) },
@@ -33,5 +33,5 @@ modules.get("*", async (c) => {
     data: payload,
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });

@@ -3,6 +3,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
 import { config } from "./config";
+import { toCamelCase } from "./utils";
 
 /* -----------------------------------------------------------------------------------------------
  * Rate Limit Middleware using Upstash Redis Ratelimit
@@ -92,3 +93,26 @@ export function rateLimitMiddleware(): MiddlewareHandler {
 //     await next();
 //   };
 // }
+
+/* -----------------------------------------------------------------------------------------------
+ * Camel Case Middleware
+ * -----------------------------------------------------------------------------------------------*/
+
+export function camelCaseMiddleware(): MiddlewareHandler {
+  return async (c, next) => {
+    const camel = c.req.query("camel");
+
+    await next();
+
+    if (
+      (camel || camel === "") &&
+      c.res.headers.get("Content-Type")?.startsWith("application/json")
+    ) {
+      const obj = await c.res.json();
+
+      const camelCaseResponse = toCamelCase(obj as Record<string, unknown>);
+
+      c.res = new Response(JSON.stringify(camelCaseResponse), c.res);
+    }
+  };
+}

@@ -5,7 +5,6 @@ import { config } from "../lib/config";
 import {
   isJioSaavnLink,
   parseBool,
-  toCamelCase,
   tokenFromLink,
   validLangs,
 } from "../lib/utils";
@@ -54,7 +53,6 @@ album.get("/", async (c) => {
     link = "",
     token = "",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -80,7 +78,7 @@ album.get("/", async (c) => {
     data: albumPayload(result, parseBool(mini)),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -88,13 +86,7 @@ album.get("/", async (c) => {
  * -----------------------------------------------------------------------------------------------*/
 
 album.get("/recommend", async (c) => {
-  const {
-    id: albumid,
-    lang = "",
-    raw = "",
-    camel = "",
-    mini = "",
-  } = c.req.query();
+  const { id: albumid, lang = "", raw = "", mini = "" } = c.req.query();
 
   const result = await api<AlbumRequest[]>(r, {
     query: { albumid, language: validLangs(lang) },
@@ -114,7 +106,7 @@ album.get("/recommend", async (c) => {
     data: result.map((a) => albumPayload(a, parseBool(mini))),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -126,7 +118,6 @@ album.get("/same-year", async (c) => {
     year: album_year = "",
     lang = "",
     raw = "",
-    camel = "",
     mini = "",
   } = c.req.query();
 
@@ -148,5 +139,5 @@ album.get("/same-year", async (c) => {
     data: result.map((a) => albumPayload(a, parseBool(mini))),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });

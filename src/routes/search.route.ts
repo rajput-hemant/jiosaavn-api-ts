@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 import { api } from "../lib/api";
 import { config } from "../lib/config";
-import { parseBool, toCamelCase } from "../lib/utils";
+import { parseBool } from "../lib/utils";
 import {
   albumSearchPayload,
   allSearchPayload,
@@ -44,7 +44,7 @@ export const search = new Hono();
  * -----------------------------------------------------------------------------------------------*/
 
 search.get("/", async (c) => {
-  const { q: query = "", raw = "", camel = "" } = c.req.query();
+  const { q: query = "", raw = "" } = c.req.query();
 
   const result: AllSearchRequest = await api(all, {
     query: { query },
@@ -65,11 +65,11 @@ search.get("/", async (c) => {
     data: allSearchPayload(result),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
+  return c.json(payload);
 });
 
 search.get("/top", async (c) => {
-  const { raw = "", camel = "" } = c.req.query();
+  const { raw = "" } = c.req.query();
 
   const result: TopSearchRequest[] = await api(t, {});
 
@@ -87,7 +87,7 @@ search.get("/top", async (c) => {
     data: result.map(topSearchesPayload),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
+  return c.json(payload);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ search.get("/top", async (c) => {
 search.get("/:path{(songs|albums|playlists|artists)}", async (c) => {
   const path = c.req.path.split("/")[2];
 
-  const { q = "", page: p = "", n = "", raw = "", camel = "" } = c.req.query();
+  const { q = "", page: p = "", n = "", raw = "" } = c.req.query();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _artistSearchPayload = (a: ArtistSearchRequest, _?: boolean) =>
@@ -134,7 +134,7 @@ search.get("/:path{(songs|albums|playlists|artists)}", async (c) => {
     data: payloadFn(result),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(response) : response);
+  return c.json(response);
 });
 
 /* -----------------------------------------------------------------------------------------------
@@ -142,13 +142,7 @@ search.get("/:path{(songs|albums|playlists|artists)}", async (c) => {
  * -----------------------------------------------------------------------------------------------*/
 
 search.get("/podcasts", async (c) => {
-  const {
-    q: query = "",
-    page: p = "",
-    n = "",
-    raw = "",
-    camel = "",
-  } = c.req.query();
+  const { q: query = "", page: p = "", n = "", raw = "" } = c.req.query();
 
   const result: PodcastSearchRequest = await api(m, {
     query: { query, p, n, params: '{ "type": "podcasts" }' },
@@ -168,5 +162,5 @@ search.get("/podcasts", async (c) => {
     data: podcastsSearchPayload(result),
   };
 
-  return c.json(parseBool(camel) ? toCamelCase(payload) : payload);
+  return c.json(payload);
 });
