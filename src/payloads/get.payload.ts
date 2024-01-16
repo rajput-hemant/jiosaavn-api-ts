@@ -41,10 +41,10 @@ export function trendingPayload(
     mini
       ? miniPayload(i)
       : i.type === "song"
-      ? songPayload(i)
-      : i.type === "album"
-      ? albumPayload(i)
-      : playlistPayload(i)
+        ? songPayload(i)
+        : i.type === "album"
+          ? albumPayload(i)
+          : playlistPayload(i)
   );
 }
 
@@ -174,8 +174,8 @@ export function topAlbumsPayload(
       mini
         ? miniPayload(a)
         : a.type === "song"
-        ? songPayload(a)
-        : albumPayload(a)
+          ? songPayload(a)
+          : albumPayload(a)
     ),
   };
 }

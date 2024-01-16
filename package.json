@@ -9,7 +9,7 @@
     "deploy:vc": "vc",
     "dev:cf": "wrangler dev src/index.ts",
     "deploy:cf": "wrangler deploy --minify src/index.ts",
-    "typecheck": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src --ext ts,json --report-unused-disable-directives --max-warnings 0",
     "fmt": "prettier --write \"**/*.{ts,json}\" --cache",
     "fmt:check": "prettier --check \"**/*.{ts,json}\" --cache",

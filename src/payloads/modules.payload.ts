@@ -98,8 +98,8 @@ export function modulesPayload(
         mini
           ? miniPayload(a)
           : a.type === "song"
-          ? songPayload(a)
-          : albumPayload(a)
+            ? songPayload(a)
+            : albumPayload(a)
       ),
     },
 
