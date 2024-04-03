@@ -38,5 +38,5 @@
       ]
     }
   ],
-  "buildCommand": "bun run build:vercel"
+  "buildCommand": "bun run build:vc"
 }
