@@ -107,8 +107,11 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
           album,
           ctr,
           position,
-          more_info: { language, primary_artists, singers, triller_available },
+          more_info,
         } = s;
+
+        const { language, primary_artists, singers, triller_available } =
+          more_info!;
 
         return {
           id,
@@ -234,8 +237,26 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
           album,
           ctr,
           position,
-          more_info: { language, primary_artists, singers, triller_available },
+          more_info,
         } = t;
+
+        if (!more_info) {
+          return {
+            id,
+            name: decode(title),
+            subtitle: decode(description),
+            type,
+            image: createImageLinks(image),
+            description,
+            url,
+            album,
+            ctr,
+            position,
+          };
+        }
+
+        const { primary_artists, singers, triller_available, language } =
+          more_info;
 
         return {
           id,

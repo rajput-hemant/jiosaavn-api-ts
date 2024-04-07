@@ -13,7 +13,7 @@
     "lint": "eslint src --ext ts,json --report-unused-disable-directives --max-warnings 0",
     "fmt": "prettier --write \"**/*.{ts,json}\" --cache",
     "fmt:check": "prettier --check \"**/*.{ts,json}\" --cache",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "prettier": {
     "endOfLine": "lf",

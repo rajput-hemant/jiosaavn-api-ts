@@ -232,11 +232,11 @@ get.get("/footer-details", async (c) => {
     query: { language: validLangs(lang), p, n },
   });
 
-  if (!result.playlist.length) {
-    throw new Error(
-      "Failed to fetch footer details, please provide a valid language"
-    );
-  }
+  // if (!result.playlist.length) {
+  //   throw new Error(
+  //     "Failed to fetch footer details, please provide a valid language"
+  //   );
+  // }
 
   if (parseBool(raw)) return c.json(result);
 

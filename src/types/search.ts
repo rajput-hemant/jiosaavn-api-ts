@@ -79,7 +79,7 @@ export type AllSearchRequest = {
       video_available: boolean;
       triller_available: boolean;
       language: string;
-    };
+    } | null;
   }>;
   playlists: A<{
     id: string;
@@ -207,9 +207,9 @@ export type AllSearchResponse = {
     url: string;
     type: string;
     position: number;
-    primary_artists: string;
-    singers: string;
-    language: string;
+    primary_artists?: string;
+    singers?: string;
+    language?: string;
   }>;
   playlists: A<{
     id: string;

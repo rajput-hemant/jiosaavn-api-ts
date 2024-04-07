@@ -59,6 +59,8 @@ search.get("/", async (c) => {
     return c.json(result);
   }
 
+  console.log({ result });
+
   const payload: CAllSearchResponse = {
     status: "Success",
     message: "✅ Search results fetched successfully",
