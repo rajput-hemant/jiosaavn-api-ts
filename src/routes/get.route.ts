@@ -79,11 +79,19 @@ get.get("/trending", async (c) => {
     throw new Error("Invalid entity type");
   }
 
-  const result: TrendingRequest = await api(t, {
+  let result: TrendingRequest = await api(t, {
     query: { entity_type, entity_language: validLangs(lang).split(",")[0] },
   });
 
-  if (!result.length) throw new Error("Failed to fetch trending items");
+  if (!result.length) {
+    result = await api(t, {
+      query: { entity_language: validLangs(lang).split(",")[0] },
+    });
+
+    result = result.filter((t) => t.type === entity_type);
+
+    if (!result.length) throw new Error("Failed to fetch trending items");
+  }
 
   if (parseBool(raw)) {
     return c.json(result);

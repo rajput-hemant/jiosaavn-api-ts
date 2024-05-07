@@ -24,8 +24,6 @@ export const radio = new Hono();
 radio.get("/:path{(create/)?(featured|artist|entity)}", async (c) => {
   const path = c.req.path.split("/").at(-1) as "featured" | "artist" | "entity";
 
-  console.log(path);
-
   const {
     song_id: pid = "",
     artist_id: artistid = "",

@@ -184,7 +184,8 @@ function seasonPayload(s: SeasonRequest): SeasonResponse {
     entity_title_exact_match,
     description,
     parental_advisory: parseBool(
-      (JSON.parse(song_info) as { parental_advisory: string }).parental_advisory
+      (JSON.parse(song_info || "{}") as { parental_advisory: string })
+        .parental_advisory
     ),
     show_id,
     show_title: decode(show_title),

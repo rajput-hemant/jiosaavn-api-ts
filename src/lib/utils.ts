@@ -128,7 +128,7 @@ export function validLangs(langs: string) {
     .filter((l) => validLangs.includes(l.trim()))
     .join(",");
 
-  return filteredLangs === "" ? "hindi,english" : filteredLangs;
+  return filteredLangs;
 }
 
 type A = Record<string, unknown>;
