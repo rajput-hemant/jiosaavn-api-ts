@@ -57,7 +57,7 @@
     "@upstash/redis": "^1.31.6",
     "bun-vercel": "^1.0.0-alpha.5",
     "crypto-js": "^4.2.0",
-    "entities": "^4.5.0",
+    "entities": "^5.0.0",
     "hono": "^4.4.7"
   },
   "devDependencies": {
