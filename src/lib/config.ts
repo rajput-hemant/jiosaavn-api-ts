@@ -6,8 +6,8 @@ export const config = {
   },
 
   rateLimit: {
-    enable: process.env.ENABLE_RATE_LIMIT === "true" ?? false,
-    limitedReqCount: +(process.env.LIMITED_REQ_COUNT ?? 5),
+    enable: process.env.ENABLE_RATE_LIMIT === "true" || false,
+    limitedReqCount: +(process.env.LIMITED_REQ_COUNT || 5),
   },
 
   endpoint: {
