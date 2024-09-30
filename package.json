@@ -61,7 +61,7 @@
     "hono": "^4.6.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240924.0",
+    "@cloudflare/workers-types": "^4.20240925.0",
     "@commitlint/cli": "^18.6.1",
     "@commitlint/config-conventional": "^18.6.3",
     "@total-typescript/ts-reset": "^0.6.1",
@@ -76,7 +76,7 @@
     "prettier": "^3.3.3",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2",
-    "vercel": "^37.5.4",
-    "wrangler": "^3.78.9"
+    "vercel": "^37.6.0",
+    "wrangler": "^3.78.12"
   }
 }
