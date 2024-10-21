@@ -58,17 +58,17 @@
     "bun-vercel": "^1.0.0-alpha.5",
     "crypto-js": "^4.2.0",
     "entities": "^5.0.0",
-    "hono": "^4.6.4"
+    "hono": "^4.6.5"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20241011.0",
+    "@cloudflare/workers-types": "^4.20241018.0",
     "@commitlint/cli": "^18.6.1",
     "@commitlint/config-conventional": "^18.6.3",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/crypto-js": "^4.2.2",
-    "@typescript-eslint/eslint-plugin": "^8.8.1",
-    "@typescript-eslint/parser": "^8.8.1",
-    "bun-types": "^1.1.30",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.10.0",
+    "bun-types": "^1.1.31",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.1.6",
@@ -76,7 +76,7 @@
     "prettier": "^3.3.3",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",
-    "vercel": "^37.8.0",
-    "wrangler": "^3.80.4"
+    "vercel": "^37.11.0",
+    "wrangler": "^3.81.0"
   }
 }
