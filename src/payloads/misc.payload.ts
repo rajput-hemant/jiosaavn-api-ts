@@ -61,7 +61,7 @@ export function miniPayload(item: MiniPayloadRequest): MiniResponse {
     album_url = more_info.album_url;
   }
   if (type === "album" && "artistMap" in more_info) {
-    subs = more_info?.artistMap?.artists.map((a) => a.name.trim()).join(",");
+    subs = more_info?.artistMap?.artists?.map((a) => a.name.trim()).join(",");
   }
   if (type === "radio_station" && "color" in more_info) {
     color = more_info.color;

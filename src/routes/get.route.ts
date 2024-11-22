@@ -237,7 +237,7 @@ get.get("/footer-details", async (c) => {
   if (!lang) throw new Error("Language param is required");
 
   const result: FooterDetails = await api(fd, {
-    query: { language: validLangs(lang), p, n },
+    query: { language: validLangs(lang).split(",").at(0) ?? "hindi", p, n },
   });
 
   // if (!result.playlist.length) {

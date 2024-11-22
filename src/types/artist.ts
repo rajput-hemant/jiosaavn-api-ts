@@ -95,8 +95,8 @@ export type SimilarArtistRequest = {
 
 export type ArtistMapRequest = {
   primary_artists: ArtistMiniRequest[];
-  featured_artists: ArtistMiniRequest[];
-  artists: ArtistMiniRequest[];
+  featured_artists?: ArtistMiniRequest[];
+  artists?: ArtistMiniRequest[];
 };
 
 export type ArtistMiniRequest = {
