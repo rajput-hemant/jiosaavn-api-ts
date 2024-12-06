@@ -52,31 +52,31 @@
     ]
   },
   "dependencies": {
-    "@hono/node-server": "^1.13.2",
-    "@upstash/ratelimit": "^2.0.3",
+    "@hono/node-server": "^1.13.7",
+    "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.34.3",
     "bun-vercel": "^1.0.0-alpha.5",
     "crypto-js": "^4.2.0",
     "entities": "^5.0.0",
-    "hono": "^4.6.5"
+    "hono": "^4.6.13"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20241018.0",
+    "@cloudflare/workers-types": "^4.20241205.0",
     "@commitlint/cli": "^18.6.1",
     "@commitlint/config-conventional": "^18.6.3",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/crypto-js": "^4.2.2",
-    "@typescript-eslint/eslint-plugin": "^8.10.0",
-    "@typescript-eslint/parser": "^8.10.0",
-    "bun-types": "^1.1.31",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "bun-types": "^1.1.38",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
-    "husky": "^9.1.6",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3",
-    "tsx": "^4.19.1",
-    "typescript": "^5.6.3",
-    "vercel": "^37.11.0",
-    "wrangler": "^3.81.0"
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vercel": "^37.14.0",
+    "wrangler": "^3.93.0"
   }
 }
