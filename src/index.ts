@@ -30,7 +30,7 @@ app.use(
   cors(),
   prettyJSON(),
   logger(),
-  rateLimitMiddleware(),
+  // rateLimitMiddleware(),
   camelCaseMiddleware()
 );
 
