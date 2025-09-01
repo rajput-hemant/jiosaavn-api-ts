@@ -21,10 +21,25 @@ export const api = async <T>(
   const response = await fetch(url, {
     headers: {
       cookie: `L=${langs}; gdpr_acceptance=true; DL=english`,
+      "user-agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
+      accept: "application/json, text/plain, */*",
+      "accept-language": "en-US,en;q=0.9",
+      referer: "https://www.jiosaavn.com/",
+      origin: "https://www.jiosaavn.com",
+      "sec-fetch-site": "same-origin",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-dest": "empty",
     },
   });
 
-  const data = await response.json();
-
-  return data as T;
+  const text = await response.text();
+  console.log("JioSaavn API raw response:", text);
+  try {
+    const data = JSON.parse(text);
+    return data as T;
+  } catch (err) {
+    console.error("Failed to parse JioSaavn API response as JSON:", err);
+    throw err;
+  }
 };
