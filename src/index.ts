@@ -4,7 +4,7 @@ import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 
 import { config } from "./lib/config";
-import { camelCaseMiddleware, rateLimitMiddleware } from "./lib/middleware";
+import { camelCaseMiddleware } from "./lib/middleware";
 import {
   album,
   artist,
@@ -30,7 +30,6 @@ app.use(
   cors(),
   prettyJSON(),
   logger(),
-  // rateLimitMiddleware(),
   camelCaseMiddleware()
 );
 
