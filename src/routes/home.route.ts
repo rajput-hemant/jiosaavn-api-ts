@@ -232,5 +232,5 @@ export const home = new Hono().get("/", (c) =>
 			}
 		};
 	</script>
-</html>`)
+</html>`),
 );

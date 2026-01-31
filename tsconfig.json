@@ -1,26 +1,25 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext",
     "skipLibCheck": true,
     "lib": ["esnext"],
-
     /* Bundler mode */
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "types": ["bun-types", "@cloudflare/workers-types"],
-
     /* Linting */
     "strict": true,
+    // "verbatimModuleSyntax": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-
+    "noFallthroughCasesInSwitch": true,
     /* path aliases */
-    // "baseUrl": "./",
-    // "paths": {
-    //   "@/*": ["src/*"]
-    // }
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["src/*"]
+    }
   },
-  "include": ["_api", "src", "test", ".env"]
+  "include": ["src", "test"],
+  "exclude": ["node_modules"]
 }

@@ -1,10 +1,11 @@
+import { Scalar } from "@scalar/hono-api-reference";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
-
 import { config } from "./lib/config";
 import { camelCaseMiddleware, rateLimitMiddleware } from "./lib/middleware";
+import { createOpenApiDocument } from "./openapi";
 import {
   album,
   artist,
@@ -18,9 +19,7 @@ import {
   show,
   song,
 } from "./routes";
-import { CustomResponse } from "./types/response";
-import { Scalar } from "@scalar/hono-api-reference";
-import { createOpenApiDocument } from "./openapi";
+import type { CustomResponse } from "./types/response";
 
 const app = new Hono({ strict: false }); // match routes w/ or w/o trailing slash
 
@@ -32,11 +31,10 @@ const app = new Hono({ strict: false }); // match routes w/ or w/o trailing slas
 app.get(
   "/docs",
   Scalar({
-    version: "1.0.0",
     url: "/openapi.json",
     pageTitle: "JioSaavn API Reference",
     theme: "deepSpace",
-  })
+  }),
 );
 
 app.get("/openapi.json", (c) => {
@@ -53,7 +51,7 @@ app.use(
   prettyJSON(),
   logger(),
   rateLimitMiddleware(),
-  camelCaseMiddleware()
+  camelCaseMiddleware(),
 );
 
 /* -----------------------------------------------------------------------------------------------
