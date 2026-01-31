@@ -12,7 +12,13 @@ import { toCamelCase } from "./utils";
 export function rateLimitMiddleware(): MiddlewareHandler {
   return async (c, next) => {
     // skip middleware if rate limit is disabled
-    if (!config.rateLimit.enable || c.req.path === "/") {
+    const path = c.req.path;
+    if (
+      !config.rateLimit.enable ||
+      path === "/" ||
+      path === "/openapi.json" ||
+      path.startsWith("/docs")
+    ) {
       return await next();
     }
 

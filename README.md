@@ -8,7 +8,7 @@
 
 ### A simple wrapper for the Jio Saavn API powered by Hono.js 🔥.
 
-[**📚 Documentation**](https://docs-jiosaavn.netlify.app/) (in progress)
+[**📚 Documentation**](https://jiosaavn.rajputhemant.me/docs) (Scalar UI) · [**OpenAPI JSON**](https://jiosaavn.rajputhemant.me/openapi.json)
 
 ## ✨ Features
 
@@ -20,6 +20,11 @@
 - 🔥 Download High Quality Songs, w/ lyrics for supported songs.
 - 🎵 Get Songs, Albums, Playlists, Artists, Radio Stations, Podcasts Lyrics, Recommendations, and more.
 - ❤️ Open Source
+
+## 📚 API Documentation
+
+- **Scalar API Reference**: `GET /docs`
+- **OpenAPI JSON**: `GET /openapi.json`
 
 <div align=center>
 

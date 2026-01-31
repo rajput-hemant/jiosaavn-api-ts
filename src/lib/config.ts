@@ -1,7 +1,7 @@
 export const config = {
   urls: {
     baseUrl: "https://www.jiosaavn.com/api.php",
-    docsUrl: "https://docs.jiosaavn.rajputhemant.me",
+    docsUrl: "/docs",
     siteUrl: "https://jiosaavn.rajputhemant.me",
   },
 

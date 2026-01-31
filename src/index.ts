@@ -19,8 +19,30 @@ import {
   song,
 } from "./routes";
 import { CustomResponse } from "./types/response";
+import { Scalar } from "@scalar/hono-api-reference";
+import { createOpenApiDocument } from "./openapi";
 
 const app = new Hono({ strict: false }); // match routes w/ or w/o trailing slash
+
+/* -----------------------------------------------------------------------------------------------
+ * OpenAPI documentation
+ * Scalar API Reference: `GET /docs`
+ * OpenAPI JSON: `GET /openapi.json`
+ * -----------------------------------------------------------------------------------------------*/
+app.get(
+  "/docs",
+  Scalar({
+    version: "1.0.0",
+    url: "/openapi.json",
+    pageTitle: "JioSaavn API Reference",
+    theme: "deepSpace",
+  })
+);
+
+app.get("/openapi.json", (c) => {
+  const origin = new URL(c.req.url).origin;
+  return c.json(createOpenApiDocument(origin));
+});
 
 /* -----------------------------------------------------------------------------------------------
  * middlewares
