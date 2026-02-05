@@ -42,7 +42,7 @@
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",
     "vercel": "^37.11.0",
-    "wrangler": "^3.81.0"
+    "wrangler": "^4.63.0"
   },
   "lint-staged": {
     "*.{ts,json}": [
