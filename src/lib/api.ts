@@ -5,7 +5,7 @@ export const api = async <T>(
   {
     isVersion4 = true,
     query,
-  }: { isVersion4?: boolean; query?: Record<string, string> } = {}
+  }: { isVersion4?: boolean; query?: Record<string, string> } = {},
 ) => {
   const params = new URLSearchParams({
     _format: "json",

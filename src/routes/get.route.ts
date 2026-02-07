@@ -22,7 +22,7 @@ import {
 } from "../payloads/get.payload";
 import { miniPayload } from "../payloads/misc.payload";
 import { songPayload } from "../payloads/song.payload";
-import {
+import type {
   CGetFooterDetails,
   CGetLabelResponse,
   CGetLyricsResponse,
@@ -43,7 +43,7 @@ import {
   TopShowsRequest,
   TrendingRequest,
 } from "../types/get";
-import { CSongsResponse, SongRequest } from "../types/song";
+import type { CSongsResponse, SongRequest } from "../types/song";
 
 export const get = new Hono();
 
@@ -212,7 +212,7 @@ get.get("/actor-top-songs", async (c) => {
 
   if (!result.length) {
     throw new Error(
-      "Failed to fetch actor top songs, please provide a valid ID(s)"
+      "Failed to fetch actor top songs, please provide a valid ID(s)",
     );
   }
 
@@ -316,7 +316,7 @@ get.get("/mix", async (c) => {
 
   if (!result.id) {
     throw new Error(
-      "Failed to fetch mix details, please provide a valid token or link"
+      "Failed to fetch mix details, please provide a valid token or link",
     );
   }
 
@@ -368,7 +368,7 @@ get.get("/label", async (c) => {
 
   if (!result.labelId) {
     throw new Error(
-      "Failed to fetch label details, please provide a valid token or link"
+      "Failed to fetch label details, please provide a valid token or link",
     );
   }
 

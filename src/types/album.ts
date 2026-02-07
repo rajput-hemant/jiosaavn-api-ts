@@ -1,7 +1,7 @@
-import { ArtistMapRequest, ArtistMapResponse } from "./artist";
-import { MiniResponse, Quality, Type } from "./misc";
-import { CustomResponse } from "./response";
-import { SongRequest, SongResponse } from "./song";
+import type { ArtistMapRequest, ArtistMapResponse } from "./artist";
+import type { MiniResponse, Quality, Type } from "./misc";
+import type { CustomResponse } from "./response";
+import type { SongRequest, SongResponse } from "./song";
 
 /* -----------------------------------------------------------------------------------------------
  * Request

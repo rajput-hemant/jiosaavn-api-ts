@@ -1,7 +1,7 @@
 import { decode } from "entities";
 
 import { createDownloadLinks, createImageLinks, parseBool } from "../lib/utils";
-import {
+import type {
   EpisodeDetailRequest,
   EpisodeDetailResponse,
   EpisodeRequest,
@@ -185,7 +185,7 @@ function seasonPayload(s: SeasonRequest): SeasonResponse {
     description,
     parental_advisory: parseBool(
       (JSON.parse(song_info || "{}") as { parental_advisory: string })
-        .parental_advisory
+        .parental_advisory,
     ),
     show_id,
     show_title: decode(show_title),
@@ -223,7 +223,7 @@ export function episodePayload(e: EpisodeRequest): EpisodeResponse {
 }
 
 export function episodeDetailPayload(
-  e: EpisodeDetailRequest
+  e: EpisodeDetailRequest,
 ): EpisodeDetailResponse {
   const {
     id,

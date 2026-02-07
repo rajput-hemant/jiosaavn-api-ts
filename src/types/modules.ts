@@ -1,5 +1,5 @@
-import { AlbumRequest, AlbumResponse } from "./album";
-import {
+import type { AlbumRequest, AlbumResponse } from "./album";
+import type {
   ChartRequest,
   ChartResponse,
   RadioRequest,
@@ -7,10 +7,10 @@ import {
   TrendingRequest,
   TrendingResponse,
 } from "./get";
-import { MiniResponse, Quality, Type } from "./misc";
-import { PlaylistRequest, PlaylistResponse } from "./playlist";
-import { CustomResponse } from "./response";
-import { SongRequest, SongResponse } from "./song";
+import type { MiniResponse, Quality, Type } from "./misc";
+import type { PlaylistRequest, PlaylistResponse } from "./playlist";
+import type { CustomResponse } from "./response";
+import type { SongRequest, SongResponse } from "./song";
 
 /* -----------------------------------------------------------------------------------------------
  * Common

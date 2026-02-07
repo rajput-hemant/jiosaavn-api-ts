@@ -1,7 +1,6 @@
 import Crypto from "crypto-js";
-
-import { Quality } from "../types/misc";
-import { ArtistMiniRequest, ArtistMiniResponse } from "../types/artist";
+import type { ArtistMiniRequest, ArtistMiniResponse } from "../types/artist";
+import type { Quality } from "../types/misc";
 
 /**
  * Utility function to create image links for different qualities
@@ -43,10 +42,10 @@ export function createDownloadLinks(encryptedMediaUrl: string): Quality {
 
   const decrypted = Crypto.DES.decrypt(
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error
     { ciphertext: Crypto.enc.Base64.parse(encryptedMediaUrl) },
     Crypto.enc.Utf8.parse(key),
-    { mode: Crypto.mode.ECB }
+    { mode: Crypto.mode.ECB },
   );
 
   const decryptedLink = decrypted.toString(Crypto.enc.Utf8);
@@ -71,7 +70,7 @@ export function createDownloadLinks(encryptedMediaUrl: string): Quality {
  * @returns Token from the link
  */
 export function tokenFromLink(link: string) {
-  return link.split("/").at(-1)!;
+  return link.split("/").at(-1) || "";
 }
 
 /**
@@ -151,9 +150,9 @@ export function toCamelCase<T>(obj: A | A[]): T {
   const result: A = {};
 
   for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+    if (Object.hasOwn(obj, key)) {
       const camelCaseKey = key.replace(/_([a-z])/g, (_, letter) =>
-        letter.toUpperCase()
+        letter.toUpperCase(),
       );
       result[camelCaseKey] = toCamelCase(obj[key] as A);
     }

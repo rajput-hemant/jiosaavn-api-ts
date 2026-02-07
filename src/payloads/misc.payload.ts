@@ -1,18 +1,18 @@
 import { decode } from "entities";
 
 import { createDownloadLinks, createImageLinks, parseBool } from "../lib/utils";
-import { AlbumRequest } from "../types/album";
-import { ChartRequest, RadioRequest } from "../types/get";
-import { MiniResponse, Quality } from "../types/misc";
-import {
+import type { AlbumRequest } from "../types/album";
+import type { ChartRequest, RadioRequest } from "../types/get";
+import type { MiniResponse, Quality } from "../types/misc";
+import type {
   ArtistRecoRequest,
   CityModRequest,
   DiscoverRequest,
   PromoRequest,
   TagMixRequest,
 } from "../types/modules";
-import { PlaylistRequest } from "../types/playlist";
-import { SongRequest } from "../types/song";
+import type { PlaylistRequest } from "../types/playlist";
+import type { SongRequest } from "../types/song";
 import { artistMapPayload } from "./artist.payload";
 
 /* -----------------------------------------------------------------------------------------------

@@ -1,11 +1,11 @@
-import { MiniResponse } from "../types/misc";
-import { RadioSongRequest, RadioSongResponse } from "../types/radio";
-import { SongResponse } from "../types/song";
+import type { MiniResponse } from "../types/misc";
+import type { RadioSongRequest, RadioSongResponse } from "../types/radio";
+import type { SongResponse } from "../types/song";
 import { songPayload } from "./song.payload";
 
 export function radioSongsPayload(
   s: RadioSongRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): RadioSongResponse {
   const station_id = s.stationid;
   const songs: (SongResponse | MiniResponse)[] = [];

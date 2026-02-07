@@ -1,7 +1,7 @@
 import { decode } from "entities";
 
 import { dedupArtists, parseBool } from "../lib/utils";
-import {
+import type {
   PlaylistModulesRequest,
   PlaylistModulesResponse,
   PlaylistRequest,
@@ -12,7 +12,7 @@ import { songPayload } from "./song.payload";
 
 export function playlistPayload(
   p: PlaylistRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): PlaylistResponse {
   const {
     id,
@@ -86,7 +86,7 @@ export function playlistPayload(
 }
 
 type PlaylistModulesPayload = (
-  m: PlaylistModulesRequest
+  m: PlaylistModulesRequest,
 ) => PlaylistModulesResponse;
 
 export const playlistModulesPayload: PlaylistModulesPayload = (m) => {

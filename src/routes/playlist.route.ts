@@ -9,7 +9,7 @@ import {
   validLangs,
 } from "../lib/utils";
 import { playlistPayload } from "../payloads/playlist.payload";
-import {
+import type {
   CPlaylistResponse,
   CPlaylistsResponse,
   PlaylistRequest,
@@ -25,7 +25,7 @@ export const playlist = new Hono();
 
 playlist.use("*", async (c, next) => {
   const { id, link, token } = c.req.query();
-  const path = "/" + c.req.path.split("/").slice(2).join("/");
+  const path = `/${c.req.path.split("/").slice(2).join("/")}`;
 
   if (path === "/") {
     if (!id && !link && !token)

@@ -1,5 +1,5 @@
-import { ArtistMapRequest, ArtistMapResponse } from "./artist";
-import { Quality, Rights } from "./misc";
+import type { ArtistMapRequest, ArtistMapResponse } from "./artist";
+import type { Quality, Rights } from "./misc";
 
 export type ShowRequest = {
   show_details: ShowDetailsRequest;

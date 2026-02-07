@@ -1,4 +1,4 @@
-import { ArtistMapResponse } from "./artist";
+import type { ArtistMapResponse } from "./artist";
 
 export type Type =
   | "artist"

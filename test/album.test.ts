@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: _ */
 import { describe, expect, test } from "bun:test";
 
 import { app } from "../src";
@@ -53,7 +54,7 @@ describe("Album", () => {
 
   test("GET /album?link=https://www.jiosaavn.com/album/night-visions/xe6Gx7Sg12U | Album Details by Link", async () => {
     const response = await app.request(
-      "/album?link=https://www.jiosaavn.com/album/night-visions/xe6Gx7Sg12U"
+      "/album?link=https://www.jiosaavn.com/album/night-visions/xe6Gx7Sg12U",
     );
 
     expect(response.status).toBe(200);
@@ -77,8 +78,8 @@ describe("Album", () => {
     expect(recos.data).toBeNull();
   });
 
-  test("GET /album/recommend?id=1142502 | Recommend Albums", async () => {
-    const response = await app.request("/album/recommend?id=1142502");
+  test("GET /album/recommend?id=60606647 | Recommend Albums", async () => {
+    const response = await app.request("/album/recommend?id=60606647");
 
     expect(response.status).toBe(200);
 

@@ -1,7 +1,7 @@
 import { decode } from "entities";
 
 import { createImageLinks, parseBool } from "../lib/utils";
-import {
+import type {
   AlbumSearchRequest,
   AlbumSearchResponse,
   AllSearchRequest,
@@ -111,7 +111,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
         } = s;
 
         const { language, primary_artists, singers, triller_available } =
-          more_info!;
+          more_info || {};
 
         return {
           id,
@@ -311,7 +311,7 @@ export function allSearchPayload(s: AllSearchRequest): AllSearchResponse {
 
 export function songSearchPayload(
   s: SongSearchRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): SongSearchResponse {
   const { total, start, results } = s;
 
@@ -320,7 +320,7 @@ export function songSearchPayload(
 
 export function albumSearchPayload(
   a: AlbumSearchRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): AlbumSearchResponse {
   const { total, start, results } = a;
 
@@ -333,7 +333,7 @@ export function albumSearchPayload(
 
 export function playlistSearchPayload(
   s: PlaylistSearchRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): PlaylistSearchResponse {
   const { total, start, results } = s;
 
@@ -345,7 +345,7 @@ export function playlistSearchPayload(
 }
 
 export function artistSearchPayload(
-  a: ArtistSearchRequest
+  a: ArtistSearchRequest,
 ): ArtistSearchResponse {
   const { total, start, results } = a;
 
@@ -383,7 +383,7 @@ export function artistSearchPayload(
 }
 
 export function podcastsSearchPayload(
-  p: PodcastSearchRequest
+  p: PodcastSearchRequest,
 ): PodcastSearchResposne {
   const { start, total, results } = p;
 

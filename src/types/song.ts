@@ -1,6 +1,6 @@
-import { ArtistMapRequest, ArtistMapResponse } from "./artist";
-import { MiniResponse, Quality, Rights } from "./misc";
-import { CustomResponse } from "./response";
+import type { ArtistMapRequest, ArtistMapResponse } from "./artist";
+import type { MiniResponse, Quality, Rights } from "./misc";
+import type { CustomResponse } from "./response";
 
 /* -----------------------------------------------------------------------------------------------
  * Request

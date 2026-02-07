@@ -1,4 +1,5 @@
-import { expect, test, describe } from "bun:test";
+/** biome-ignore-all lint/suspicious/noExplicitAny: _ */
+import { describe, expect, test } from "bun:test";
 
 import { app } from "../src";
 
@@ -36,7 +37,7 @@ describe("Show", () => {
 
   test("GET /show?link=https://www.jiosaavn.com/shows/dhadkane-meri-sun/1/YZxHhNAGfv0_ | Show Details by Link", async () => {
     const response = await app.request(
-      "/show?link=https://www.jiosaavn.com/shows/dhadkane-meri-sun/1/YZxHhNAGfv0_"
+      "/show?link=https://www.jiosaavn.com/shows/dhadkane-meri-sun/1/YZxHhNAGfv0_",
     );
 
     expect(response.status).toBe(200);
@@ -140,7 +141,7 @@ describe("Show", () => {
 
   test("GET /show/episode?link=https://www.jiosaavn.com/shows/silsile...teri-mohabbat-ke...na-rukenge-kabhi/8BlwZT--v8s_ | Show's Episode Details by Link", async () => {
     const response = await app.request(
-      "/show/episode?link=https://www.jiosaavn.com/shows/silsile...teri-mohabbat-ke...na-rukenge-kabhi/8BlwZT--v8s_"
+      "/show/episode?link=https://www.jiosaavn.com/shows/silsile...teri-mohabbat-ke...na-rukenge-kabhi/8BlwZT--v8s_",
     );
 
     expect(response.status).toBe(200);
@@ -156,7 +157,7 @@ describe("Show", () => {
 
   test("GET /show/episode?token=8BlwZT--v8s_&camel=1 | Show's Episode Details by Token (Camel Case)", async () => {
     const response = await app.request(
-      "/show/episode?token=8BlwZT--v8s_&camel=1"
+      "/show/episode?token=8BlwZT--v8s_&camel=1",
     );
 
     expect(response.status).toBe(200);

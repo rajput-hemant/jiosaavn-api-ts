@@ -8,8 +8,8 @@ import {
   episodePayload,
   showsPayload,
 } from "../payloads/show.payload";
-import { CustomResponse } from "../types/response";
-import {
+import type { CustomResponse } from "../types/response";
+import type {
   EpisodeDetailRequest,
   EpisodeDetailResponse,
   EpisodeRequest,
@@ -31,7 +31,7 @@ export const show = new Hono();
  * -----------------------------------------------------------------------------------------------*/
 
 show.use("*", async (c, next) => {
-  const path = "/" + c.req.path.split("/").slice(2).join("/");
+  const path = `/${c.req.path.split("/").slice(2).join("/")}`;
   const { id = "", token = "", link = "" } = c.req.query();
 
   const entity = path === "/" ? "show" : "episode";
@@ -86,7 +86,7 @@ show.get("/episodes", async (c) => {
  * -----------------------------------------------------------------------------------------------*/
 
 show.get("/:episode?", async (c) => {
-  const path = "/" + c.req.path.split("/").slice(2).join("/");
+  const path = `/${c.req.path.split("/").slice(2).join("/")}`;
 
   const {
     token = "",

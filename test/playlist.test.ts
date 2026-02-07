@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: _ */
 import { describe, expect, test } from "bun:test";
 
 import { app } from "../src";
@@ -53,7 +54,7 @@ describe("Playlist", () => {
 
   test("GET /playlist?link=https://www.jiosaavn.com/featured/hindi-india-superhits-top-50/zlJfJYVuyjpxWb5,FqsjKg__ | Playlist Details by Link", async () => {
     const response = await app.request(
-      "/playlist?link=https://www.jiosaavn.com/featured/hindi-india-superhits-top-50/zlJfJYVuyjpxWb5,FqsjKg__"
+      "/playlist?link=https://www.jiosaavn.com/featured/hindi-india-superhits-top-50/zlJfJYVuyjpxWb5,FqsjKg__",
     );
 
     expect(response.status).toBe(200);

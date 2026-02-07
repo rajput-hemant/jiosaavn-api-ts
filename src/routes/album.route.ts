@@ -9,7 +9,11 @@ import {
   validLangs,
 } from "../lib/utils";
 import { albumPayload } from "../payloads/album.payload";
-import { AlbumRequest, CAlbumResponse, CAlbumsResponse } from "../types/album";
+import type {
+  AlbumRequest,
+  CAlbumResponse,
+  CAlbumsResponse,
+} from "../types/album";
 
 const { id: i, link: l, recommend: r, same_year: s } = config.endpoint.album;
 
@@ -21,7 +25,7 @@ export const album = new Hono();
 
 album.use("*", async (c, next) => {
   const { id, link, token, year } = c.req.query();
-  const path = "/" + c.req.path.split("/").slice(2).join("/");
+  const path = `/${c.req.path.split("/").slice(2).join("/")}`;
 
   if (path === "/") {
     if (!id && !link && !token)

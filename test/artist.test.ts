@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: _ */
 import { describe, expect, test } from "bun:test";
 
 import { app } from "../src";
@@ -49,7 +50,7 @@ describe("Artist", () => {
 
   test("GET /artist?link=https://www.jiosaavn.com/artist/arijit-singh/LlRWpHzy3Hk_ | Artist Details by Link", async () => {
     const response = await app.request(
-      "/artist?link=https://www.jiosaavn.com/artist/arijit-singh/LlRWpHzy3Hk_"
+      "/artist?link=https://www.jiosaavn.com/artist/arijit-singh/LlRWpHzy3Hk_",
     );
 
     expect(response.status).toBe(200);
@@ -109,7 +110,7 @@ describe("Artist", () => {
 
   test("GET /artist/top-songs?artist_id=459___&song_id=_rJmbKSP | Artist's Top Songs", async () => {
     const response = await app.request(
-      "/artist/top-songs?artist_id=459___&song_id=_rJmbKSP"
+      "/artist/top-songs?artist_id=459___&song_id=_rJmbKSP",
     );
 
     expect(response.status).toBe(400);
@@ -122,7 +123,7 @@ describe("Artist", () => {
 
   test("GET /artist/top-songs?artist_id=459___&song_id=_rJmbKSP | Artist's Top Songs (Invalid IDs)", async () => {
     const response = await app.request(
-      "/artist/top-songs?artist_id=459___&song_id=_rJmbKSP"
+      "/artist/top-songs?artist_id=459___&song_id=_rJmbKSP",
     );
 
     expect(response.status).toBe(400);

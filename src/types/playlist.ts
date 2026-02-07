@@ -1,7 +1,7 @@
-import { ArtistMiniRequest, ArtistMiniResponse } from "./artist";
-import { MiniResponse, Quality } from "./misc";
-import { CustomResponse } from "./response";
-import { SongRequest, SongResponse } from "./song";
+import type { ArtistMiniRequest, ArtistMiniResponse } from "./artist";
+import type { MiniResponse, Quality } from "./misc";
+import type { CustomResponse } from "./response";
+import type { SongRequest, SongResponse } from "./song";
 
 /* -----------------------------------------------------------------------------------------------
  * Request

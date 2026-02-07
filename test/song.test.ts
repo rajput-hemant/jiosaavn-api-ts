@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: _ */
 import { describe, expect, test } from "bun:test";
 
 import { app } from "../src";
@@ -53,7 +54,7 @@ describe("Song", () => {
 
   test("GET /song?link=https://www.jiosaavn.com/song/thunderclouds/RT8zcBh9eUc | Song Details by Link", async () => {
     const response = await app.request(
-      "/song?link=https://www.jiosaavn.com/song/thunderclouds/RT8zcBh9eUc"
+      "/song?link=https://www.jiosaavn.com/song/thunderclouds/RT8zcBh9eUc",
     );
 
     expect(response.status).toBe(200);

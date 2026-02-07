@@ -1,8 +1,8 @@
 import { decode } from "entities";
 
 import { createImageLinks, parseBool } from "../lib/utils";
-import { MiniResponse } from "../types/misc";
-import {
+import type { MiniResponse } from "../types/misc";
+import type {
   ArtistRecoRequest,
   ArtistRecoResponse,
   CityModRequest,
@@ -26,7 +26,7 @@ import { songPayload } from "./song.payload";
 
 export function modulesPayload(
   m: ModulesRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): ModuleResponse | ModulesMiniResponse {
   const {
     artist_recos: ar,
@@ -66,7 +66,7 @@ export function modulesPayload(
 
         return acc;
       },
-      {} as Record<string, Module<PromoResponse | MiniResponse>>
+      {} as Record<string, Module<PromoResponse | MiniResponse>>,
     );
 
   return {
@@ -99,7 +99,7 @@ export function modulesPayload(
           ? miniPayload(a)
           : a.type === "song"
             ? songPayload(a)
-            : albumPayload(a)
+            : albumPayload(a),
       ),
     },
 

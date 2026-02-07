@@ -4,13 +4,13 @@ import { api } from "../lib/api";
 import { config } from "../lib/config";
 import { parseBool, validLangs } from "../lib/utils";
 import { radioSongsPayload } from "../payloads/radio.payload";
-import {
+import type {
   RadioSongRequest,
   RadioSongResponse,
   RadioStationRequest,
   RadioStationResponse,
 } from "../types/radio";
-import { CustomResponse } from "../types/response";
+import type { CustomResponse } from "../types/response";
 
 const { featured: f, artist: a, entity: e, songs: s } = config.endpoint.radio;
 
@@ -58,7 +58,7 @@ radio.get("/:path{(create/)?(featured|artist|entity)}", async (c) => {
         mode,
         language: validLangs(lang),
       },
-    }
+    },
   );
 
   if (error) throw new Error(typeof error === "string" ? error : error.msg);

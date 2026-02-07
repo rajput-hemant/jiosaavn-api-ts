@@ -12,8 +12,8 @@ import {
   songSearchPayload,
   topSearchesPayload,
 } from "../payloads/search.payload";
-import { CustomResponse } from "../types/response";
-import {
+import type { CustomResponse } from "../types/response";
+import type {
   AlbumSearchRequest,
   AllSearchRequest,
   ArtistSearchRequest,

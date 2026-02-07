@@ -1,7 +1,7 @@
 import { decode } from "entities";
 
 import { createImageLinks, dedupArtists } from "../lib/utils";
-import {
+import type {
   ArtistMapRequest,
   ArtistMapResponse,
   ArtistMiniRequest,
@@ -22,7 +22,7 @@ import { songPayload } from "./song.payload";
 
 export function artistPayload(
   a: ArtistRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): ArtistResponse {
   const {
     artistId: id,
@@ -77,11 +77,11 @@ export function artistPayload(
       topAlbums?.map((a) => (mini ? miniPayload(a) : albumPayload(a))) ?? [],
     dedicated_artist_playlist:
       dedicated_artist_playlist?.map((p) =>
-        mini ? miniPayload(p) : playlistPayload(p)
+        mini ? miniPayload(p) : playlistPayload(p),
       ) ?? [],
     featured_artist_playlist:
       featured_artist_playlist?.map((p) =>
-        mini ? miniPayload(p) : playlistPayload(p)
+        mini ? miniPayload(p) : playlistPayload(p),
       ) ?? [],
     singles: singles?.map(artistSongPayload) ?? [],
     latest_release: latest_release?.map(artistSongPayload) ?? [],
@@ -144,7 +144,7 @@ export function artistPayload(
 }
 
 export function similarArtistPayload(
-  a: SimilarArtistRequest
+  a: SimilarArtistRequest,
 ): SimilarArtistResponse {
   const {
     id,
@@ -180,7 +180,7 @@ export function similarArtistPayload(
     search_keywords,
     primary_artist_id,
     languages: JSON.parse(
-      languages || "{}"
+      languages || "{}",
     ) as SimilarArtistResponse["languages"],
     url,
     type,
@@ -229,7 +229,7 @@ export function artistSongPayload(a: ArtistSongRequest): ArtistSongResponse {
 
 export function artistTopSongsOrAlbumsPayload(
   a: ArtistSongsOrAlbumsRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): ArtistSongsOrAlbumsResponse {
   const {
     artistId: id,
@@ -265,7 +265,7 @@ export function artistTopSongsOrAlbumsPayload(
           total: topAlbums.total,
           last_page: topAlbums.last_page,
           albums: topAlbums.albums.map((a) =>
-            mini ? miniPayload(a) : albumPayload(a)
+            mini ? miniPayload(a) : albumPayload(a),
           ),
         }
       : undefined,
@@ -273,7 +273,7 @@ export function artistTopSongsOrAlbumsPayload(
 }
 
 export function artistMapPayload(
-  a: string | ArtistMapRequest
+  a: string | ArtistMapRequest,
 ): ArtistMapResponse {
   return typeof a === "string"
     ? {
@@ -284,7 +284,7 @@ export function artistMapPayload(
     : {
         artists: dedupArtists(a.artists?.map(artistMiniPayload) ?? []),
         featured_artists: dedupArtists(
-          a.featured_artists?.map(artistMiniPayload) ?? []
+          a.featured_artists?.map(artistMiniPayload) ?? [],
         ),
         primary_artists: dedupArtists(a.primary_artists.map(artistMiniPayload)),
       };

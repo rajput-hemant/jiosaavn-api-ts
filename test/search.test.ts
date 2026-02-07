@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: _ */
 import { describe, expect, test } from "bun:test";
 
 import { app } from "../src";

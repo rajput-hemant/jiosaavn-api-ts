@@ -1,7 +1,7 @@
 import { decode } from "entities";
 
 import { createImageLinks, parseBool } from "../lib/utils";
-import {
+import type {
   AlbumModulesRequest,
   AlbumModulesResponse,
   AlbumRequest,
@@ -12,7 +12,7 @@ import { songPayload } from "./song.payload";
 
 export function albumPayload(
   a: AlbumRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): AlbumResponse {
   const {
     id,
@@ -52,7 +52,7 @@ export function albumPayload(
     name: decode(title),
     subtitle: decode(
       subtitle ||
-        (artistMap?.artists?.map((a) => a.name.trim()).join(", ") ?? "")
+        (artistMap?.artists?.map((a) => a.name.trim()).join(", ") ?? ""),
     ),
     type,
     language,
@@ -76,7 +76,7 @@ export function albumPayload(
 }
 
 export function albumModulesPayload(
-  a: AlbumModulesRequest
+  a: AlbumModulesRequest,
 ): AlbumModulesResponse {
   const {
     reco: r,

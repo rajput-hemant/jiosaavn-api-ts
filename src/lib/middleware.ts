@@ -1,6 +1,6 @@
-import { MiddlewareHandler } from "hono";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import type { MiddlewareHandler } from "hono";
 
 import { config } from "./config";
 import { toCamelCase } from "./utils";

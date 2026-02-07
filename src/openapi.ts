@@ -16,7 +16,7 @@ function q(
     description,
     schema,
     example,
-  }: Omit<OpenApiParameter, "name" | "in">
+  }: Omit<OpenApiParameter, "name" | "in">,
 ): OpenApiParameter {
   return { name, in: "query", required, description, schema, example };
 }
@@ -28,7 +28,7 @@ function p(
     description,
     schema,
     example,
-  }: Omit<OpenApiParameter, "name" | "in">
+  }: Omit<OpenApiParameter, "name" | "in">,
 ): OpenApiParameter {
   return { name, in: "path", required, description, schema, example };
 }

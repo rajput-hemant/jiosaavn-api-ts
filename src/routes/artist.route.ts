@@ -13,13 +13,13 @@ import {
   artistTopSongsOrAlbumsPayload,
 } from "../payloads/artist.payload";
 import { songPayload } from "../payloads/song.payload";
-import {
+import type {
   ArtistRequest,
   ArtistSongsOrAlbumsRequest,
   CArtistResponse,
   CArtistSongsOrAlbumsResponse,
 } from "../types/artist";
-import { CSongsResponse, SongRequest } from "../types/song";
+import type { CSongsResponse, SongRequest } from "../types/song";
 
 const {
   id: i,
@@ -37,7 +37,7 @@ export const artist = new Hono();
 
 artist.use("*", async (c, next) => {
   const { id, link, token, artist_id, song_id } = c.req.query();
-  const path = "/" + c.req.path.split("/").slice(2).join("/");
+  const path = `/${c.req.path.split("/").slice(2).join("/")}`;
 
   if (path === "/") {
     if (!id && !link && !token)
@@ -122,7 +122,7 @@ artist.get("/:path{(songs|albums)}", async (c) => {
 
   const result: ArtistSongsOrAlbumsRequest = await api(
     path === "songs" ? s : a,
-    { query: { artistId: id, page, category, sort_order, n_song: "50" } }
+    { query: { artistId: id, page, category, sort_order, n_song: "50" } },
   );
 
   if (

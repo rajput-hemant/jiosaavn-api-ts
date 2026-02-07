@@ -21,7 +21,7 @@ import {
 } from "./routes";
 import type { CustomResponse } from "./types/response";
 
-const app = new Hono({ strict: false }); // match routes w/ or w/o trailing slash
+export const app = new Hono({ strict: false }); // match routes w/ or w/o trailing slash
 
 /* -----------------------------------------------------------------------------------------------
  * OpenAPI documentation
@@ -111,7 +111,5 @@ const server = {
   port: +(process.env.PORT ?? 3000),
   fetch: app.fetch,
 };
-
-export { app };
 
 export default server;

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: _ */
 import { describe, expect, test } from "bun:test";
 
 import { app } from "../src";
@@ -66,27 +67,25 @@ describe("Radio", () => {
     expect(station.status).toBe("Failed");
   });
 
-  test.todo(
-    "GET /radio/songs?id=${station_id} | Create Songs Radio Station",
-    async () => {
-      let response = await app.request("/get/featured-stations");
-      const featuredStations: any = await response.json();
+  // biome-ignore lint/suspicious/noTemplateCurlyInString: _
+  test.todo("GET /radio/songs?id=${station_id} | Create Songs Radio Station", async () => {
+    let response = await app.request("/get/featured-stations");
+    const featuredStations: any = await response.json();
 
-      response = await app.request(
-        `/radio/featured?name=${featuredStations.data[0].name}`
-      );
-      const stationID = ((await response.json()) as any).data.station_id;
+    response = await app.request(
+      `/radio/featured?name=${featuredStations.data[0].name}`,
+    );
+    const stationID = ((await response.json()) as any).data.station_id;
 
-      response = await app.request(
-        `/radio/songs?id=${stationID.data.station_id}`
-      );
+    response = await app.request(
+      `/radio/songs?id=${stationID.data.station_id}`,
+    );
 
-      expect(response.status).toBe(200);
+    expect(response.status).toBe(200);
 
-      const station: any = await response.json();
+    const station: any = await response.json();
 
-      expect(station.status).toBe("Success");
-      expect(station.data).toHaveProperty("station_id");
-    }
-  );
+    expect(station.status).toBe("Success");
+    expect(station.data).toHaveProperty("station_id");
+  });
 });

@@ -1,7 +1,7 @@
 import { decode } from "entities";
 
 import { createImageLinks, parseBool } from "../lib/utils";
-import {
+import type {
   ChartRequest,
   ChartResponse,
   FeaturedPlaylistsRequest,
@@ -27,7 +27,7 @@ import {
   TrendingRequest,
   TrendingResponse,
 } from "../types/get";
-import { MiniResponse } from "../types/misc";
+import type { MiniResponse } from "../types/misc";
 import { albumPayload } from "./album.payload";
 import { miniPayload } from "./misc.payload";
 import { playlistPayload } from "./playlist.payload";
@@ -35,7 +35,7 @@ import { songPayload } from "./song.payload";
 
 export function trendingPayload(
   t: TrendingRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): TrendingResponse {
   return t.map((i) =>
     mini
@@ -44,13 +44,13 @@ export function trendingPayload(
         ? songPayload(i)
         : i.type === "album"
           ? albumPayload(i)
-          : playlistPayload(i)
+          : playlistPayload(i),
   );
 }
 
 export function featuredPlaylistsPayload(
   f: FeaturedPlaylistsRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): FeaturedPlaylistsResponse {
   return {
     count: f.count,
@@ -163,7 +163,7 @@ export function topArtistsPayload(a: TopArtistRequest): TopArtistResponse {
 
 export function topAlbumsPayload(
   a: TopAlbumRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): TopAlbumResponse | MiniResponse[] {
   const { count, last_page, data } = a;
 
@@ -175,7 +175,7 @@ export function topAlbumsPayload(
         ? miniPayload(a)
         : a.type === "song"
           ? songPayload(a)
-          : albumPayload(a)
+          : albumPayload(a),
     ),
   };
 }
@@ -279,7 +279,7 @@ export function mixPayload(m: MixRequest, mini: boolean = false): MixResponse {
 
 export function labelPayload(
   l: LabelRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): LabelResponse {
   const {
     labelId: id,

@@ -4,12 +4,11 @@
   "description": "🎵 An Unofficial wrapper for the JioSaavn API.",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "build": "echo \"Building...\"",
     "dev:cf": "wrangler dev src/index.ts",
     "deploy:cf": "wrangler deploy --minify src/index.ts",
     "type-check": "tsc --noEmit",
-    "fmt": "biome format --write",
-    "lint": "biome check src",
+    "lint:check": "biome check",
+    "lint": "biome check --write",
     "prepare": "husky"
   },
   "dependencies": {
@@ -43,11 +42,9 @@
     "wrangler": "^4.63.0"
   },
   "lint-staged": {
-    "*.{ts,json}": [
-      "prettier --write \"**/*.{ts,json}\" --cache"
-    ],
-    "*.ts": [
-      "tsc --noEmit --esModuleInterop --skipLibCheck --types bun-types"
+    "*": [
+      "biome format --write",
+      "biome check"
     ]
   },
   "commitlint": {

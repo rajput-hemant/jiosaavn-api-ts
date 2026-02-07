@@ -1,5 +1,5 @@
-import { MiniResponse } from "./misc";
-import { SongRequest, SongResponse } from "./song";
+import type { MiniResponse } from "./misc";
+import type { SongRequest, SongResponse } from "./song";
 
 /* -----------------------------------------------------------------------------------------------
  * Request

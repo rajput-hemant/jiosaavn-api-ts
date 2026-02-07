@@ -4,7 +4,7 @@ import { api } from "../lib/api";
 import { config } from "../lib/config";
 import { parseBool, validLangs } from "../lib/utils";
 import { modulesPayload } from "../payloads/modules.payload";
-import { CModulesRespose, ModulesRequest } from "../types/modules";
+import type { CModulesRespose, ModulesRequest } from "../types/modules";
 
 const { launch_data: l } = config.endpoint.modules;
 

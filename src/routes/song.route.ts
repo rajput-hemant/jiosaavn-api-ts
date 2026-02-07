@@ -9,7 +9,7 @@ import {
   validLangs,
 } from "../lib/utils";
 import { songObjPayload, songPayload } from "../payloads/song.payload";
-import {
+import type {
   CSongResponse,
   CSongsResponse,
   SongObjRequest,

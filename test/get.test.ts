@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: _ */
 import { describe, expect, test } from "bun:test";
 
 import { app } from "../src";
@@ -127,7 +128,7 @@ describe("Get Route", () => {
 
   test("Get /get/actor-top-songs?actor_id=461361,476035&song_id=7SobLOvo | Actors Top Songs", async () => {
     const response = await app.request(
-      "/get/actor-top-songs?actor_id=461361,476035&song_id=7SobLOvo"
+      "/get/actor-top-songs?actor_id=461361,476035&song_id=7SobLOvo",
     );
 
     expect(response.status).toBe(200);
@@ -151,7 +152,7 @@ describe("Get Route", () => {
 
   test("Get /get/actor-top-songs?actor_id=461___&song_id=7SobLOvo  | Actors Top Songs (Invalid ID)", async () => {
     const response = await app.request(
-      "/get/actor-top-songs?actor_id=461___&song_id=7SobLOvo"
+      "/get/actor-top-songs?actor_id=461___&song_id=7SobLOvo",
     );
 
     expect(response.status).toBe(400);
@@ -202,8 +203,8 @@ describe("Get Route", () => {
     expect(lyrics.data).toBeNull();
   });
 
-  test("Get /get/lyrics?id=IhKbmgyP | Song's Lyrics", async () => {
-    const response = await app.request("/get/lyrics?id=IhKbmgyP");
+  test("Get /get/lyrics?id=1gHtmQ3x | Song's Lyrics", async () => {
+    const response = await app.request("/get/lyrics?id=1gHtmQ3x");
 
     expect(response.status).toBe(200);
 
@@ -212,6 +213,6 @@ describe("Get Route", () => {
     expect(lyrics.status).toBe("Success");
     expect(lyrics.data).toHaveProperty("lyrics");
     expect(lyrics.data).toHaveProperty("snippet");
-    expect(lyrics.data.snippet).toBe("Sunaayi deti hai jiski dhadkan");
+    expect(lyrics.data.snippet).toBe(" ~Music~");
   });
 });

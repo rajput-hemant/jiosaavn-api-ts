@@ -1,8 +1,8 @@
 import { decode } from "entities";
 
 import { createDownloadLinks, createImageLinks, parseBool } from "../lib/utils";
-import { MiniResponse } from "../types/misc";
-import {
+import type { MiniResponse } from "../types/misc";
+import type {
   SongModulesRequest,
   SongModulesResponse,
   SongObjRequest,
@@ -15,7 +15,7 @@ import { miniPayload } from "./misc.payload";
 
 export function songObjPayload(
   s: SongObjRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): SongObjResponse {
   const { songs, modules } = s;
 
@@ -27,7 +27,7 @@ export function songObjPayload(
 
 export function songPayload(
   s: SongRequest,
-  mini: boolean = false
+  mini: boolean = false,
 ): SongResponse | MiniResponse {
   const {
     id,

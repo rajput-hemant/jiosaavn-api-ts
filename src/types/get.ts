@@ -1,8 +1,8 @@
-import { AlbumRequest, AlbumResponse } from "./album";
-import { MiniResponse, Quality, Type } from "./misc";
-import { PlaylistRequest, PlaylistResponse } from "./playlist";
-import { CustomResponse } from "./response";
-import { SongRequest, SongResponse } from "./song";
+import type { AlbumRequest, AlbumResponse } from "./album";
+import type { MiniResponse, Quality, Type } from "./misc";
+import type { PlaylistRequest, PlaylistResponse } from "./playlist";
+import type { CustomResponse } from "./response";
+import type { SongRequest, SongResponse } from "./song";
 
 /* -----------------------------------------------------------------------------------------------
  * Common
