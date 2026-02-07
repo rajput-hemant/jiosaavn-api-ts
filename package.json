@@ -12,11 +12,10 @@
   "dependencies": {
     "@biomejs/biome": "^2.3.14",
     "@scalar/hono-api-reference": "^0.9.40",
-    "@upstash/ratelimit": "^2.0.8",
-    "@upstash/redis": "^1.36.2",
     "crypto-js": "^4.2.0",
     "entities": "^7.0.1",
-    "hono": "^4.11.8"
+    "hono": "^4.11.8",
+    "hono-rate-limiter": "^0.5.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260207.0",
