@@ -3,6 +3,7 @@ export const config = {
     baseUrl: "https://www.jiosaavn.com/api.php",
     docsUrl: "/docs",
     siteUrl: "https://jiosaavn.rajputhemant.me",
+    lrclibUrl: "https://lrclib.net/api/get",
   },
 
   rateLimit: {

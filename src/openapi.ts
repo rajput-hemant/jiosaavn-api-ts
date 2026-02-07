@@ -841,6 +841,45 @@ export function createOpenApiDocument(origin: string): OpenApiDocument {
           },
         },
       },
+      "/get/synced-lyrics": {
+        get: {
+          tags: ["Get"],
+          summary: "Synced lyrics (LRCLIB)",
+          parameters: [
+            q("id", {
+              description: "Song ID.",
+              schema: { type: "string" },
+            }),
+            q("link", {
+              description: "Song link.",
+              schema: { type: "string" },
+            }),
+            q("token", {
+              description: "Song token.",
+              schema: { type: "string" },
+            }),
+            q("track", {
+              description: "Track name (if not using song id/link/token).",
+              schema: { type: "string" },
+            }),
+            q("artist", {
+              description: "Artist name (if not using song id/link/token).",
+              schema: { type: "string" },
+            }),
+            q("duration", {
+              description: "Track duration in seconds (recommended).",
+              schema: { type: "string" },
+            }),
+            rawParam,
+            camelParam,
+          ],
+          responses: {
+            "200": commonSuccessResponse,
+            "400": commonErrorResponse,
+            "429": rateLimitResponse,
+          },
+        },
+      },
       "/get/mix": {
         get: {
           tags: ["Get"],

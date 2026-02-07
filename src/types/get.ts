@@ -34,6 +34,18 @@ export type Lyrics = {
   snippet: string;
 };
 
+export type SyncedLyrics = {
+  source: "lrclib";
+  track: string;
+  artist: string;
+  album?: string;
+  duration?: number | null;
+  instrumental: boolean;
+  plain_lyrics?: string;
+  synced_lyrics?: string;
+  synced_available: boolean;
+};
+
 /* -----------------------------------------------------------------------------------------------
  * Request
  * -----------------------------------------------------------------------------------------------*/
@@ -258,6 +270,12 @@ export type TopShowResponse = {
   release_date: string;
   badge: string;
 };
+
+/* -----------------------------------------------------------------------------------------------
+ * Custom Responses
+ * -----------------------------------------------------------------------------------------------*/
+
+export type CGetSyncedLyricsResponse = CustomResponse<SyncedLyrics>;
 
 export type TopArtistResponse = {
   id: string;

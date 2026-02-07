@@ -1,3 +1,5 @@
+import { decode } from "entities";
+import type { Context } from "hono";
 import { Hono } from "hono";
 
 import { api } from "../lib/api";
@@ -28,6 +30,7 @@ import type {
   CGetLyricsResponse,
   CGetMegaMenuResponse,
   CGetMixResponse,
+  CGetSyncedLyricsResponse,
   CGetTrendingResponse,
   CGetXResponse,
   ChartRequest,
@@ -38,12 +41,17 @@ import type {
   MegaMenuRequest,
   MixRequest,
   RadioRequest,
+  SyncedLyrics,
   TopAlbumRequest,
   TopArtistRequest,
   TopShowsRequest,
   TrendingRequest,
 } from "../types/get";
-import type { CSongsResponse, SongRequest } from "../types/song";
+import type {
+  CSongsResponse,
+  SongObjRequest,
+  SongRequest,
+} from "../types/song";
 
 export const get = new Hono();
 
@@ -406,4 +414,144 @@ get.get("/mega-menu", async (c) => {
   };
 
   return c.json(response);
+});
+
+/* -----------------------------------------------------------------------------------------------
+ * Synced Lyrics (LRCLIB) - /get/synced-lyrics
+ * -----------------------------------------------------------------------------------------------*/
+
+type LrclibResponse = {
+  duration?: number;
+  instrumental?: boolean;
+  plainLyrics?: string;
+  syncedLyrics?: string;
+  artistName?: string;
+  trackName?: string;
+  albumName?: string;
+};
+
+type SyncedLyricsQuery = {
+  trackName: string;
+  artistName: string;
+  albumName?: string;
+  duration?: number;
+};
+
+const parseDuration = (value?: string) => {
+  if (!value) {
+    return undefined;
+  }
+
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : undefined;
+};
+
+const resolveSyncedLyricsQuery = async (
+  c: Context,
+): Promise<SyncedLyricsQuery> => {
+  const {
+    id: song_id = "",
+    link = "",
+    token = "",
+    track = "",
+    artist = "",
+    duration = "",
+  } = c.req.query();
+  const requestedDuration = parseDuration(duration);
+
+  if (track && artist) {
+    return {
+      trackName: track,
+      artistName: artist,
+      duration: requestedDuration,
+    };
+  }
+
+  if (!song_id && !link && !token) {
+    throw new Error("Song ID, link, token, or track/artist are required");
+  }
+
+  const songDetails: SongObjRequest = await api(config.endpoint.song.id, {
+    query: {
+      pids: song_id,
+      token: token ? token : tokenFromLink(link),
+      type: "song",
+    },
+  });
+
+  const song = songDetails.songs?.[0];
+
+  if (!song) {
+    throw new Error("Song not found, please check the id, link or token");
+  }
+
+  const trackName = decode(song.title);
+  const artistName =
+    decode(song.more_info?.artistMap?.primary_artists?.[0]?.name ?? "") ||
+    decode(song.subtitle);
+  const albumName = decode(song.more_info?.album ?? "");
+  const songDuration = parseDuration(song.more_info?.duration);
+
+  if (!trackName || !artistName) {
+    throw new Error("Track and artist are required to fetch synced lyrics");
+  }
+
+  return {
+    trackName,
+    artistName,
+    albumName,
+    duration: requestedDuration ?? songDuration,
+  };
+};
+
+const buildLrclibUrl = ({
+  trackName,
+  artistName,
+  albumName,
+  duration,
+}: SyncedLyricsQuery) => {
+  const url = new URL(config.urls.lrclibUrl);
+  url.searchParams.set("track_name", trackName);
+  url.searchParams.set("artist_name", artistName);
+
+  if (albumName) url.searchParams.set("album_name", albumName);
+  if (duration) url.searchParams.set("duration", duration.toString());
+
+  return url;
+};
+
+get.get("/synced-lyrics", async (c) => {
+  const { raw = "" } = c.req.query();
+  const query = await resolveSyncedLyricsQuery(c);
+  const response = await fetch(buildLrclibUrl(query));
+
+  if (!response.ok) {
+    throw new Error("Synced lyrics not found for the provided track");
+  }
+
+  const lrclibResult = (await response.json()) as LrclibResponse;
+
+  if (parseBool(raw)) {
+    return c.json(lrclibResult);
+  }
+
+  const result: SyncedLyrics = {
+    source: "lrclib",
+    track: lrclibResult.trackName ?? query.trackName,
+    artist: lrclibResult.artistName ?? query.artistName,
+    album: lrclibResult.albumName ?? query.albumName,
+    duration: lrclibResult.duration ?? query.duration ?? null,
+    instrumental: lrclibResult.instrumental ?? false,
+    plain_lyrics: lrclibResult.plainLyrics,
+    synced_lyrics: lrclibResult.syncedLyrics,
+    synced_available: Boolean(lrclibResult.syncedLyrics),
+  };
+
+  const payload: CGetSyncedLyricsResponse = {
+    status: "Success",
+    message: "✅ Synced lyrics fetched successfully",
+    data: result,
+  };
+
+  return c.json(payload);
 });
