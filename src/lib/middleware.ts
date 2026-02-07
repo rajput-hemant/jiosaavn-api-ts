@@ -40,6 +40,14 @@ export function rateLimitMiddleware(): MiddlewareHandler {
         return true;
       }
 
+      const bypassHash = config.rateLimit.bypassKeyHash;
+      if (bypassHash) {
+        const provided = c.req.header("x-ratelimit-bypass") ?? "";
+        if (provided && provided === bypassHash) {
+          return true;
+        }
+      }
+
       const path = c.req.path;
       return skipPaths.has(path) || path.startsWith("/docs");
     },
